@@ -1,23 +1,25 @@
+import { Gavel, Menu, ArrowRight, Quote, Briefcase, Newspaper } from "lucide-react";
+import { WhatsAppWrapper } from "../../../components/WhatsAppWrapper";
 import "./theme.css";
 
 export default function Propuesta3() {
   return (
     <div className="propuesta-3">
       {/* Header Navigation Shell */}
-      <header className="fixed top-12 sm:top-10 lg:top-[40px] w-full z-40 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-lg">
+      <header className="fixed top-12 sm:top-10 lg:top-[40px] w-full z-40 bg-surface/90 backdrop-blur-lg border-b border-outline-variant/10 transition-all">
         <div className="flex justify-between items-center px-8 py-6 max-w-screen-2xl mx-auto">
           <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary">gavel</span>
-            <span className="text-xl font-bold tracking-widest text-slate-900 dark:text-slate-50 font-headline uppercase italic">BPB ABOGADOS</span>
+            <Gavel className="text-primary" />
+            <span className="text-xl font-bold tracking-widest text-on-surface font-headline uppercase italic">BPB ABOGADOS</span>
           </div>
           <nav className="hidden md:flex items-center gap-10">
-            <a className="text-amber-700 dark:text-amber-500 font-semibold border-b-2 border-amber-700 text-sm tracking-widest transition-all duration-300" href="#">ESTUDIO</a>
-            <a className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-sm tracking-widest transition-all duration-300" href="#">ÁREAS</a>
-            <a className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-sm tracking-widest transition-all duration-300" href="#">EQUIPO</a>
+            <a className="text-secondary font-bold border-b-2 border-secondary text-sm tracking-widest transition-all duration-300" href="#">ESTUDIO</a>
+            <a className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300" href="#">ÁREAS</a>
+            <a className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300" href="#">EQUIPO</a>
             <a className="px-5 py-2 bg-primary text-on-primary text-xs font-bold tracking-widest hover:bg-primary-container transition-transform scale-95 active:opacity-80" href="#">CONTACTO</a>
           </nav>
           <div className="md:hidden">
-            <span className="material-symbols-outlined text-primary">menu</span>
+            <Menu className="text-primary" />
           </div>
         </div>
       </header>
@@ -36,7 +38,7 @@ export default function Propuesta3() {
               </p>
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 rounded-full border border-outline-variant/20 flex items-center justify-center hover:bg-primary hover:text-white transition-colors duration-500 group cursor-pointer">
-                  <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </div>
                 <span className="font-label text-xs uppercase tracking-widest font-bold">Explorar Servicios</span>
               </div>
@@ -131,7 +133,7 @@ export default function Propuesta3() {
         {/* The "Editorial" Quote Section */}
         <section className="py-40 px-8 bg-surface-bright flex justify-center text-center">
           <div className="max-w-3xl">
-            <span className="material-symbols-outlined text-secondary text-5xl mb-8">format_quote</span>
+            <Quote className="text-secondary text-5xl mb-8" />
             <blockquote className="font-headline text-3xl md:text-5xl italic font-light leading-snug text-primary">
               "La verdadera distinción en el derecho no reside solo en el conocimiento de la norma, sino en la <span className="font-normal not-italic">inteligencia aplicada</span> para crear caminos donde otros ven obstáculos."
             </blockquote>
@@ -207,53 +209,50 @@ export default function Propuesta3() {
           </div>
         </section>
       </main>
+      <WhatsAppWrapper />
 
       {/* Footer Shell */}
-      <footer className="bg-slate-900 dark:bg-black w-full py-20 px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto border-t border-slate-800 pt-16">
+      <footer className="bg-primary  w-full py-20 px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto border-t border-white/10 pt-16">
           <div className="col-span-1 md:col-span-1">
-            <span className="text-2xl font-headline italic text-amber-600 block mb-6">BPB Abogados</span>
-            <p className="font-body text-xs uppercase tracking-widest text-slate-400 leading-relaxed">
+            <span className="text-2xl font-headline italic text-secondary block mb-6">BPB Abogados</span>
+            <p className="font-body text-xs uppercase tracking-widest text-on-primary-container leading-relaxed">
               BUENOS AIRES<br/>
               MADRID<br/>
               NEW YORK
             </p>
           </div>
           <div className="space-y-4">
-            <p className="text-slate-200 text-xs font-bold tracking-widest mb-6">NAVEGACIÓN</p>
+            <p className="text-white text-xs font-bold tracking-widest mb-6">NAVEGACIÓN</p>
             <ul className="space-y-3">
-              <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-colors" href="#">Áreas de Práctica</a></li>
-              <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-colors" href="#">Nuestro Equipo</a></li>
-              <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-colors" href="#">Publicaciones</a></li>
+              <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Áreas de Práctica</a></li>
+              <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Nuestro Equipo</a></li>
+              <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Publicaciones</a></li>
             </ul>
           </div>
           <div className="space-y-4">
-            <p className="text-slate-200 text-xs font-bold tracking-widest mb-6">CONTACTO</p>
+            <p className="text-white text-xs font-bold tracking-widest mb-6">CONTACTO</p>
             <ul className="space-y-3">
-              <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-colors" href="#">Contacto</a></li>
-              <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-colors" href="#">Privacidad</a></li>
+              <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Contacto</a></li>
+              <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Privacidad</a></li>
             </ul>
           </div>
           <div className="space-y-6">
-            <p className="text-slate-200 text-xs font-bold tracking-widest mb-4">SÍGUENOS</p>
+            <p className="text-white text-xs font-bold tracking-widest mb-4">SÍGUENOS</p>
             <div className="flex gap-6">
-              <span className="material-symbols-outlined text-slate-400 hover:text-amber-500 cursor-pointer transition-colors">work</span>
-              <span className="material-symbols-outlined text-slate-400 hover:text-amber-500 cursor-pointer transition-colors">newspaper</span>
+              <Briefcase className="text-on-primary-container hover:text-secondary-container cursor-pointer transition-colors" />
+              <Newspaper className="text-on-primary-container hover:text-secondary-container cursor-pointer transition-colors" />
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-20 text-center border-t border-slate-800 pt-8">
-          <p className="font-body text-xs uppercase tracking-widest text-slate-500">
+        <div className="max-w-7xl mx-auto mt-20 text-center border-t border-white/10 pt-8">
+          <p className="font-body text-xs uppercase tracking-widest text-on-primary/60">
             © 2024 BPB Abogados. Todos los derechos reservados.
           </p>
         </div>
       </footer>
 
-      {/* Floating Action: Consultation Hub */}
-      <button aria-label="Abrir WhatsApp" className="fixed bottom-8 right-8 px-6 py-4 bg-green-600 rounded-full flex items-center justify-center gap-3 shadow-[0_20px_60px_rgba(25,28,29,0.06)] backdrop-blur-md z-40 hover:bg-green-700 text-white transition-all duration-500 group">
-        <span className="material-symbols-outlined group-hover:scale-110 transition-transform">chat</span>
-        <span className="font-bold tracking-wide text-sm">Asistencia Inmediata</span>
-      </button>
+      
     </div>
   );
 }

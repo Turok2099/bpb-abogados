@@ -1,3 +1,5 @@
+import { Gavel, Menu, Briefcase, ArrowRight, Users, Scale, Rocket, Phone, AtSign, Share2, MessageCircle } from "lucide-react";
+import { WhatsAppWrapper } from "../../../components/WhatsAppWrapper";
 import "./theme.css";
 
 export default function Propuesta2() {
@@ -5,9 +7,9 @@ export default function Propuesta2() {
     <div className="propuesta-2">
       {/* TopAppBar */}
       <header className="fixed top-12 sm:top-10 lg:top-[40px] w-full z-40 glass-nav">
-        <div className="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+        <div className="flex justify-between items-center px-4 md:px-8 py-4 max-w-screen-2xl mx-auto">
           <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">gavel</span>
+            <Gavel className="text-primary text-3xl" />
             <span className="text-xl font-bold tracking-widest text-slate-900 font-headline italic uppercase">BPB ABOGADOS</span>
           </div>
           <nav className="hidden md:flex gap-8 items-center">
@@ -15,21 +17,21 @@ export default function Propuesta2() {
             <a className="text-slate-600 hover:text-slate-900 transition-all" href="#">Áreas de Práctica</a>
             <a className="text-slate-600 hover:text-slate-900 transition-all" href="#">Nuestro Equipo</a>
             <a className="text-slate-600 hover:text-slate-900 transition-all" href="#">Insights</a>
-            <button aria-label="Contacto" className="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-transform active:scale-95">CONTACTO</button>
+            <button aria-label="Contacto" className="bg-secondary text-on-secondary px-4 md:px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-transform active:scale-95">CONTACTO</button>
           </nav>
           <button aria-label="Menu" className="md:hidden text-primary">
-            <span className="material-symbols-outlined text-3xl">menu</span>
+            <Menu className="text-3xl" />
           </button>
         </div>
       </header>
       
       <main className="pt-24 sm:pt-16 lg:pt-24">
         {/* Hero Section */}
-        <section className="relative min-h-[751px] flex items-center px-8 overflow-hidden">
+        <section className="relative min-h-[751px] flex items-center px-4 md:px-8 overflow-hidden">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="z-10">
               <span className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-bold mb-6 block">Aliados Estratégicos</span>
-              <h1 className="font-headline text-5xl md:text-7xl text-primary leading-tight mb-8">
+              <h1 className="font-headline text-4xl md:text-5xl md:text-7xl text-primary leading-tight mb-8">
                 Liderazgo Legal para <span className="italic">Negocios Ágiles</span>.
               </h1>
               <p className="text-body-lg text-on-surface-variant max-w-lg mb-10 leading-relaxed">
@@ -49,22 +51,22 @@ export default function Propuesta2() {
 
         {/* Stats Section */}
         <section className="py-24 bg-primary text-on-primary">
-          <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-24">
               <div className="flex flex-col gap-2">
-                <span className="font-headline text-5xl text-secondary-container italic">20+</span>
+                <span className="font-headline text-4xl md:text-5xl text-secondary-container italic">20+</span>
                 <span className="font-label text-xs uppercase tracking-widest text-on-primary-container">Años de Trayectoria</span>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="font-headline text-5xl text-secondary-container italic">500+</span>
+                <span className="font-headline text-4xl md:text-5xl text-secondary-container italic">500+</span>
                 <span className="font-label text-xs uppercase tracking-widest text-on-primary-container">Clientes Corporativos</span>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="font-headline text-5xl text-secondary-container italic">15k</span>
+                <span className="font-headline text-4xl md:text-5xl text-secondary-container italic">15k</span>
                 <span className="font-label text-xs uppercase tracking-widest text-on-primary-container">Casos Resueltos</span>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="font-headline text-5xl text-secondary-container italic">98%</span>
+                <span className="font-headline text-4xl md:text-5xl text-secondary-container italic">98%</span>
                 <span className="font-label text-xs uppercase tracking-widest text-on-primary-container">Tasa de Éxito Legal</span>
               </div>
             </div>
@@ -72,7 +74,7 @@ export default function Propuesta2() {
         </section>
 
         {/* Gallery Section: Premium Office Showcase */}
-        <section className="py-32 px-8 bg-surface-container-low overflow-hidden">
+        <section className="py-32 px-4 md:px-8 bg-surface-container-low overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="mb-20 text-center">
               <span className="font-label text-sm uppercase tracking-[0.2em] text-secondary font-bold block mb-4">Nuestras Instalaciones</span>
@@ -99,14 +101,14 @@ export default function Propuesta2() {
               <div className="bg-primary p-12 rounded-xl flex flex-col justify-center text-on-primary">
                 <h3 className="font-headline text-3xl mb-4">Presencia en el centro de las decisiones</h3>
                 <p className="text-on-primary-container leading-relaxed mb-8">Nuestra infraestructura tecnológica y física está a la altura de los desafíos globales de nuestros clientes.</p>
-                <button aria-label="Visitar Presencialmente" className="self-start border border-secondary text-secondary px-8 py-3 rounded-lg font-semibold hover:bg-secondary hover:text-on-secondary transition-all">Visitar Presencialmente</button>
+                <button aria-label="Visitar Presencialmente" className="self-start border border-secondary text-secondary px-4 md:px-8 py-3 rounded-lg font-semibold hover:bg-secondary hover:text-on-secondary transition-all">Visitar Presencialmente</button>
               </div>
             </div>
           </div>
         </section>
 
         {/* Practice Areas */}
-        <section className="py-32 px-8 bg-surface">
+        <section className="py-32 px-4 md:px-8 bg-surface">
           <div className="max-w-7xl mx-auto">
             <div className="mb-20">
               <span className="font-label text-sm uppercase tracking-[0.2em] text-secondary font-bold block mb-4">Nuestra Expertise</span>
@@ -114,28 +116,28 @@ export default function Propuesta2() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 bg-surface-container-low p-12 rounded-xl group hover:bg-surface-container-lowest transition-all hover:shadow-xl">
-                <span className="material-symbols-outlined text-secondary text-4xl mb-8">business_center</span>
+                <Briefcase className="text-secondary text-4xl mb-8" />
                 <h3 className="font-headline text-3xl text-primary mb-4">Derecho Corporativo y M&amp;A</h3>
                 <p className="text-on-surface-variant max-w-md leading-relaxed mb-8">Estructuración de negocios, fusiones, adquisiciones y cumplimiento regulatorio con visión estratégica global.</p>
                 <a className="inline-flex items-center gap-2 text-secondary font-semibold group-hover:gap-4 transition-all" href="#">
-                  Saber más <span className="material-symbols-outlined">arrow_forward</span>
+                  Saber más <ArrowRight />
                 </a>
               </div>
               <div className="bg-primary-container p-12 rounded-xl text-on-primary flex flex-col justify-between hover:scale-[1.02] transition-transform">
                 <div>
-                  <span className="material-symbols-outlined text-secondary-container text-4xl mb-8">groups</span>
+                  <Users className="text-secondary-container text-4xl mb-8" />
                   <h3 className="font-headline text-3xl mb-4">Derecho Laboral</h3>
                   <p className="text-on-primary-container leading-relaxed">Gestión proactiva del capital humano y litigio estratégico en el entorno laboral moderno.</p>
                 </div>
               </div>
               <div className="bg-surface-container-highest p-12 rounded-xl hover:shadow-lg transition-all">
-                <span className="material-symbols-outlined text-primary text-4xl mb-8">balance</span>
+                <Scale className="text-primary text-4xl mb-8" />
                 <h3 className="font-headline text-2xl text-primary mb-4">Litigios Complejos</h3>
                 <p className="text-on-surface-variant leading-relaxed">Defensa técnica especializada en controversias civiles, comerciales y administrativas.</p>
               </div>
               <div className="md:col-span-2 bg-white p-12 rounded-xl border border-outline-variant/20 flex flex-col md:flex-row gap-12 items-center hover:shadow-2xl transition-all">
                 <div className="flex-1">
-                  <span className="material-symbols-outlined text-secondary text-4xl mb-8">rocket_launch</span>
+                  <Rocket className="text-secondary text-4xl mb-8" />
                   <h3 className="font-headline text-2xl text-primary mb-4">Agilidad en Decisiones</h3>
                   <p className="text-on-surface-variant leading-relaxed">Asesoría jurídica de respuesta inmediata para startups y empresas de base tecnológica.</p>
                 </div>
@@ -148,7 +150,7 @@ export default function Propuesta2() {
         </section>
 
         {/* Meet the Team */}
-        <section className="py-32 px-8 bg-surface-container-low">
+        <section className="py-32 px-4 md:px-8 bg-surface-container-low">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
               <div>
@@ -193,70 +195,67 @@ export default function Propuesta2() {
         </section>
 
         {/* CTA / Consultation */}
-        <section className="py-24 px-8 relative overflow-hidden">
+        <section className="py-24 px-4 md:px-8 relative overflow-hidden">
           <div className="max-w-5xl mx-auto bg-primary rounded-3xl p-12 md:p-24 text-center relative z-10">
             <div className="absolute top-0 right-0 p-8 opacity-10">
-              <span className="material-symbols-outlined text-[10rem]">gavel</span>
+              <Gavel className="text-[10rem]" />
             </div>
             <h2 className="font-headline text-4xl md:text-6xl text-on-primary mb-8 leading-tight">¿Listo para blindar el <span className="italic">futuro de su empresa</span>?</h2>
             <p className="text-on-primary-container text-xl max-w-2xl mx-auto mb-12">Agende una consulta estratégica con nuestros expertos y reciba una evaluación preliminar de sus activos legales.</p>
             <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
               <button aria-label="Iniciar Consulta" className="bg-secondary text-on-secondary px-12 py-5 rounded-lg font-bold text-lg hover:opacity-90 transition-all">Iniciar Consulta Ahora</button>
               <a className="text-on-primary font-semibold flex items-center gap-2 hover:text-secondary-container transition-colors" href="tel:+541100000000">
-                <span className="material-symbols-outlined">call</span> +54 11 0000-0000
+                <Phone /> +54 11 0000-0000
               </a>
             </div>
           </div>
         </section>
       </main>
+      <WhatsAppWrapper />
 
       {/* Footer */}
-      <footer className="bg-slate-900 py-12 px-8">
-        <div className="max-w-7xl mx-auto border-t border-slate-800 pt-12">
+      <footer className="bg-primary py-12 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto border-t border-white/10 pt-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-1">
-              <span className="text-lg font-headline italic text-amber-600 mb-6 block">BPB Abogados</span>
-              <p className="font-body text-sm tracking-tight text-slate-400 max-w-xs">Excelencia y autoridad jurídica en el centro financiero de Buenos Aires.</p>
+              <span className="text-lg font-headline italic text-secondary mb-6 block">BPB Abogados</span>
+              <p className="font-body text-sm tracking-tight text-on-primary-container max-w-xs">Excelencia y autoridad jurídica en el centro financiero de Buenos Aires.</p>
             </div>
             <div>
-              <h5 className="font-body text-sm uppercase tracking-widest text-slate-50 mb-6">Enlaces</h5>
+              <h5 className="font-body text-sm uppercase tracking-widest text-on-primary mb-6">Enlaces</h5>
               <ul className="flex flex-col gap-4">
-                <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-all" href="#">Áreas de Práctica</a></li>
-                <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-all" href="#">Nuestro Equipo</a></li>
-                <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-all" href="#">Publicaciones</a></li>
+                <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-all" href="#">Áreas de Práctica</a></li>
+                <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-all" href="#">Nuestro Equipo</a></li>
+                <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-all" href="#">Publicaciones</a></li>
               </ul>
             </div>
             <div>
-              <h5 className="font-body text-sm uppercase tracking-widest text-slate-50 mb-6">Legal</h5>
+              <h5 className="font-body text-sm uppercase tracking-widest text-on-primary mb-6">Legal</h5>
               <ul className="flex flex-col gap-4">
-                <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-all" href="#">Privacidad</a></li>
-                <li><a className="font-body text-sm uppercase tracking-widest text-slate-400 hover:text-slate-50 hover:underline decoration-amber-600 underline-offset-4 transition-all" href="#">Términos de Uso</a></li>
+                <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-all" href="#">Privacidad</a></li>
+                <li><a className="font-body text-sm uppercase tracking-widest text-on-primary-container hover:text-on-primary hover:underline decoration-secondary underline-offset-4 transition-all" href="#">Términos de Uso</a></li>
               </ul>
             </div>
             <div>
-              <h5 className="font-body text-sm uppercase tracking-widest text-slate-50 mb-6">Contacto</h5>
-              <p className="font-body text-sm tracking-widest text-slate-400 mb-4">Av. Libertador 1200, CABA<br/>Argentina</p>
+              <h5 className="font-body text-sm uppercase tracking-widest text-on-primary mb-6">Contacto</h5>
+              <p className="font-body text-sm tracking-widest text-on-primary-container mb-4">Av. Libertador 1200, CABA<br/>Argentina</p>
               <div className="flex gap-4">
-                <span className="material-symbols-outlined text-amber-500">alternate_email</span>
-                <span className="material-symbols-outlined text-amber-500">share</span>
+                <AtSign className="text-secondary-container" />
+                <Share2 className="text-secondary-container" />
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-800/50">
-            <p className="font-body text-xs uppercase tracking-[0.2em] text-slate-500">© 2024 BPB Abogados. Todos los derechos reservados.</p>
+          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10/50">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-on-primary/60">© 2024 BPB Abogados. Todos los derechos reservados.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <span className="text-xs uppercase tracking-widest text-slate-500">Buenos Aires</span>
-              <span className="text-xs uppercase tracking-widest text-slate-500">Madrid</span>
+              <span className="text-xs uppercase tracking-widest text-on-primary/60">Buenos Aires</span>
+              <span className="text-xs uppercase tracking-widest text-on-primary/60">Madrid</span>
             </div>
           </div>
         </div>
       </footer>
       
-      {/* Consultation Hub (FAB) */}
-      <button aria-label="Abrir WhatsApp" className="fixed bottom-8 right-8 px-6 py-4 rounded-full bg-green-600 shadow-2xl flex items-center gap-3 text-white justify-center group hover:bg-green-700 transition-all z-[60]">
-        <span className="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat</span>
-        <span className="font-bold tracking-wide">Asistencia Inmediata</span>
-      </button>
+      
     </div>
   );
 }

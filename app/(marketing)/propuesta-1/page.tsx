@@ -1,3 +1,5 @@
+import { Gavel, PencilRuler, Building, Crosshair, Gauge, MapPin, Mail, ArrowRight, Globe, ShieldCheck } from "lucide-react";
+import { WhatsAppWrapper } from "../../../components/WhatsAppWrapper";
 import "./theme.css";
 
 export default function Propuesta1() {
@@ -5,16 +7,16 @@ export default function Propuesta1() {
     <div className="propuesta-1 min-h-screen">
       {/* TopAppBar */}
       <header className="fixed top-12 sm:top-10 lg:top-[40px] left-0 right-0 z-40 bg-[#f8f9fa] dark:bg-[#001b44] border-none transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center h-20 w-full">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center h-20 w-full">
           <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-3xl text-[#001b44] dark:text-[#f8f9fa]">gavel</span>
+            <Gavel className="text-3xl text-[#001b44] dark:text-[#f8f9fa]" />
             <span className="text-2xl font-black text-[#001b44] dark:text-[#ffffff] tracking-widest font-newsreader uppercase">BPB ABOGADOS</span>
           </div>
           <nav className="hidden md:flex gap-10 items-center">
             <a className="font-newsreader tracking-tighter uppercase text-[#001b44] dark:text-[#ffffff] border-b-2 border-[#845400] pb-1" href="#home">Inicio</a>
             <a className="font-newsreader tracking-tighter uppercase text-[#001b44]/60 dark:text-[#f8f9fa]/60 hover:bg-[#f3f4f5] dark:hover:bg-[#002f6c] transition-colors duration-300" href="#practice">Práctica</a>
             <a className="font-newsreader tracking-tighter uppercase text-[#001b44]/60 dark:text-[#f8f9fa]/60 hover:bg-[#f3f4f5] dark:hover:bg-[#002f6c] transition-colors duration-300" href="#about">Nosotros</a>
-            <button aria-label="Consulta" className="bg-primary text-on-primary px-8 py-3 text-xs tracking-widest font-bold hover:bg-primary-container transition-all active:scale-95 duration-150">
+            <button aria-label="Consulta" className="bg-primary text-on-primary px-4 md:px-8 py-3 text-xs tracking-widest font-bold hover:bg-primary-container transition-all active:scale-95 duration-150">
               CONSULTA
             </button>
           </nav>
@@ -28,14 +30,14 @@ export default function Propuesta1() {
             <img alt="Modern luxury law office interior" className="w-full h-full object-cover" src="/renders/oficina-1.jpeg" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/70 to-transparent"></div>
           </div>
-          <div className="relative z-10 max-w-7xl mx-auto px-8 w-full">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-8">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-12 h-[2px] bg-secondary"></div>
                   <span className="text-secondary tracking-[0.3em] font-bold text-xs uppercase">Estrategia Legal de Vanguardia</span>
                 </div>
-                <h1 className="text-6xl md:text-8xl text-white font-newsreader leading-[0.9] tracking-tighter mb-8 italic">
+                <h1 className="text-5xl md:text-5xl md:text-8xl text-white font-newsreader leading-[0.9] tracking-tighter mb-8 italic">
                   Excellence in <br/><span className="not-italic text-secondary-container">Legal Strategy.</span>
                 </h1>
                 <p className="text-on-primary-container text-xl max-w-xl leading-relaxed mb-12 font-light">
@@ -62,23 +64,23 @@ export default function Propuesta1() {
 
         {/* Stats Section */}
         <section className="bg-surface-container-low py-24 relative overflow-hidden border-b border-outline-variant/10">
-          <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-16 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-16 relative z-10">
             <div className="flex flex-col">
-              <span className="text-6xl font-newsreader text-primary mb-4">250+</span>
+              <span className="text-5xl md:text-6xl font-newsreader text-primary mb-4">250+</span>
               <div className="flex items-center gap-3">
                 <div className="w-1 h-8 bg-secondary"></div>
                 <span className="text-sm font-bold tracking-widest uppercase text-on-surface-variant">Casos High-Stake Ganados</span>
               </div>
             </div>
             <div className="flex flex-col md:mt-12">
-              <span className="text-6xl font-newsreader text-primary mb-4">15MM+</span>
+              <span className="text-5xl md:text-6xl font-newsreader text-primary mb-4">15MM+</span>
               <div className="flex items-center gap-3">
                 <div className="w-1 h-8 bg-secondary"></div>
                 <span className="text-sm font-bold tracking-widest uppercase text-on-surface-variant">Activos Protegidos</span>
               </div>
             </div>
             <div className="flex flex-col md:mt-24">
-              <span className="text-6xl font-newsreader text-primary mb-4">98%</span>
+              <span className="text-5xl md:text-6xl font-newsreader text-primary mb-4">98%</span>
               <div className="flex items-center gap-3">
                 <div className="w-1 h-8 bg-secondary"></div>
                 <span className="text-sm font-bold tracking-widest uppercase text-on-surface-variant">Ratio de Retención Anual</span>
@@ -89,7 +91,7 @@ export default function Propuesta1() {
 
         {/* Gallery / Office Showcase */}
         <section className="bg-surface py-32 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
               <div className="max-w-2xl">
                 <h2 className="text-5xl md:text-6xl text-primary font-newsreader mb-6 leading-none">Arquitectura de nuestra Sede.</h2>
@@ -111,7 +113,7 @@ export default function Propuesta1() {
                 <h3 className="text-4xl font-newsreader mb-4 group-hover:text-white transition-colors">Diseño que Proyecta Autoridad.</h3>
                 <p className="text-on-surface-variant group-hover:text-white/70 max-w-md transition-colors text-lg">Cada rincón de nuestra oficina refleja los valores de rigor, modernidad y confidencialidad que nuestros clientes internacionales demandan.</p>
                 <div className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-10 transition-opacity translate-x-1/4 translate-y-1/4">
-                  <span className="material-symbols-outlined text-[200px]">architecture</span>
+                  <PencilRuler className="text-[200px]" />
                 </div>
               </div>
             </div>
@@ -120,7 +122,7 @@ export default function Propuesta1() {
 
         {/* Practice Areas */}
         <section id="practice" className="bg-surface-container-low py-32 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
               <div className="max-w-2xl">
                 <h2 className="text-5xl md:text-6xl text-primary font-newsreader mb-6 leading-none">Áreas de Especialidad Profesional.</h2>
@@ -129,12 +131,12 @@ export default function Propuesta1() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-1">
               <div className="md:col-span-8 group relative bg-surface-container-lowest p-12 hover:bg-primary transition-all duration-500 overflow-hidden">
-                <span className="material-symbols-outlined text-5xl text-secondary mb-8 group-hover:text-secondary-container transition-colors">corporate_fare</span>
+                <Building className="text-5xl text-secondary mb-8 group-hover:text-secondary-container transition-colors" />
                 <h3 className="text-3xl font-newsreader mb-4 group-hover:text-white transition-colors">Derecho Corporativo &amp; M&amp;A</h3>
                 <p className="text-on-surface-variant group-hover:text-white/70 max-w-md transition-colors">Estructuración de fusiones, adquisiciones y gobernanza corporativa de alto nivel.</p>
               </div>
               <div className="md:col-span-4 group bg-surface-container p-12 hover:bg-secondary transition-all duration-500">
-                <span className="material-symbols-outlined text-5xl text-primary mb-8 group-hover:text-white">gavel</span>
+                <Gavel className="text-5xl text-primary mb-8 group-hover:text-white" />
                 <h3 className="text-3xl font-newsreader mb-4 group-hover:text-white transition-colors">Litigios Estratégicos</h3>
                 <p className="text-on-surface-variant group-hover:text-white/80 transition-colors">Representación en disputas comerciales complejas y arbitraje internacional.</p>
               </div>
@@ -145,7 +147,7 @@ export default function Propuesta1() {
         {/* Why Us / Architectural Detail */}
         <section className="relative py-32 bg-primary overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-tertiary opacity-50 skew-x-[-12deg] -translate-x-1/2"></div>
-          <div className="max-w-7xl mx-auto px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
               <div className="order-2 lg:order-1">
                 <div className="aspect-[4/5] bg-surface-container-lowest relative overflow-hidden group">
@@ -158,7 +160,7 @@ export default function Propuesta1() {
                 <div className="space-y-12">
                   <div className="flex gap-6">
                     <div className="flex-shrink-0 w-10 h-10 bg-secondary-container flex items-center justify-center">
-                      <span className="material-symbols-outlined text-on-secondary-container">precision_manufacturing</span>
+                      <Crosshair className="text-on-secondary-container" />
                     </div>
                     <div>
                       <h4 className="text-white text-xl font-bold mb-2">Precisión Absoluta</h4>
@@ -167,7 +169,7 @@ export default function Propuesta1() {
                   </div>
                   <div className="flex gap-6">
                     <div className="flex-shrink-0 w-10 h-10 bg-secondary-container flex items-center justify-center">
-                      <span className="material-symbols-outlined text-on-secondary-container">speed</span>
+                      <Gauge className="text-on-secondary-container" />
                     </div>
                     <div>
                       <h4 className="text-white text-xl font-bold mb-2">Agilidad Ejecutiva</h4>
@@ -182,7 +184,7 @@ export default function Propuesta1() {
 
         {/* Contact Section & Partners */}
         <section id="about" className="bg-surface py-32 overflow-hidden border-t border-outline-variant/10">
-          <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
               <div className="max-w-2xl">
                 <h2 className="text-5xl md:text-6xl text-primary font-newsreader mb-6 leading-none">Socios Fundadores.</h2>
@@ -223,7 +225,7 @@ export default function Propuesta1() {
         </section>
 
         <section className="py-32 bg-surface">
-          <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
             <div className="bg-surface-container-lowest border-none relative overflow-hidden flex flex-col lg:flex-row">
               <div className="w-2 bg-secondary absolute left-0 top-0 bottom-0"></div>
               <div className="p-12 lg:p-20 lg:w-1/2">
@@ -231,11 +233,11 @@ export default function Propuesta1() {
                 <p className="text-on-surface-variant mb-12 text-lg">Permita que nuestro equipo de expertos analice su situación y diseñe la mejor ruta de acción legal.</p>
                 <div className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-secondary">location_on</span>
+                    <MapPin className="text-secondary" />
                     <span className="text-on-surface font-bold tracking-tight">Av. Reforma 450, Piso 22, CDMX</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-secondary">mail</span>
+                    <Mail className="text-secondary" />
                     <span className="text-on-surface font-bold tracking-tight">contacto@bpbabogados.com</span>
                   </div>
                 </div>
@@ -260,36 +262,37 @@ export default function Propuesta1() {
           </div>
         </section>
       </main>
+      <WhatsAppWrapper />
 
       {/* Footer */}
-      <footer className="bg-[#001b44] dark:bg-[#002215] border-none">
+      <footer className="bg-primary  border-t border-white/5 pb-20 mt-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-7xl mx-auto">
           <div className="col-span-1 md:col-span-1">
-            <span className="text-xl font-bold text-[#ffffff] font-newsreader tracking-widest uppercase mb-6 block">BPB ABOGADOS</span>
-            <p className="text-[#f8f9fa]/70 font-manrope text-xs tracking-[0.1em] leading-relaxed uppercase">
+            <span className="text-xl font-bold text-on-primary font-newsreader tracking-widest uppercase mb-6 block">BPB ABOGADOS</span>
+            <p className="text-on-primary-container font-manrope text-xs tracking-[0.1em] leading-relaxed uppercase">
               Estrategia, Precisión y Autoridad en cada acción jurídica.
             </p>
           </div>
           <div>
-            <h5 className="text-[#ffffff] font-bold text-xs tracking-[0.2em] uppercase mb-8">NAVEGACIÓN</h5>
+            <h5 className="text-on-primary font-bold text-xs tracking-[0.2em] uppercase mb-8">NAVEGACIÓN</h5>
             <ul className="space-y-4">
-              <li><a className="text-[#f8f9fa]/70 font-manrope text-xs tracking-[0.1em] uppercase hover:text-[#ffffff] transition-all opacity-80" href="#">Sede Central</a></li>
-              <li><a className="text-[#f8f9fa]/70 font-manrope text-xs tracking-[0.1em] uppercase hover:text-[#ffffff] transition-all opacity-80" href="#">Práctica Corporativa</a></li>
+              <li><a className="text-on-primary-container font-manrope text-xs tracking-[0.1em] uppercase hover:text-on-primary transition-all opacity-80" href="#">Sede Central</a></li>
+              <li><a className="text-on-primary-container font-manrope text-xs tracking-[0.1em] uppercase hover:text-on-primary transition-all opacity-80" href="#">Práctica Corporativa</a></li>
             </ul>
           </div>
           <div>
-            <h5 className="text-[#ffffff] font-bold text-xs tracking-[0.2em] uppercase mb-8">LEGAL</h5>
+            <h5 className="text-on-primary font-bold text-xs tracking-[0.2em] uppercase mb-8">LEGAL</h5>
             <ul className="space-y-4">
-              <li><a className="text-[#f8f9fa]/70 font-manrope text-xs tracking-[0.1em] uppercase hover:text-[#ffffff] transition-all opacity-80" href="#">Propiedad Intelectual</a></li>
-              <li><a className="text-[#f8f9fa]/70 font-manrope text-xs tracking-[0.1em] uppercase hover:text-[#ffffff] transition-all opacity-80" href="#">Privacidad</a></li>
+              <li><a className="text-on-primary-container font-manrope text-xs tracking-[0.1em] uppercase hover:text-on-primary transition-all opacity-80" href="#">Propiedad Intelectual</a></li>
+              <li><a className="text-on-primary-container font-manrope text-xs tracking-[0.1em] uppercase hover:text-on-primary transition-all opacity-80" href="#">Privacidad</a></li>
             </ul>
           </div>
           <div>
-            <h5 className="text-[#ffffff] font-bold text-xs tracking-[0.2em] uppercase mb-8">BOLETÍN ESTRATÉGICO</h5>
+            <h5 className="text-on-primary font-bold text-xs tracking-[0.2em] uppercase mb-8">BOLETÍN ESTRATÉGICO</h5>
             <div className="flex gap-2">
-              <input aria-label="Email para boletín" className="bg-white/10 border-none text-white text-xs p-3 w-full focus:ring-1 focus:ring-secondary-container" placeholder="EMAIL" type="email" />
+              <input aria-label="Email para boletín" className="bg-white/5 border-none text-white text-xs p-3 w-full focus:ring-1 focus:ring-secondary-container" placeholder="EMAIL" type="email" />
               <button aria-label="Suscribirse" className="bg-secondary-container p-3 flex items-center justify-center">
-                <span className="material-symbols-outlined text-on-secondary-container">arrow_forward</span>
+                <ArrowRight className="text-on-secondary-container" />
               </button>
             </div>
           </div>
@@ -299,8 +302,8 @@ export default function Propuesta1() {
             © 2024 BPB ABOGADOS. TODOS LOS DERECHOS RESERVADOS.
           </p>
           <div className="flex gap-6">
-            <span aria-label="Red Mundial" className="material-symbols-outlined text-white/40 text-sm hover:text-white transition-colors cursor-pointer">public</span>
-            <span aria-label="Seguridad Certificada" className="material-symbols-outlined text-white/40 text-sm hover:text-white transition-colors cursor-pointer">verified_user</span>
+            <Globe className="text-white/40 text-sm hover:text-white transition-colors cursor-pointer" />
+            <ShieldCheck className="text-white/40 text-sm hover:text-white transition-colors cursor-pointer" />
           </div>
         </div>
       </footer>
