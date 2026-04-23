@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Primary Series (Dark Slate) */
+  --color-primary: #20222A;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #343742;
+  --color-on-primary-container: #e6e8f2;
+  --color-primary-fixed: #4b4e5c;
+  --color-primary-fixed-dim: #383b47;
+  --color-on-primary-fixed: #e6e8f2;
+  --color-on-primary-fixed-variant: #b0b4c6;
+  --color-inverse-primary: #8d92a8;
+
+  /* Secondary Series (Gold) */
+  --color-secondary: #C5A46C;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ecd8b3;
+  --color-on-secondary-container: #453416;
+  --color-secondary-fixed: #fcf1d9;
+  --color-secondary-fixed-dim: #C5A46C;
+  --color-on-secondary-fixed: #2e230f;
+  --color-on-secondary-fixed-variant: #6b5329;
+
+  /* Tertiary Series (Warm Beige) */
+  --color-tertiary: #AD9A87;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #d9cdbf;
+  --color-on-tertiary-container: #3d342c;
+  
+  /* Accents */
+  --color-accent-1: #3E5A4E;
+  --color-accent-2: #553227;
+
+  /* Dark luxury surfaces */
+  --color-surface: #14161B;
+  --color-background: #14161B;
+  --color-on-surface: #ffffff;
+  --color-on-background: #ffffff;
+  --color-surface-bright: #2b2e38;
+  --color-surface-container-lowest: #0d0f12;
+  --color-surface-container-low: #14161B;
+  --color-surface-container: #1a1c23;
+  --color-surface-container-high: #20222A;
+  --color-surface-container-highest: #2b2e38;
+  --color-surface-dim: #101115;
+  --color-surface-tint: #C5A46C;
+
+  --color-on-surface-variant: #b0b4c6;
+  --color-outline: #4b4e5c;
+  --color-outline-variant: #343742;
+  
+  --color-inverse-surface: #e6e8f2;
+  --color-inverse-on-surface: #20222A;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+
+  --font-newsreader: var(--font-newsreader), "Newsreader", serif;
+  --font-manrope: var(--font-manrope), "Manrope", sans-serif;
+  --font-headline: var(--font-newsreader), "Newsreader", serif;
+  --font-body: var(--font-manrope), "Manrope", sans-serif;
+  --font-label: var(--font-manrope), "Manrope", sans-serif;
+}
+
+:root {
+  font-family: var(--font-manrope);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: max(884px, 100dvh);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-newsreader);
+}
+
+.editorial-line {
+  height: 1px;
+  background-color: var(--color-outline-variant);
+  opacity: 0.4;
+  width: 100%;
+}
+
+.text-justify-custom {
+  text-align: justify;
+  text-justify: inter-word;
+}
