@@ -18,7 +18,7 @@ export function Navbar() {
           <Gavel className="text-secondary transition-transform group-hover:-rotate-12" />
           <span className="text-xl font-bold tracking-widest text-on-surface font-headline uppercase italic">BPB ABOGADOS</span>
         </Link>
-        
+
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-10">
           <Link
@@ -36,8 +36,8 @@ export function Navbar() {
         </nav>
 
         {/* Mobile Toggle Button */}
-        <button 
-          onClick={toggleMobileMenu} 
+        <button
+          onClick={toggleMobileMenu}
           className="md:hidden text-white focus:outline-none"
           aria-label="Alternar menú"
         >
@@ -48,13 +48,7 @@ export function Navbar() {
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-surface border-b border-outline-variant/10 shadow-xl flex flex-col py-6 px-6 gap-6">
-          <Link
-            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4"
-            href="/"
-            onClick={toggleMobileMenu}
-          >
-            ESTUDIO
-          </Link>
+
           <Link
             className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4"
             href="/infraestructura"

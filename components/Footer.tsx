@@ -14,11 +14,7 @@ export function Footer() {
         <div className="space-y-4">
           <p className="text-white text-xs font-bold tracking-widest mb-6">NAVEGACIÓN</p>
           <ul className="space-y-3">
-            <li>
-              <Link className="font-body text-sm uppercase tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors" href="/">
-                El Estudio
-              </Link>
-            </li>
+
             <li>
               <Link className="font-body text-sm uppercase tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors" href="/infraestructura">
                 Monetización Infraestructura
