@@ -10,30 +10,20 @@ export function Navbar() {
           <span className="text-xl font-bold tracking-widest text-on-surface font-headline uppercase italic">BPB ABOGADOS</span>
         </Link>
         <nav className="hidden md:flex items-center gap-10">
-          <Link 
-            className="text-on-surface-variant hover:text-secondary font-bold text-sm tracking-widest transition-all duration-300" 
-            href="/"
-          >
-            ESTUDIO
-          </Link>
-          <Link 
-            className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300" 
+
+          <Link
+            className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300"
             href="/infraestructura"
           >
             MONETIZACIÓN INFRAESTRUCTURA
           </Link>
-          <Link 
-            className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300" 
+          <Link
+            className="text-on-surface-variant hover:text-secondary text-sm tracking-widest transition-all duration-300"
             href="/contacto"
           >
             CONTACTO
           </Link>
-          <Link 
-            className="px-5 py-2 bg-secondary text-primary text-xs font-bold tracking-widest hover:bg-white transition-colors cursor-pointer rounded-sm" 
-            href="/contacto"
-          >
-            EVALUACIÓN FAST-TRACK
-          </Link>
+
         </nav>
         <div className="md:hidden">
           <Menu className="text-white w-6 h-6" />

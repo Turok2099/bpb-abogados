@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+
 import "./theme.css";
 
 export default function Home() {
@@ -18,14 +18,11 @@ export default function Home() {
             </h1>
             <div className="mt-16 flex flex-col md:flex-row md:items-center gap-8 border-t border-white/20 pt-12">
               <h2 className="font-body text-lg text-white/90 max-w-md leading-relaxed">
-                Protegemos el capital y aseguramos el crecimiento de las empresas medianas en Argentina. Más de 16 años de resultados silenciosos, ahora a su disposición.
+                Protegemos el capital y aseguramos el crecimiento de las empresas medianas en Argentina. Más de 16 años de resultados silenciosos, ahora a tu disposición.
               </h2>
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <div className="h-12 w-12 rounded-full border border-white/30 flex items-center justify-center hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 text-white">
-                  <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                </div>
-                <span className="font-label text-xs uppercase tracking-widest font-bold text-white group-hover:text-secondary transition-colors">Agendar sesión de diagnóstico estratégico</span>
-              </div>
+              <a href="#contacto" className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.2em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm">
+                Agendar sesión de diagnóstico estratégico
+              </a>
             </div>
           </div>
         </section>
@@ -33,23 +30,15 @@ export default function Home() {
         {/* Signature Image Grid (Bento Style) */}
         <section className="px-8 pb-32 pt-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 max-w-screen-2xl mx-auto">
-            
-            <div className="md:col-span-8 flex flex-col justify-center p-8 md:p-12 bg-surface-container">
-              <div className="max-w-xl">
+
+            <div className="md:col-span-12 flex flex-col items-center justify-center text-center p-8 md:p-16 lg:p-24 bg-surface-container">
+              <div className="max-w-4xl mx-auto">
                 <p className="text-secondary font-semibold font-label text-xs uppercase tracking-[0.2em] mb-4">Autoridad &amp; Certidumbre</p>
-                <h2 className="font-headline text-4xl text-white font-light italic mb-8">¿Por qué elegir a BPB Abogados?</h2>
-                <p className="text-on-surface-variant font-body leading-relaxed text-justify-custom">
+                <h2 className="font-headline text-4xl md:text-5xl text-white font-light italic mb-8">¿Por qué elegir a BPB Abogados?</h2>
+                <p className="text-on-surface-variant font-body text-lg leading-relaxed">
                   En el entorno empresarial B2B, las decisiones no admiten improvisaciones. En BPB Abogados no hacemos "trámites legales"; diseñamos arquitectura jurídica. Nos especializamos en derecho comercial, societario y monetización de infraestructura, ofreciendo a los directorios y CEOs la certidumbre necesaria para escalar sus negocios con riesgo cero.
                 </p>
               </div>
-            </div>
-
-            <div className="md:col-span-4 flex flex-col justify-between p-8 md:p-12 bg-primary text-white">
-              <div>
-                <span className="text-secondary font-semibold font-headline italic text-2xl">01</span>
-                <h3 className="font-headline text-3xl mt-4 font-light">Derecho <br/>Corporativo</h3>
-              </div>
-              <p className="text-sm opacity-60 leading-loose uppercase tracking-widest mt-8">Transacciones complejas, fusiones y adquisiciones con rigor técnico excepcional.</p>
             </div>
 
             {/* Office Render 2 */}
@@ -72,41 +61,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Core Practices Section (Asymmetric List) */}
-        <section className="bg-primary text-white py-20 md:py-32 px-8">
-          <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-12 md:gap-20">
-            <div className="md:w-1/3">
-              <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">Nuestra Expertise</p>
-              <h2 className="font-headline text-4xl md:text-5xl italic font-light sticky top-32">Arquitectura legal para el ciclo de vida de su empresa.</h2>
-            </div>
-            <div className="md:w-2/3 space-y-16 md:space-y-24">
-              <div className="group cursor-pointer">
-                <div className="flex justify-between items-baseline mb-6">
-                  <h3 className="font-headline text-3xl group-hover:text-secondary group-hover:italic transition-all">Derecho Societario y Corporativo</h3>
-                  <span className="font-label text-xs tracking-widest opacity-40">01 / ESTRUCTURACIÓN</span>
-                </div>
-                <p className="text-on-primary-container text-lg max-w-lg leading-relaxed group-hover:text-white transition-colors">
-                  Diseñamos la estructura legal que su empresa necesita para operar, escalar o fusionarse con seguridad. Desde la constitución de sociedades hasta la resolución de conflictos societarios y la redacción de contratos comerciales blindados.
-                </p>
-              </div>
-              <div className="editorial-line"></div>
-              <div className="group cursor-pointer">
-                <div className="flex justify-between items-baseline mb-6">
-                  <h3 className="font-headline text-3xl group-hover:text-secondary group-hover:italic transition-all">BPB Real Estate &amp; Infraestructura</h3>
-                  <span className="font-label text-xs tracking-widest opacity-40">02 / MONETIZACIÓN</span>
-                </div>
-                <p className="text-on-primary-container text-lg max-w-lg leading-relaxed group-hover:text-white transition-colors">
-                  Monetización de activos ocultos para desarrollistas. Al finalizar un desarrollo inmobiliario, las empresas suelen dejar inmovilizadas sumas millonarias en infraestructura eléctrica (cámaras transformadoras) por evitar la burocracia. Nosotros recuperamos ese capital (entre 36M y 80M ARS) por vía administrativa ágil en aproximadamente 6 meses, sin juicios y sin inversión inicial. Usted cobra directo de la distribuidora; nosotros cobramos a resultado.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* The "Filosofía" Section */}
         <section className="py-20 md:py-32 px-8 bg-surface-bright flex justify-center text-center">
           <div className="max-w-4xl">
-            <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">El Mito de Base</p>
+            <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">Nuestra filosofía</p>
             <h2 className="font-headline text-4xl md:text-6xl italic font-light leading-snug text-white mb-12">
               La discreción de nuestros resultados es nuestra mejor credencial.
             </h2>
@@ -120,6 +78,66 @@ export default function Home() {
               <p className="font-bold text-white">
                 No somos una firma masiva, ni pretendemos serlo. Somos una boutique de alta gama donde cada caso es liderado y ejecutado personalmente por nuestros socios.
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Services / Core Practices Section (Premium UI Cards) */}
+        <section className="bg-surface py-24 md:py-32 px-4 md:px-8">
+          <div className="max-w-screen-2xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-16 md:mb-24">
+              <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">Nuestra Expertise</p>
+              <h2 className="font-headline text-4xl md:text-5xl text-white font-light italic max-w-3xl mx-auto leading-snug">
+                Arquitectura legal para el ciclo de vida de tu empresa.
+              </h2>
+            </div>
+            
+            {/* Services Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
+              {/* Service 1 */}
+              <div className="group relative bg-surface-container-low border border-white/5 hover:border-secondary/30 transition-all duration-700 p-10 md:p-16 overflow-hidden rounded-xl cursor-pointer">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-secondary/10 transition-colors duration-700"></div>
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div>
+                    <div className="flex items-center justify-between mb-12">
+                      <span className="font-headline text-5xl md:text-6xl text-secondary opacity-30 group-hover:opacity-100 transition-opacity duration-700 font-light">01</span>
+                      <span className="font-label text-xs uppercase tracking-[0.2em] text-white/40 group-hover:text-white border border-white/10 group-hover:border-white/30 rounded-full px-4 py-2 transition-all duration-500">ESTRUCTURACIÓN</span>
+                    </div>
+                    <h3 className="font-headline text-3xl md:text-4xl text-white mb-6 group-hover:text-secondary group-hover:italic transition-all duration-500">Derecho Societario <br className="hidden lg:block" />y Corporativo</h3>
+                    <div className="w-12 h-[1px] bg-secondary mb-8 transition-all duration-500 group-hover:w-24"></div>
+                  </div>
+                  <p className="text-on-surface-variant font-body text-lg leading-relaxed group-hover:text-white/90 transition-colors duration-500 mb-10">
+                    Diseñamos la estructura legal que tu empresa necesita para operar, escalar o fusionarse con seguridad. Desde la constitución de sociedades hasta la resolución de conflictos societarios y la redacción de contratos comerciales blindados.
+                  </p>
+                  <a href="#contacto" className="mt-auto inline-flex items-center justify-center border border-white/20 px-6 py-4 font-label text-xs uppercase tracking-[0.2em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-fit">
+                    Cotizar estructuración
+                  </a>
+                </div>
+              </div>
+
+              {/* Service 2 */}
+              <div className="group relative bg-surface-container-low border border-white/5 hover:border-secondary/30 transition-all duration-700 p-10 md:p-16 overflow-hidden rounded-xl cursor-pointer">
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 group-hover:bg-secondary/10 transition-colors duration-700"></div>
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div>
+                    <div className="flex items-center justify-between mb-12">
+                      <span className="font-headline text-5xl md:text-6xl text-secondary opacity-30 group-hover:opacity-100 transition-opacity duration-700 font-light">02</span>
+                      <span className="font-label text-xs uppercase tracking-[0.2em] text-white/40 group-hover:text-white border border-white/10 group-hover:border-white/30 rounded-full px-4 py-2 transition-all duration-500">MONETIZACIÓN</span>
+                    </div>
+                    <h3 className="font-headline text-3xl md:text-4xl text-white mb-6 group-hover:text-secondary group-hover:italic transition-all duration-500">BPB Real Estate <br className="hidden lg:block" />&amp; Infraestructura</h3>
+                    <div className="w-12 h-[1px] bg-secondary mb-8 transition-all duration-500 group-hover:w-24"></div>
+                  </div>
+                  <p className="text-on-surface-variant font-body text-lg leading-relaxed group-hover:text-white/90 transition-colors duration-500 mb-10">
+                    Monetización de activos ocultos para desarrollistas. Al finalizar un desarrollo inmobiliario, las empresas suelen dejar inmovilizadas sumas millonarias en infraestructura eléctrica (cámaras transformadoras) por evitar la burocracia. Nosotros recuperamos ese capital (entre 36M y 80M ARS) por vía administrativa ágil en aproximadamente 6 meses, sin juicios y sin inversión inicial. Cobrás directo de la distribuidora; nosotros cobramos a resultado.
+                  </p>
+                  <a href="#contacto" className="mt-auto inline-flex items-center justify-center border border-white/20 px-6 py-4 font-label text-xs uppercase tracking-[0.2em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-fit">
+                    Cotizar monetización
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -139,8 +157,9 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {/* Partner 1 */}
               <div className="group cursor-pointer">
-                <div className="aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
-                  <img alt="Retrato Profesional Dr. Alejandro Belgrano" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Q8feONBrdR24FBlu51mj3PhTEwgmNNbvDRj3zMYND8K2UkJPs0CakiX3V8CtrZuv3oiUZKEE1j3PtbTlBtLk0oXmiELbCdBImnzvzVkkuhzp8tzkA6nYkSinp8Pogj6H0enHj5fiSiZrwHxD8TO0-6JrB4-3E7PxQet8ZO3VS4c6hBQHBtp52F_hrEM5nhxYBO139lnIqX0nZDG_0kLBJWteQ2sZxjmTOi2c5r6wum0NYZWEqtwca9e0X8PDnBhAFTPcBetSjER9" />
+                <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
+                  <img alt="Retrato Profesional Dr. Alejandro Belgrano" className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-105" src="/socios/1.png" />
+                  <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none"></div>
                 </div>
                 <h3 className="font-headline text-2xl text-white mb-1">Dr. Alejandro Belgrano</h3>
                 <p className="font-label text-xs uppercase tracking-widest text-secondary font-bold mb-4">Socio Senior - Corporate &amp; M&amp;A</p>
@@ -148,17 +167,19 @@ export default function Home() {
               </div>
               {/* Partner 2 */}
               <div className="group cursor-pointer">
-                <div className="aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
-                  <img alt="Retrato Profesional Dra. Victoria Pellegrini" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIv_La1ln6SegIh5uVnr3F6hp9N2uXdFyGDZr5VbixvwHoyV-tlmFYylhI_u4GhmkRBhRW7xoA7d1aItGCLxLMSvXnWrt-xdWELuXPJykzA1exfgy8RXc-jhV_pGdVeEvkcr7GH1KiNZw5d2oqrospizFJMs41XYNPWTAktLTqeSqoeIukwXvPmfo69C22Jo-8vZ8QPxfcEQD07HqgAJOJyA7miumCjd2f6-jr4CbAyydY5WsaBGX-yq00U7UB18rkaGMqEVLU2DmA" />
+                <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
+                  <img alt="Retrato Profesional Dra. Victoria Pellegrini" className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-105" src="/socios/2.png" />
+                  <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none"></div>
                 </div>
-                <h3 className="font-headline text-2xl text-white mb-1">Dra. Victoria Pellegrini</h3>
+                <h3 className="font-headline text-2xl text-white mb-1">Dr. Victor Pellegrini</h3>
                 <p className="font-label text-xs uppercase tracking-widest text-secondary font-bold mb-4">Socia Directora - Litigios Estratégicos</p>
                 <div className="editorial-line mb-4 opacity-40"></div>
               </div>
               {/* Partner 3 */}
               <div className="group cursor-pointer">
-                <div className="aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
-                  <img alt="Retrato Profesional Dr. Manuel Benavídez" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXAcvF9LvQMdW1bs__FJWCjocciwqxuSsDEA7XMFxy-Oz-2kKJNdoxBSkbmsWdIjPpafDZXvi_uV8vsDylY7bJXWRFvrNy3jt-WbwT1gOHz7zXBu-Vpa8qTl2YsztfNy0YbNLnvdr95daZvj6jvAiqXayAxneBvojPGT-MN-GS7w0xMmfuaMN9cfWVUXQ0YphOC0oHIsyHhCu52yIm4hHvLyH-D3upUndiLZACmCW8DwkC74Zq1bo5Stk1xOF0G0VY0GgjZiXXvACp" />
+                <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
+                  <img alt="Retrato Profesional Dr. Manuel Benavídez" className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-105" src="/socios/3.png" />
+                  <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none"></div>
                 </div>
                 <h3 className="font-headline text-2xl text-white mb-1">Dr. Manuel Benavídez</h3>
                 <p className="font-label text-xs uppercase tracking-widest text-secondary font-bold mb-4">Socio - Wealth Management</p>
@@ -176,7 +197,7 @@ export default function Home() {
               <div>
                 <h2 className="font-headline text-4xl mb-6">Inicie una consulta discreta.</h2>
                 <p className="font-body text-white/70 leading-relaxed">
-                  Analizamos cada caso bajo los más estrictos estándares de confidencialidad y rigor analítico. Permítanos ser su socio estratégico en la toma de decisiones.
+                  Analizamos cada caso bajo los más estrictos estándares de confidencialidad y rigor analítico. Permitinos ser tu socio estratégico en la toma de decisiones.
                 </p>
               </div>
               <form className="space-y-8">
@@ -193,7 +214,7 @@ export default function Home() {
         </section>
       </main>
 
-      
+
     </div>
   );
 }
