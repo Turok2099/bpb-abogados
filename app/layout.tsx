@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BPB Abogados - Maquetas",
-  description: "Propuestas de Diseño para el despacho legal",
+  title: "BPB Abogados",
+  description: "Despacho legal especializado en derecho corporativo y monetización de infraestructura en Argentina.",
 };
 
 export default function RootLayout({
