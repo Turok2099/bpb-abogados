@@ -1,4 +1,3 @@
-import { Briefcase, Newspaper } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -6,7 +5,7 @@ export function Footer() {
     <footer className="bg-primary w-full py-20 px-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto border-t border-white/10 pt-16">
         <div className="col-span-1 md:col-span-1">
-          <span className="text-2xl font-headline italic text-secondary block mb-6">BPB Abogados</span>
+          <img src="/favicon.png" alt="BPB Abogados Logo" className="h-24 w-auto object-contain mb-6 opacity-90" />
           <p className="font-body text-xs uppercase tracking-widest text-white/70 leading-relaxed">
             BUENOS AIRES
           </p>
@@ -32,8 +31,24 @@ export function Footer() {
         <div className="space-y-6">
           <p className="text-white text-xs font-bold tracking-widest mb-4">SÍGUENOS</p>
           <div className="flex gap-6">
-            <Briefcase className="text-white/70 hover:text-secondary cursor-pointer transition-colors" />
-            <Newspaper className="text-white/70 hover:text-secondary cursor-pointer transition-colors" />
+            <a href="https://www.instagram.com/bpb.abogados?igsh=MXZhdmN4YmJxZnZ0" target="_blank" rel="noopener noreferrer" aria-label="Instagram de BPB Abogados">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-white/70 hover:text-secondary cursor-pointer transition-colors w-6 h-6"
+              >
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { MapPin, Mail } from "lucide-react";
 import "../theme.css";
+import { CalendlyWidget } from "../../components/CalendlyWidget";
 
 export default function Contacto() {
   return (
@@ -8,7 +9,7 @@ export default function Contacto() {
         <div className="mb-16">
           <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-6">Contacto Directo</p>
           <h1 className="font-headline text-5xl md:text-7xl text-white font-light mb-8">
-            Inicie una consulta discreta.
+            Inicie una consulta.
           </h1>
           <p className="font-body text-lg text-on-surface-variant max-w-2xl leading-relaxed">
             Analizamos cada caso bajo los más estrictos estándares de confidencialidad y rigor analítico. Permítanos ser su socio estratégico en la toma de decisiones.
@@ -22,6 +23,9 @@ export default function Contacto() {
             <form className="space-y-12 relative z-10">
               <div className="relative">
                 <input aria-label="Nombre Completo" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="NOMBRE COMPLETO" type="text" />
+              </div>
+              <div className="relative">
+                <input aria-label="Correo Electrónico" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="CORREO ELECTRÓNICO" type="email" />
               </div>
               <div className="relative">
                 <input aria-label="Empresa" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="EMPRESA / ORGANIZACIÓN" type="text" />
@@ -39,26 +43,27 @@ export default function Contacto() {
           {/* Map and Info */}
           <div className="flex flex-col gap-10">
             <div className="bg-surface-container rounded-2xl overflow-hidden shadow-2xl h-80 lg:h-full border border-white/5 relative">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.016713578103!2d-58.38381532425986!3d-34.60373887295435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacf11603ba5%3A0x8f2d5f0e34c0e628!2sBuenos%20Aires%2C%20CABA!5e0!3m2!1sen!2sar!4v1700000000000!5m2!1sen!2sar" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0, filter: "grayscale(100%) invert(90%) hue-rotate(180deg) contrast(1.2)" }} 
-                allowFullScreen={false} 
-                loading="lazy" 
+              <iframe
+                src="https://maps.google.com/maps?q=Bertoia%20Tower,%20Polo%20Hudson,%20Buenos%20Aires&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade">
               </iframe>
               <div className="absolute inset-0 bg-secondary/10 pointer-events-none mix-blend-overlay"></div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 bg-surface-container p-10 border border-white/5 rounded-2xl">
               <div className="flex items-start gap-4">
                 <MapPin className="text-secondary w-6 h-6 shrink-0" />
                 <div>
                   <h3 className="text-white font-headline text-xl mb-2">Ubicación</h3>
                   <p className="text-on-surface-variant font-body text-sm leading-relaxed">
-                    Buenos Aires<br/>
-                    Argentina
+                    Bertoia Tower, Polo Hudson<br />
+                    Au. Buenos Aires - La Plata Km. 30<br />
+                    Buenos Aires, Argentina
                   </p>
                 </div>
               </div>
@@ -72,6 +77,20 @@ export default function Contacto() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Calendly Section */}
+        <div className="mt-20 md:mt-32 pt-20 border-t border-white/5">
+          <div className="text-center mb-12">
+            <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">Agendar Sesión</p>
+            <h2 className="font-headline text-4xl text-white font-light italic">
+              O agende directamente una videollamada.
+            </h2>
+          </div>
+          <div className="max-w-5xl mx-auto relative group">
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/10 to-transparent opacity-100 blur-3xl pointer-events-none"></div>
+            <CalendlyWidget url="https://calendly.com/bpb-abogados" />
           </div>
         </div>
       </div>
