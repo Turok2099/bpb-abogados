@@ -15,7 +15,7 @@ export function Navbar() {
     <header className="fixed top-0 w-full z-40 bg-surface/90 backdrop-blur-lg border-b border-outline-variant/10 transition-all">
       <div className="flex justify-between items-center px-6 md:px-8 py-6 max-w-screen-2xl mx-auto">
         <Link href="/" className="flex items-center group">
-          <img src="/favicon.png" alt="BPB Abogados Logo" className="h-[72px] w-auto object-contain transition-transform group-hover:scale-105" />
+          <img src="/logo.png" alt="BPB Abogados Logo" className="h-[72px] w-auto object-contain transition-transform group-hover:scale-105" />
         </Link>
 
         {/* Desktop Nav */}

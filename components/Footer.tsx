@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-primary w-full py-20 px-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto border-t border-white/10 pt-16">
         <div className="col-span-1 md:col-span-1">
-          <img src="/favicon.png" alt="BPB Abogados Logo" className="h-24 w-auto object-contain mb-6 opacity-90" />
+          <img src="/logo.png" alt="BPB Abogados Logo" className="h-24 w-auto object-contain mb-6 opacity-90" />
           <p className="font-body text-xs uppercase tracking-widest text-white/70 leading-relaxed">
             BUENOS AIRES
           </p>
