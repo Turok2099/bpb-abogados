@@ -72,7 +72,7 @@ export default function Contacto() {
                 <div>
                   <h3 className="text-white font-headline text-xl mb-2">Email Directo</h3>
                   <p className="text-on-surface-variant font-body text-sm leading-relaxed">
-                    contacto@bpbabogados.com
+                    contacto@bpbabogados.com.ar
                   </p>
                 </div>
               </div>
