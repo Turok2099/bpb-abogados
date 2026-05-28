@@ -1,5 +1,5 @@
 import { MapPin, Mail } from "lucide-react";
-import "../theme.css";
+
 import { CalendlyWidget } from "../../components/CalendlyWidget";
 
 export default function Contacto() {

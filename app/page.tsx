@@ -1,4 +1,4 @@
-import "./theme.css";
+
 import { Hero } from "@/components/home/Hero";
 import { Authority } from "@/components/home/Authority";
 import { Philosophy } from "@/components/home/Philosophy";
