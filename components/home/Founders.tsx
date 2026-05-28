@@ -15,7 +15,7 @@ export function Founders() {
           {/* Partner 1 */}
           <div className="group cursor-pointer">
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
-              <img alt="Retrato Profesional Dr. Guillermo Betard" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="/socios/1.png" />
+              <img alt="Retrato Profesional Dr. Guillermo Betard" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779939996/WhatsApp_Image_2026-05-27_at_4.11.20_PM_yrjsl9.jpg" />
               <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
             </div>
             <h3 className="font-headline text-2xl text-white mb-1">Dr. Guillermo Betard</h3>
@@ -25,7 +25,7 @@ export function Founders() {
           {/* Partner 2 */}
           <div className="group cursor-pointer">
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
-              <img alt="Retrato Profesional Dr. Mariano Pacifico" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="/socios/2.png" />
+              <img alt="Retrato Profesional Dr. Mariano Pacifico" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779940183/Gemini_Generated_Image_u8zqdyu8zqdyu8zq_q9pej9.jpg" />
               <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
             </div>
             <h3 className="font-headline text-2xl text-white mb-1">Dr. Mariano Pacifico</h3>
