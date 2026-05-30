@@ -30,7 +30,7 @@ export function Footer() {
         <div className="space-y-6">
           <p className="text-white text-base font-bold tracking-widest mb-4">SÍGUENOS</p>
           <div className="flex gap-6">
-            <a href="https://www.instagram.com/bpb.abogados?igsh=MXZhdmN4YmJxZnZ0" target="_blank" rel="noopener noreferrer" aria-label="Instagram de BPB Abogados">
+            <a href="https://www.instagram.com/bpb.abogados?igsh=MXZhdmN4YmJxZnZ0" target="_blank" rel="noopener noreferrer" aria-label="Instagram de BPB Abogados" className="flex items-center gap-3 group">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -41,12 +41,13 @@ export function Footer() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="text-white/70 hover:text-secondary cursor-pointer transition-colors w-6 h-6"
+                className="text-white/70 group-hover:text-secondary cursor-pointer transition-colors w-6 h-6"
               >
                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
               </svg>
+              <span className="text-secondary font-label text-sm tracking-widest font-semibold">@bpb.abogados</span>
             </a>
           </div>
         </div>

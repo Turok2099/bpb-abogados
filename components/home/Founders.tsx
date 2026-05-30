@@ -13,7 +13,7 @@ export function Founders() {
           </div>
           <div className="max-w-2xl">
             <blockquote className="border-l-2 border-secondary/50 pl-6 md:pl-10">
-              <p className="font-headline text-2xl md:text-3xl text-white/90 italic leading-snug">
+              <p className="font-headline text-2xl md:text-3xl text-white/90 leading-snug">
                 "Nuestra filosofía de trabajo se sustenta en la seriedad profesional, la honestidad, la confidencialidad y el compromiso permanente con los intereses de quienes confían en nosotros."
               </p>
             </blockquote>
@@ -25,7 +25,7 @@ export function Founders() {
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Guillermo Betard"
-                className="w-full h-full object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                className="w-full h-full object-cover object-center grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1780111745/Gemini_Generated_Image_y1zur4y1zur4y1zu_dpjtza.jpg"
               />
               <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
@@ -45,7 +45,7 @@ export function Founders() {
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Mariano Pacifico"
-                className="w-full h-full object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                className="w-full h-full object-cover object-center grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1780111809/Gemini_Generated_Image_1h9t6r1h9t6r1h9t_foo9f0.jpg"
               />
               <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>
@@ -65,7 +65,7 @@ export function Founders() {
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Rodrigo Biondi"
-                className="w-full h-full object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                className="w-full h-full object-cover object-center grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1780111731/Gemini_Generated_Image_ijod61ijod61ijod_kogs4c.jpg"
               />
               <div className="absolute inset-0 bg-gray-500/40 mix-blend-multiply pointer-events-none transition-opacity duration-700 group-hover:opacity-0"></div>

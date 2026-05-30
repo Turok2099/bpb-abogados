@@ -95,7 +95,7 @@ export default function Contacto() {
         <div className="mt-20 md:mt-32 pt-20 border-t border-white/5">
           <div className="text-center mb-12">
             <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">Agendar Sesión</p>
-            <h2 className="font-headline text-4xl text-white font-light italic">
+            <h2 className="font-headline text-4xl text-white font-light">
               O agende directamente una videollamada.
             </h2>
           </div>

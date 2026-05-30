@@ -174,7 +174,7 @@ export function Services() {
         {/* Header */}
         <div className="text-center mb-16 md:mb-24">
           <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">Nuestra Expertise</p>
-          <h2 className="font-headline text-3xl md:text-4xl text-white font-light italic mb-8">
+          <h2 className="font-headline text-3xl md:text-4xl text-white font-light mb-8">
             Áreas de Práctica.
           </h2>
         </div>

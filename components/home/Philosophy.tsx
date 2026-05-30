@@ -3,7 +3,7 @@ export function Philosophy() {
     <section className="py-20 md:py-32 px-8 bg-surface-bright flex justify-center text-center">
       <div className="max-w-4xl">
         <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">Nuestra filosofía</p>
-        <h2 className="font-headline text-4xl md:text-6xl italic font-light leading-snug text-white mb-12">
+        <h2 className="font-headline text-4xl md:text-6xl font-light leading-snug text-white mb-12">
           Nuestros resultados son nuestra mejor credencial.
         </h2>
         <div className="text-on-surface-variant font-body text-lg leading-relaxed text-justify-custom space-y-6">
