@@ -1,8 +1,19 @@
+"use client";
 import { MapPin, Mail } from "lucide-react";
-
+import { toast } from "sonner";
 import { CalendlyWidget } from "../../components/CalendlyWidget";
 
 export default function Contacto() {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Hemos recibido sus datos y nos comunicaremos a la brevedad", {
+      style: {
+        background: 'var(--color-surface)',
+        borderColor: 'var(--color-secondary)',
+        color: 'var(--color-on-surface)'
+      }
+    });
+  };
   return (
     <div className="pt-32 pb-20 md:pt-48 md:pb-32 px-8 min-h-screen bg-background">
       <div className="max-w-screen-xl mx-auto">
@@ -20,23 +31,23 @@ export default function Contacto() {
           {/* Form */}
           <div className="bg-surface-container border border-secondary/20 text-white p-10 md:p-16 rounded-2xl shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-3xl rounded-full"></div>
-            <form className="space-y-12 relative z-10">
+            <form className="space-y-12 relative z-10" onSubmit={handleSubmit}>
               <div className="relative">
-                <input aria-label="Nombre Completo" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="NOMBRE COMPLETO" type="text" />
+                <input aria-label="Nombre Completo" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="NOMBRE COMPLETO *" type="text" required />
               </div>
               <div className="relative">
-                <input aria-label="Correo Electrónico" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="CORREO ELECTRÓNICO" type="email" />
+                <input aria-label="Correo Electrónico" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="CORREO ELECTRÓNICO *" type="email" required />
               </div>
               <div className="relative">
-                <input aria-label="Empresa" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="EMPRESA / ORGANIZACIÓN" type="text" />
+                <input aria-label="Empresa" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="EMPRESA / ORGANIZACIÓN" type="text" />
               </div>
               <div className="relative">
-                <input aria-label="WhatsApp o Teléfono" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="WHATSAPP / TELÉFONO" type="tel" />
+                <input aria-label="WhatsApp o Teléfono" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="WHATSAPP / TELÉFONO *" type="tel" required />
               </div>
               <div className="relative">
-                <textarea aria-label="Asunto" rows={3} className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-sm font-label tracking-wide outline-none focus:ring-0 text-white placeholder-white/40 resize-none" placeholder="Breve descripción del caso o consulta..."></textarea>
+                <textarea aria-label="Asunto" rows={3} className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label tracking-wide outline-none focus:ring-0 text-white placeholder-white/40 resize-none" placeholder="Breve descripción del caso o consulta... *" required></textarea>
               </div>
-              <button aria-label="Solicitar Reunión" className="w-full bg-secondary text-primary py-6 text-sm font-bold tracking-[0.3em] hover:bg-white transition-all duration-300 rounded-sm mt-8" type="submit">SOLICITAR REUNIÓN</button>
+              <button aria-label="Solicitar Reunión" className="w-full bg-secondary text-primary py-6 text-base font-bold tracking-[0.3em] hover:bg-white transition-all duration-300 rounded-sm mt-8" type="submit">SOLICITAR REUNIÓN</button>
             </form>
           </div>
 

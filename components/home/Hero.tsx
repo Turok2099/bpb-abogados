@@ -9,6 +9,13 @@ export function Hero() {
       <div className="max-w-4xl relative z-10">
         <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">Excelencia Jurídica &amp; Visión Estratégica</p>
 
+        <h1 className="font-headline text-5xl md:text-7xl text-white font-light mb-8 leading-snug">
+          Una sólida trayectoria orientada al asesoramiento integral.
+        </h1>
+        <p className="font-body text-lg md:text-xl text-white/90 max-w-3xl leading-relaxed mb-10">
+          BPB Abogados es un estudio jurídico fundado sobre una sólida trayectoria profesional y una visión moderna del ejercicio del derecho, orientada al asesoramiento integral de empresas, asociaciones y clientes particulares.
+        </p>
+
         <div className="mt-8 flex flex-col md:flex-row md:items-center gap-8">
 
           <a href="#contacto" className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.2em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm">

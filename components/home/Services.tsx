@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+
+let lastHashChange = 0;
 
 const servicesData = [
   {
@@ -84,25 +86,65 @@ const servicesData = [
 
 function ServiceCard({ service, index }: { service: any; index: number }) {
   const [expanded, setExpanded] = useState(false);
+  const [isTargeted, setIsTargeted] = useState(false);
+
+  useEffect(() => {
+    const checkHash = () => {
+      lastHashChange = Date.now();
+      setIsTargeted(window.location.hash === `#servicio-${service.num}`);
+    };
+    
+    checkHash();
+    window.addEventListener("hashchange", checkHash);
+    return () => window.removeEventListener("hashchange", checkHash);
+  }, [service.num]);
+
+  const handleMouseEnter = () => {
+    // Prevent scroll-by clearing: wait 1 second after hash change before allowing hover to clear it
+    if (Date.now() - lastHashChange < 1000) return;
+
+    if (window.location.hash.startsWith('#servicio-')) {
+      window.history.replaceState(null, '', window.location.pathname);
+      window.dispatchEvent(new Event('hashchange'));
+    }
+  };
 
   return (
     <div 
-      className="group relative bg-surface-container-low border border-white/5 hover:border-secondary/30 transition-all duration-700 p-8 md:p-12 overflow-hidden rounded-xl cursor-pointer flex flex-col h-full"
+      id={`servicio-${service.num}`}
+      className={`group relative border transition-all duration-700 p-8 md:p-12 overflow-hidden rounded-xl cursor-pointer flex flex-col h-full scroll-mt-32 ${
+        isTargeted 
+          ? 'bg-secondary border-secondary scale-[1.02] shadow-2xl shadow-secondary/20' 
+          : 'bg-surface-container-low border-white/5 hover:bg-secondary hover:border-secondary hover:scale-[1.02] hover:shadow-2xl hover:shadow-secondary/20'
+      }`}
       onClick={() => setExpanded(!expanded)}
+      onMouseEnter={handleMouseEnter}
     >
-      <div className={`absolute ${index % 2 === 0 ? 'top-0 right-0' : 'bottom-0 left-0'} w-64 h-64 bg-secondary/5 rounded-full blur-3xl ${index % 2 === 0 ? '-translate-y-1/2 translate-x-1/2' : 'translate-y-1/2 -translate-x-1/2'} group-hover:bg-secondary/10 transition-colors duration-700`}></div>
+      <div className={`absolute ${index % 2 === 0 ? 'top-0 right-0' : 'bottom-0 left-0'} w-64 h-64 rounded-full blur-3xl transition-colors duration-700 ${
+        isTargeted ? 'bg-white/30' : 'bg-secondary/5 group-hover:bg-white/30'
+      } ${index % 2 === 0 ? '-translate-y-1/2 translate-x-1/2' : 'translate-y-1/2 -translate-x-1/2'}`}></div>
 
       <div className="relative z-10 flex flex-col flex-grow">
         <div>
           <div className="flex items-center justify-between mb-8">
-            <span className="font-headline text-4xl md:text-5xl text-secondary opacity-30 group-hover:opacity-100 transition-opacity duration-700 font-light">{service.num}</span>
-            <span className="font-label text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/40 group-hover:text-white border border-white/10 group-hover:border-white/30 rounded-full px-4 py-2 transition-all duration-500">{service.tag}</span>
+            <span className={`font-headline text-4xl md:text-5xl font-light transition-all duration-700 ${
+              isTargeted ? 'text-primary opacity-100' : 'text-secondary opacity-30 group-hover:text-primary group-hover:opacity-100'
+            }`}>{service.num}</span>
+            <span className={`font-label text-[10px] md:text-xs uppercase tracking-[0.2em] border rounded-full px-4 py-2 transition-all duration-500 ${
+              isTargeted ? 'text-primary border-primary/50' : 'text-white/40 border-white/10 group-hover:text-primary group-hover:border-primary/50'
+            }`}>{service.tag}</span>
           </div>
-          <h3 className="font-headline text-2xl md:text-3xl text-white mb-6 group-hover:text-secondary group-hover:italic transition-all duration-500 pr-8">{service.title}</h3>
-          <div className="w-12 h-[1px] bg-secondary mb-6 transition-all duration-500 group-hover:w-24"></div>
+          <h3 className={`font-headline text-2xl md:text-3xl mb-6 transition-all duration-500 pr-8 ${
+            isTargeted ? 'text-primary font-medium' : 'text-white group-hover:text-primary group-hover:font-medium'
+          }`}>{service.title}</h3>
+          <div className={`h-[1px] mb-6 transition-all duration-500 ${
+            isTargeted ? 'bg-primary/30 w-24' : 'bg-secondary w-12 group-hover:bg-primary/30 group-hover:w-24'
+          }`}></div>
         </div>
         
-        <div className="text-on-surface-variant font-body text-base md:text-lg leading-relaxed group-hover:text-white/90 transition-colors duration-500">
+        <div className={`font-body text-base md:text-lg leading-relaxed transition-colors duration-500 ${
+          isTargeted ? 'text-primary/90' : 'text-on-surface-variant group-hover:text-primary/90'
+        }`}>
           <p>{service.text[0]}</p>
           
           <div className={`grid transition-all duration-500 ease-in-out ${expanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>
@@ -114,7 +156,9 @@ function ServiceCard({ service, index }: { service: any; index: number }) {
           </div>
         </div>
         
-        <div className="mt-auto pt-6 flex items-center gap-2 text-secondary/70 group-hover:text-secondary transition-colors text-sm font-label uppercase tracking-widest font-semibold">
+        <div className={`mt-auto pt-6 flex items-center gap-2 text-sm font-label uppercase tracking-widest font-semibold transition-colors ${
+          isTargeted ? 'text-primary' : 'text-secondary/70 group-hover:text-primary'
+        }`}>
            {expanded ? 'Ocultar detalles' : 'Leer más'}
            <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${expanded ? 'rotate-180' : ''}`} />
         </div>

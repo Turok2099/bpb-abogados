@@ -1,14 +1,14 @@
 import { UploadCloud, CheckCircle, Shield } from "lucide-react";
 import "../theme.css";
 
-export default function FastTrack() {
+export default function TestDeViabilidad() {
   return (
     <div className="pt-32 pb-20 md:py-48 px-8 min-h-screen bg-background">
       <main className="max-w-screen-xl mx-auto">
         <div className="mb-16 md:mb-24 text-center">
           <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-6">Portal de Recepción Segura</p>
           <h1 className="font-headline text-5xl md:text-7xl text-white font-light mb-8 max-w-4xl mx-auto">
-            Evaluación Fast-Track.
+            Test de Viabilidad.
           </h1>
           <p className="font-body text-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
             Inicie el análisis de viabilidad de su proyecto adjuntando la documentación básica. Nuestro equipo técnico-legal revisará los antecedentes con estricta confidencialidad en un plazo de 48 horas.

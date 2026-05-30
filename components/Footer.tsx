@@ -6,30 +6,29 @@ export function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto border-t border-white/10 pt-16">
         <div className="col-span-1 md:col-span-1">
           <img src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" alt="BPB Abogados Logo" className="h-24 w-auto object-contain mb-6 opacity-90" />
-          <p className="font-body text-xs uppercase tracking-widest text-white/70 leading-relaxed">
+          <p className="font-body text-base uppercase tracking-widest text-white/70 leading-relaxed">
             BUENOS AIRES
           </p>
         </div>
         <div className="space-y-4">
-          <p className="text-white text-xs font-bold tracking-widest mb-6">NAVEGACIÓN</p>
+          <p className="text-white text-base font-bold tracking-widest mb-6">NAVEGACIÓN</p>
           <ul className="space-y-3">
 
             <li>
               <Link className="font-body text-sm uppercase tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors" href="/infraestructura">
-                Monetización Infraestructura
+                Real State
               </Link>
             </li>
           </ul>
         </div>
         <div className="space-y-4">
-          <p className="text-white text-xs font-bold tracking-widest mb-6">CONTACTO</p>
+          <p className="text-white text-base font-bold tracking-widest mb-6">CONTACTO</p>
           <ul className="space-y-3">
             <li><Link className="font-body text-sm uppercase tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors" href="/contacto">Contacto Directo</Link></li>
-            <li><a className="font-body text-sm uppercase tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors" href="#">Privacidad</a></li>
           </ul>
         </div>
         <div className="space-y-6">
-          <p className="text-white text-xs font-bold tracking-widest mb-4">SÍGUENOS</p>
+          <p className="text-white text-base font-bold tracking-widest mb-4">SÍGUENOS</p>
           <div className="flex gap-6">
             <a href="https://www.instagram.com/bpb.abogados?igsh=MXZhdmN4YmJxZnZ0" target="_blank" rel="noopener noreferrer" aria-label="Instagram de BPB Abogados">
               <svg

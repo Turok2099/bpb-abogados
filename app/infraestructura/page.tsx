@@ -22,8 +22,8 @@ export default function Infraestructura() {
               <h2 className="font-body text-lg md:text-xl text-white/90 max-w-3xl leading-relaxed mb-10">
                 Usted financió la infraestructura; las distribuidoras capitalizan la rentabilidad. Gestionamos frente a EDENOR y EDESUR la restitución de los gastos de construcción y una indemnización por los metros cuadrados cedidos.
               </h2>
-              <Link href="/fast-track" className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.15em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-fit">
-                Solicitar Evaluación Fast-Track (Viabilidad en 48hs)
+              <Link href="/test-de-viabilidad" className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.15em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-fit">
+                Solicitar Test de Viabilidad (en 48hs)
               </Link>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function Infraestructura() {
           <div className="max-w-screen-xl mx-auto text-center">
             <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-6">El momento de actuar</p>
             <h2 className="font-headline text-4xl md:text-6xl text-white font-light italic mb-8 max-w-4xl mx-auto leading-snug">
-              Evaluación Fast-Track de su portafolio.
+              Test de Viabilidad de su portafolio.
             </h2>
             <p className="font-body text-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed mb-16">
               Transforme sus metros cuadrados inmovilizados y gastos hundidos en liquidez. El escrutinio regulatorio actual sobre las distribuidoras no tiene precedentes, volviéndolas altamente vulnerables ante reclamos técnicos bien fundamentados. Es el momento exacto para actuar.
@@ -153,8 +153,8 @@ export default function Infraestructura() {
                   </p>
                 </div>
                 <div className="md:w-1/3 w-full">
-                  <Link href="/fast-track" className="block w-full text-center bg-secondary text-surface-container py-5 px-6 text-xs font-bold tracking-[0.2em] hover:bg-white transition-all duration-300 rounded-sm">
-                    INICIAR EVALUACIÓN<br />FAST-TRACK
+                  <Link href="/test-de-viabilidad" className="block w-full text-center bg-secondary text-surface-container py-5 px-6 text-xs font-bold tracking-[0.2em] hover:bg-white transition-all duration-300 rounded-sm">
+                    INICIAR TEST DE<br />VIABILIDAD
                   </Link>
                 </div>
               </div>
