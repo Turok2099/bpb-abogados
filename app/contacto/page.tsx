@@ -17,12 +17,12 @@ export default function Contacto() {
   return (
     <div className="pt-32 pb-20 md:pt-48 md:pb-32 px-8 min-h-screen bg-background">
       <div className="max-w-screen-xl mx-auto">
-        <div className="mb-16">
+        <div className="mb-16 flex flex-col items-center lg:items-start text-center lg:text-left">
           <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-6">Contacto Directo</p>
-          <h1 className="font-headline text-5xl md:text-7xl text-white font-light mb-8">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl text-white font-light mb-8">
             Inicie una consulta.
           </h1>
-          <p className="font-body text-lg text-on-surface-variant max-w-2xl leading-relaxed">
+          <p className="font-body text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed mx-auto lg:mx-0">
             Analizamos cada caso bajo los más estrictos estándares de confidencialidad y rigor analítico. Permítanos ser su socio estratégico en la toma de decisiones.
           </p>
         </div>

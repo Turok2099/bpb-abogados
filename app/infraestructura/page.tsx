@@ -8,7 +8,7 @@ export default function Infraestructura() {
     <div>
       <main>
         {/* Hero Section */}
-        <section className="relative min-h-[85vh] flex flex-col justify-center px-8 md:px-24 py-20 pt-32 md:py-32 md:pt-48">
+        <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center px-8 md:px-24 py-20 pt-32 md:py-32 md:pt-48">
           <div className="absolute inset-0 z-0">
             <img
               alt="Infraestructura y Real Estate"
@@ -17,15 +17,15 @@ export default function Infraestructura() {
             />
             <div className="absolute inset-0 bg-black/60"></div>
           </div>
-          <div className="max-w-5xl relative z-10">
+          <div className="max-w-5xl relative z-10 flex flex-col items-center md:items-start text-center md:text-left mx-auto md:mx-0">
             <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">
               BPB REAL ESTATE &amp; INFRAESTRUCTURA
             </p>
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl text-white leading-[1.1] font-extralight tracking-tight mb-8">
+            <h1 className="font-headline text-3xl sm:text-5xl md:text-7xl text-white leading-[1.1] font-extralight tracking-tight mb-8">
               Monetice la infraestructura eléctrica de sus desarrollos.
             </h1>
-            <div className="mt-12 flex flex-col items-start border-t border-white/20 pt-8">
-              <h2 className="font-body text-lg md:text-xl text-white/90 max-w-3xl leading-relaxed mb-10">
+            <div className="mt-12 flex flex-col items-center md:items-start border-t border-white/20 pt-8 w-full">
+              <h2 className="font-body text-base md:text-xl text-white/90 max-w-3xl leading-relaxed mb-10 mx-auto md:mx-0">
                 En BPB Abogados asesoramos y representamos a desarrolladores
                 inmobiliarios, fiduciarios, constructoras y consorcios de
                 copropietarios en reclamos vinculados a instalaciones
@@ -35,7 +35,7 @@ export default function Infraestructura() {
               </h2>
               <Link
                 href="/test-de-viabilidad"
-                className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.15em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-fit"
+                className="inline-flex items-center justify-center border border-white/30 px-8 py-4 font-label text-xs uppercase tracking-[0.15em] font-bold text-white hover:bg-secondary hover:border-secondary hover:text-primary transition-all duration-500 rounded-sm w-full md:w-fit"
               >
                 Solicitar Test de Viabilidad (en 48hs)
               </Link>
@@ -164,14 +164,14 @@ export default function Infraestructura() {
         {/* Sección 4: El Proceso y la Documentación */}
         <section className="py-20 md:py-32 px-8 bg-surface border-t border-white/5">
           <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-16 items-start">
-            <div className="lg:w-1/2">
+            <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
               <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">
                 Eficiencia y Ejecución
               </p>
-              <h2 className="font-headline text-4xl md:text-5xl text-white font-light mb-8">
+              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl text-white font-light mb-8">
                 Cuatro fases de precisión para recuperar su inversión.
               </h2>
-              <p className="text-on-surface-variant font-body text-xl leading-relaxed text-justify-custom">
+              <p className="text-on-surface-variant font-body text-base md:text-xl leading-relaxed text-justify-custom mx-auto lg:mx-0">
                 Nuestro equipo hiper-especializado audita toda la evidencia
                 material para blindar el expediente desde el día uno. Nos
                 encargamos de la Auditoría Técnica y Legal, agotamos la
@@ -225,14 +225,14 @@ export default function Infraestructura() {
               momento exacto para actuar.
             </p>
 
-            <div className="bg-surface-container border border-white/10 text-white p-8 md:p-16 max-w-4xl mx-auto rounded-2xl shadow-2xl text-left relative overflow-hidden group">
+            <div className="bg-surface-container border border-white/10 text-white p-8 md:p-16 max-w-4xl mx-auto rounded-2xl shadow-2xl text-center md:text-left relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-                <div className="md:w-2/3">
-                  <h3 className="font-headline text-3xl mb-4 text-white">
+                <div className="md:w-2/3 flex flex-col items-center md:items-start">
+                  <h3 className="font-headline text-2xl sm:text-3xl mb-4 text-white">
                     Agende una evaluación técnica confidencial.
                   </h3>
-                  <div className="flex items-center gap-3 text-white/80 mb-6">
+                  <div className="flex items-center gap-3 text-white/80 mb-6 justify-center md:justify-start">
                     <Clock className="w-5 h-5 text-secondary" />
                     <p className="font-body text-sm font-bold tracking-wide">
                       En 48 horas entregaremos un informe de viabilidad.
@@ -261,11 +261,11 @@ export default function Infraestructura() {
         {/* Sección FAQ */}
         <section className="py-20 md:py-32 px-8 bg-background border-t border-white/5">
           <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-16 items-start">
-            <div className="md:w-1/3">
+            <div className="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left w-full">
               <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">
                 Claridad Absoluta
               </p>
-              <h2 className="font-headline text-4xl md:text-5xl text-white font-light mb-8">
+              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl text-white font-light mb-8">
                 Preguntas Frecuentes.
               </h2>
             </div>

@@ -18,8 +18,8 @@ export function Contact() {
       <div className="max-w-screen-xl mx-auto bg-surface-container border border-secondary/20 text-white p-8 md:p-24 relative overflow-hidden rounded-2xl shadow-2xl">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-secondary opacity-5 -rotate-12 translate-x-12 translate-y-12"></div>
         <div className="relative z-10 grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="font-headline text-4xl mb-6">Inicie una consulta.</h2>
+          <div className="text-center md:text-left">
+            <h2 className="font-headline text-3xl sm:text-4xl mb-6">Inicie una consulta.</h2>
             <p className="font-body text-white/70 leading-relaxed">
               Analizamos cada caso bajo los más estrictos estándares de confidencialidad y rigor analítico. Permítanos ser su socio estratégico en la toma de decisiones.
             </p>

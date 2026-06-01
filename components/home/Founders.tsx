@@ -2,18 +2,18 @@ export function Founders() {
   return (
     <section id="socios" className="py-20 md:py-32 px-8 bg-surface scroll-mt-24">
       <div className="max-w-screen-2xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start mb-16 md:mb-24 gap-12 md:gap-8">
-          <div className="max-w-md shrink-0">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left mb-16 md:mb-24 gap-8 md:gap-12">
+          <div className="max-w-md shrink-0 flex flex-col items-center md:items-start">
             <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">
               Liderazgo &amp; Visión
             </p>
-            <h2 className="font-headline text-5xl md:text-7xl text-white font-light">
+            <h2 className="font-headline text-4xl sm:text-5xl md:text-7xl text-white font-light">
               Socios Fundadores
             </h2>
           </div>
-          <div className="max-w-2xl">
-            <blockquote className="border-l-2 border-secondary/50 pl-6 md:pl-10">
-              <p className="font-headline text-2xl md:text-3xl text-white/90 leading-snug">
+          <div className="max-w-2xl text-center md:text-left">
+            <blockquote className="border-l-0 md:border-l-2 border-secondary/50 pl-0 md:pl-10">
+              <p className="font-headline text-xl sm:text-2xl md:text-3xl text-white/90 leading-snug">
                 "Nuestra filosofía de trabajo se sustenta en la seriedad profesional, la honestidad, la confidencialidad y el compromiso permanente con los intereses de quienes confían en nosotros."
               </p>
             </blockquote>
@@ -21,7 +21,7 @@ export function Founders() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Partner 1 */}
-          <div className="group cursor-pointer">
+          <div className="max-w-sm mx-auto w-full group cursor-pointer">
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Guillermo Betard"
@@ -41,7 +41,7 @@ export function Founders() {
             <div className="editorial-line mb-4 opacity-40"></div>
           </div>
           {/* Partner 2 */}
-          <div className="group cursor-pointer">
+          <div className="max-w-sm mx-auto w-full group cursor-pointer">
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Mariano Pacifico"
@@ -61,7 +61,7 @@ export function Founders() {
             <div className="editorial-line mb-4 opacity-40"></div>
           </div>
           {/* Partner 3 */}
-          <div className="group cursor-pointer">
+          <div className="max-w-sm mx-auto w-full group cursor-pointer">
             <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
               <img
                 alt="Retrato Profesional Dr. Rodrigo Biondi"
