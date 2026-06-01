@@ -18,6 +18,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BPB Abogados",
   description: "Despacho legal especializado en derecho corporativo y monetización de infraestructura en Argentina.",
+  icons: {
+    icon: "https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png",
+    apple: "https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png",
+  },
 };
 
 export default function RootLayout({
