@@ -15,7 +15,6 @@
     "react": "19.2.4",
     "react-calendly": "^4.4.0",
     "react-dom": "19.2.4",
-    "react-whatsapp-widget": "^2.2.0",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
