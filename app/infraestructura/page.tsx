@@ -8,7 +8,7 @@ export default function Infraestructura() {
     <div>
       <main>
         {/* Hero Section */}
-        <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center px-6 md:px-24 py-16 pt-28 md:py-32 md:pt-48">
+        <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center px-6 md:px-24 py-16 pt-44 md:py-32 md:pt-48">
           <div className="absolute inset-0 z-0">
             <img
               alt="Infraestructura y Real Estate"

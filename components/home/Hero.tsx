@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[70vh] md:min-h-[90vh] flex flex-col justify-center px-6 md:px-24 py-16 pt-28 md:py-32 md:pt-48">
+    <section className="relative min-h-[70vh] md:min-h-[90vh] flex flex-col justify-center px-6 md:px-24 py-16 pt-44 md:py-32 md:pt-48">
       <div className="absolute inset-0 z-0">
         <img alt="BPB Abogados Office" className="w-full h-full object-cover brightness-[0.35]" src="/renders/oficina-2.jpeg" />
       </div>
