@@ -18,7 +18,7 @@ export function WhatsAppWrapper() {
   return (
     <div style={{ zIndex: 9999, position: 'relative' }}>
       <WhatsAppWidget 
-        phoneNumber="+541100000000" 
+        phoneNumber="+5491176310531" 
         companyName="BPB Abogados" 
         message="¡Hola! 👋 ¿En qué podemos asesorarte?" 
         replyTimeText="Normalmente respondemos en minutos"
