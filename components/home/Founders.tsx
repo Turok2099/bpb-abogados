@@ -43,7 +43,7 @@ function PartnerCard({ name, role, imgUrl, altText }: PartnerCardProps) {
       <div className="relative aspect-[3/4] overflow-hidden bg-slate-100 mb-8 border-b-2 border-transparent group-hover:border-secondary transition-colors duration-500">
         <img
           alt={altText}
-          className={`w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-105 ${
+          className={`w-full h-full object-cover object-[center_10%] transition-all duration-700 group-hover:scale-105 ${
             isActive 
               ? "grayscale-0 scale-105" 
               : "grayscale group-hover:grayscale-0"
