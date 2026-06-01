@@ -17,9 +17,13 @@ const servicesList = [
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+    if (isMobileMenuOpen) {
+      setIsServicesOpen(false);
+    }
   };
 
   return (
@@ -96,49 +100,57 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full max-h-[85vh] overflow-y-auto bg-surface border-b border-outline-variant/10 shadow-xl flex flex-col py-6 px-6 gap-6">
 
-          <div className="flex flex-col gap-3 border-b border-white/10 pb-4">
-            <span className="text-white text-base font-bold tracking-widest">SERVICIOS</span>
-            <div className="flex flex-col pl-4 gap-4 mt-2">
-              {servicesList.map((srv) => (
-                <Link
-                  key={srv.num}
-                  href={`/#servicio-${srv.num}`}
-                  onClick={() => {
-                    toggleMobileMenu();
-                    setTimeout(() => window.dispatchEvent(new Event('hashchange')), 100);
-                    setTimeout(() => window.dispatchEvent(new Event('hashchange')), 500);
-                  }}
-                  className="text-base text-white/70 hover:text-secondary tracking-widest uppercase"
-                >
-                  {srv.title}
-                </Link>
-              ))}
-            </div>
+          <div className="border-b border-white/10 pb-4">
+            <button
+              onClick={() => setIsServicesOpen(!isServicesOpen)}
+              className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left"
+            >
+              <span>SERVICIOS</span>
+              <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`} />
+            </button>
+            {isServicesOpen && (
+              <div className="flex flex-col pl-4 gap-3.5 mt-4 transition-all duration-300">
+                {servicesList.map((srv) => (
+                  <Link
+                    key={srv.num}
+                    href={`/#servicio-${srv.num}`}
+                    onClick={() => {
+                      toggleMobileMenu();
+                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 100);
+                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 500);
+                    }}
+                    className="text-xs text-white/70 hover:text-secondary tracking-wider uppercase transition-colors"
+                  >
+                    {srv.title}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
           <Link
-            className="text-white text-base font-bold tracking-widest border-b border-white/10 pb-4"
+            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
             href="/#socios"
             onClick={toggleMobileMenu}
           >
             SOCIOS
           </Link>
           <Link
-            className="text-white text-base font-bold tracking-widest border-b border-white/10 pb-4"
+            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
             href="/test-de-viabilidad"
             onClick={toggleMobileMenu}
           >
             TEST DE VIABILIDAD
           </Link>
           <Link
-            className="text-white text-base font-bold tracking-widest border-b border-white/10 pb-4"
+            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
             href="/infraestructura"
             onClick={toggleMobileMenu}
           >
             REAL STATE
           </Link>
           <Link
-            className="text-white text-base font-bold tracking-widest border-b border-white/10 pb-4"
+            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
             href="/contacto"
             onClick={toggleMobileMenu}
           >
