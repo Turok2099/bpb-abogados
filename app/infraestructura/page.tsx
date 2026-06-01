@@ -8,7 +8,7 @@ export default function Infraestructura() {
     <div>
       <main>
         {/* Hero Section */}
-        <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center px-8 md:px-24 py-20 pt-32 md:py-32 md:pt-48">
+        <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center px-6 md:px-24 py-16 pt-28 md:py-32 md:pt-48">
           <div className="absolute inset-0 z-0">
             <img
               alt="Infraestructura y Real Estate"
@@ -18,14 +18,14 @@ export default function Infraestructura() {
             <div className="absolute inset-0 bg-black/60"></div>
           </div>
           <div className="max-w-5xl relative z-10 flex flex-col items-center md:items-start text-center md:text-left mx-auto md:mx-0">
-            <p className="font-label text-sm uppercase tracking-[0.3em] text-secondary font-semibold mb-8 block">
+            <p className="font-label text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] text-secondary font-semibold mb-6 md:mb-8 block">
               BPB REAL ESTATE &amp; INFRAESTRUCTURA
             </p>
-            <h1 className="font-headline text-3xl sm:text-5xl md:text-7xl text-white leading-[1.1] font-extralight tracking-tight mb-8">
+            <h1 className="font-headline text-2xl sm:text-4xl md:text-7xl text-white leading-[1.1] font-extralight tracking-tight mb-6 md:mb-8">
               Monetice la infraestructura eléctrica de sus desarrollos.
             </h1>
-            <div className="mt-12 flex flex-col items-center md:items-start border-t border-white/20 pt-8 w-full">
-              <h2 className="font-body text-base md:text-xl text-white/90 max-w-3xl leading-relaxed mb-10 mx-auto md:mx-0">
+            <div className="mt-6 md:mt-12 flex flex-col items-center md:items-start border-t border-white/20 pt-6 md:pt-8 w-full">
+              <h2 className="font-body text-sm md:text-xl text-white/90 max-w-3xl leading-relaxed mb-8 md:mb-10 mx-auto md:mx-0">
                 En BPB Abogados asesoramos y representamos a desarrolladores
                 inmobiliarios, fiduciarios, constructoras y consorcios de
                 copropietarios en reclamos vinculados a instalaciones
