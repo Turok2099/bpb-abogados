@@ -11,7 +11,8 @@ export function Contact() {
     e.preventDefault();
     setIsPending(true);
     
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const result = await submitContact(null, formData);
     
     if (result.success) {
@@ -22,7 +23,7 @@ export function Contact() {
           color: 'var(--color-on-surface)'
         }
       });
-      e.currentTarget.reset();
+      form.reset();
     } else {
       toast.error(result.error || "Hubo un error al enviar el formulario", {
         style: {
