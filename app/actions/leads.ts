@@ -77,7 +77,7 @@ export async function submitContact(prevState: any, formData: FormData) {
     return { success: true };
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return { success: false, error: err.errors.map(e => e.message).join(", ") };
+      return { success: false, error: err.issues.map(e => e.message).join(", ") };
     }
     console.error("Action error:", err);
     return { success: false, error: "Error de servidor. Intente más tarde." };
@@ -185,7 +185,7 @@ export async function submitViabilidad(prevState: any, formData: FormData) {
     return { success: true };
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return { success: false, error: err.errors.map(e => e.message).join(", ") };
+      return { success: false, error: err.issues.map(e => e.message).join(", ") };
     }
     console.error("Action error:", err);
     return { success: false, error: "Error de servidor. Intente más tarde." };
