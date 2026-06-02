@@ -3,16 +3,39 @@ import { MapPin, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { CalendlyWidget } from "../../components/CalendlyWidget";
 
+import { useState } from "react";
+import { submitContact } from "../actions/leads";
+
 export default function Contacto() {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isPending, setIsPending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Hemos recibido sus datos y nos comunicaremos a la brevedad", {
-      style: {
-        background: 'var(--color-surface)',
-        borderColor: 'var(--color-secondary)',
-        color: 'var(--color-on-surface)'
-      }
-    });
+    setIsPending(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await submitContact(null, formData);
+    
+    if (result.success) {
+      toast.success("Hemos recibido sus datos y nos comunicaremos a la brevedad", {
+        style: {
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-secondary)',
+          color: 'var(--color-on-surface)'
+        }
+      });
+      e.currentTarget.reset();
+    } else {
+      toast.error(result.error || "Hubo un error al enviar el formulario", {
+        style: {
+          background: 'var(--color-surface)',
+          borderColor: 'red',
+          color: 'var(--color-on-surface)'
+        }
+      });
+    }
+    
+    setIsPending(false);
   };
   return (
     <div className="pt-32 pb-20 md:pt-48 md:pb-32 px-8 min-h-screen bg-background">
@@ -33,21 +56,23 @@ export default function Contacto() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-3xl rounded-full"></div>
             <form className="space-y-12 relative z-10" onSubmit={handleSubmit}>
               <div className="relative">
-                <input aria-label="Nombre Completo" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="NOMBRE COMPLETO *" type="text" required />
+                <input aria-label="Nombre Completo" name="nombre" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="NOMBRE COMPLETO *" type="text" required disabled={isPending} />
               </div>
               <div className="relative">
-                <input aria-label="Correo Electrónico" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="CORREO ELECTRÓNICO *" type="email" required />
+                <input aria-label="Correo Electrónico" name="email" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="CORREO ELECTRÓNICO *" type="email" required disabled={isPending} />
               </div>
               <div className="relative">
-                <input aria-label="Empresa" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="EMPRESA / ORGANIZACIÓN" type="text" />
+                <input aria-label="Empresa" name="empresa" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="EMPRESA / ORGANIZACIÓN" type="text" disabled={isPending} />
               </div>
               <div className="relative">
-                <input aria-label="WhatsApp o Teléfono" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="WHATSAPP / TELÉFONO *" type="tel" required />
+                <input aria-label="WhatsApp o Teléfono" name="telefono" className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label uppercase tracking-widest outline-none focus:ring-0 text-white placeholder-white/40" placeholder="WHATSAPP / TELÉFONO *" type="tel" required disabled={isPending} />
               </div>
               <div className="relative">
-                <textarea aria-label="Asunto" rows={3} className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label tracking-wide outline-none focus:ring-0 text-white placeholder-white/40 resize-none" placeholder="Breve descripción del caso o consulta... *" required></textarea>
+                <textarea aria-label="Asunto" name="mensaje" rows={3} className="w-full bg-transparent border-b-2 border-white/20 focus:border-secondary transition-colors py-4 px-0 text-base font-label tracking-wide outline-none focus:ring-0 text-white placeholder-white/40 resize-none" placeholder="Breve descripción del caso o consulta... *" required disabled={isPending}></textarea>
               </div>
-              <button aria-label="Solicitar Reunión" className="w-full bg-secondary text-primary py-6 text-base font-bold tracking-[0.3em] hover:bg-white transition-all duration-300 rounded-sm mt-8" type="submit">SOLICITAR REUNIÓN</button>
+              <button aria-label="Solicitar Reunión" className="w-full bg-secondary text-primary py-6 text-base font-bold tracking-[0.3em] hover:bg-white transition-all duration-300 rounded-sm mt-8 disabled:opacity-50 disabled:cursor-not-allowed" type="submit" disabled={isPending}>
+                {isPending ? "ENVIANDO..." : "SOLICITAR REUNIÓN"}
+              </button>
             </form>
           </div>
 
