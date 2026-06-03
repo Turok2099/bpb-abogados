@@ -18,11 +18,13 @@ const servicesList = [
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isRealStateOpen, setIsRealStateOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     if (isMobileMenuOpen) {
       setIsServicesOpen(false);
+      setIsRealStateOpen(false);
     }
   };
 
@@ -37,7 +39,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-10">
 
           <div className="relative group">
-            <button className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none">
+            <button className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none cursor-pointer">
               SERVICIOS
               <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
             </button>
@@ -66,18 +68,31 @@ export function Navbar() {
           >
             SOCIOS
           </Link>
-          <Link
-            className="text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300"
-            href="/infraestructura"
-          >
-            REAL STATE
-          </Link>
-          <Link
-            className="text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300"
-            href="/test-de-viabilidad"
-          >
-            TEST DE VIABILIDAD
-          </Link>
+
+          {/* REAL STATE Dropdown */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none cursor-pointer">
+              REAL STATE
+              <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300">
+              <div className="bg-surface border border-outline-variant/10 shadow-xl rounded-sm py-2 w-64 flex flex-col">
+                <Link
+                  href="/infraestructura"
+                  className="px-6 py-3 text-base tracking-wider text-white/70 hover:text-secondary hover:bg-white/5 transition-colors"
+                >
+                  Infraestructura
+                </Link>
+                <Link
+                  href="/test-de-viabilidad"
+                  className="px-6 py-3 text-base tracking-wider text-white/70 hover:text-secondary hover:bg-white/5 transition-colors"
+                >
+                  Test de Viabilidad
+                </Link>
+              </div>
+            </div>
+          </div>
+
           <Link
             className="text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300"
             href="/contacto"
@@ -100,10 +115,11 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full max-h-[85vh] overflow-y-auto bg-surface border-b border-outline-variant/10 shadow-xl flex flex-col py-6 px-6 gap-6">
 
+          {/* Mobile Servicios Dropdown */}
           <div className="border-b border-white/10 pb-4">
             <button
               onClick={() => setIsServicesOpen(!isServicesOpen)}
-              className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left"
+              className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left cursor-pointer"
             >
               <span>SERVICIOS</span>
               <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`} />
@@ -135,20 +151,36 @@ export function Navbar() {
           >
             SOCIOS
           </Link>
-          <Link
-            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
-            href="/test-de-viabilidad"
-            onClick={toggleMobileMenu}
-          >
-            TEST DE VIABILIDAD
-          </Link>
-          <Link
-            className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
-            href="/infraestructura"
-            onClick={toggleMobileMenu}
-          >
-            REAL STATE
-          </Link>
+
+          {/* Mobile REAL STATE Dropdown */}
+          <div className="border-b border-white/10 pb-4">
+            <button
+              onClick={() => setIsRealStateOpen(!isRealStateOpen)}
+              className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left cursor-pointer"
+            >
+              <span>REAL STATE</span>
+              <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isRealStateOpen ? "rotate-180" : ""}`} />
+            </button>
+            {isRealStateOpen && (
+              <div className="flex flex-col pl-4 gap-3.5 mt-4 transition-all duration-300">
+                <Link
+                  href="/infraestructura"
+                  onClick={toggleMobileMenu}
+                  className="text-xs text-white/70 hover:text-secondary tracking-wider uppercase transition-colors"
+                >
+                  Infraestructura
+                </Link>
+                <Link
+                  href="/test-de-viabilidad"
+                  onClick={toggleMobileMenu}
+                  className="text-xs text-white/70 hover:text-secondary tracking-wider uppercase transition-colors"
+                >
+                  Test de Viabilidad
+                </Link>
+              </div>
+            )}
+          </div>
+
           <Link
             className="text-white text-sm font-bold tracking-widest border-b border-white/10 pb-4 transition-colors hover:text-secondary"
             href="/contacto"
