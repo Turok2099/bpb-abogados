@@ -1,8 +1,9 @@
 import { getPosts } from '@/app/actions/blog'
 import { logout } from '@/app/actions/auth'
 import { AdminPostList } from './AdminPostList'
-import { LogOut, LayoutDashboard, User } from 'lucide-react'
+import { LogOut, LayoutDashboard, User, Globe } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,11 +24,13 @@ export default async function AdminDashboardPage() {
       <header className="bg-surface border-b border-outline-variant/20 py-4 px-6 md:px-8">
         <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <img 
-              src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" 
-              alt="BPB Abogados Logo" 
-              className="h-10 w-auto object-contain"
-            />
+            <Link href="/" className="flex items-center shrink-0">
+              <img 
+                src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" 
+                alt="BPB Abogados Logo" 
+                className="h-10 w-auto object-contain hover:opacity-80 transition-opacity"
+              />
+            </Link>
             <div className="h-6 w-[1px] bg-outline-variant/35 hidden sm:block"></div>
             <div className="hidden sm:flex items-center gap-2 text-xs uppercase tracking-widest text-secondary font-semibold">
               <LayoutDashboard className="w-4 h-4" />
@@ -40,6 +43,14 @@ export default async function AdminDashboardPage() {
               <User className="w-4 h-4 text-secondary" />
               <span>Hola, <strong className="text-white font-semibold">{profile?.nombre || 'Administrador'}</strong></span>
             </div>
+
+            <Link 
+              href="/"
+              className="h-10 px-4 border border-outline-variant/30 hover:border-secondary hover:text-secondary text-white/70 text-xs uppercase tracking-widest transition-all rounded-sm flex items-center gap-2 cursor-pointer"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              Ver Sitio
+            </Link>
             
             <form action={logout}>
               <button 
