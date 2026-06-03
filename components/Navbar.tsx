@@ -96,6 +96,13 @@ export function Navbar() {
           >
             CONTACTO
           </Link>
+
+          <Link
+            className="h-10 px-4 border border-secondary/35 text-secondary hover:bg-secondary/5 text-xs uppercase tracking-widest transition-all rounded-sm flex items-center justify-center font-semibold cursor-pointer"
+            href="/dashboard"
+          >
+            PORTAL CLIENTES
+          </Link>
         </nav>
 
         {/* Mobile Toggle Button */}
@@ -185,6 +192,14 @@ export function Navbar() {
             onClick={toggleMobileMenu}
           >
             CONTACTO
+          </Link>
+
+          <Link
+            className="w-full h-11 border border-secondary/35 text-secondary hover:bg-secondary/5 text-xs uppercase tracking-widest font-semibold rounded-sm flex items-center justify-center cursor-pointer"
+            href="/dashboard"
+            onClick={toggleMobileMenu}
+          >
+            PORTAL CLIENTES
           </Link>
         </div>
       )}

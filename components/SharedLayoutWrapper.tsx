@@ -12,8 +12,14 @@ interface SharedLayoutWrapperProps {
 export function SharedLayoutWrapper({ children }: SharedLayoutWrapperProps) {
   const pathname = usePathname();
   
-  // Hide Navbar, Footer, and WhatsAppWrapper in admin and login routes
-  const isSharedLayout = pathname ? !pathname.startsWith('/admin') && !pathname.startsWith('/login') : true;
+  // Hide Navbar, Footer, and WhatsAppWrapper in admin, login, register, dashboard, and gestor routes
+  const isSharedLayout = pathname 
+    ? !pathname.startsWith('/admin') && 
+      !pathname.startsWith('/login') && 
+      !pathname.startsWith('/registro') && 
+      !pathname.startsWith('/dashboard') && 
+      !pathname.startsWith('/gestor')
+    : true;
 
   return (
     <>

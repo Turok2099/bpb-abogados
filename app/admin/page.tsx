@@ -1,7 +1,7 @@
 import { getPosts } from '@/app/actions/blog'
 import { logout } from '@/app/actions/auth'
 import { AdminPostList } from './AdminPostList'
-import { LogOut, LayoutDashboard, User, Globe } from 'lucide-react'
+import { LogOut, LayoutDashboard, User, Globe, Briefcase } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
@@ -43,6 +43,14 @@ export default async function AdminDashboardPage() {
               <User className="w-4 h-4 text-secondary" />
               <span>Hola, <strong className="text-white font-semibold">{profile?.nombre || 'Administrador'}</strong></span>
             </div>
+
+            <Link 
+              href="/gestor"
+              className="h-10 px-4 border border-secondary/35 text-secondary hover:bg-secondary/5 text-xs uppercase tracking-widest transition-all rounded-sm flex items-center gap-2 cursor-pointer font-semibold"
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              Gestión de Casos
+            </Link>
 
             <Link 
               href="/"

@@ -38,7 +38,13 @@ function LoginForm() {
             color: "var(--color-on-surface)",
           },
         });
-        router.push("/admin");
+        if (res?.role === 'admin') {
+          router.push("/admin");
+        } else if (res?.role === 'gestor') {
+          router.push("/gestor");
+        } else {
+          router.push("/dashboard");
+        }
         router.refresh();
       }
     } catch (err) {

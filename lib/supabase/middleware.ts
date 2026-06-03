@@ -47,7 +47,7 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname
 
-  // 1. Proteger rutas administrativas (/admin/*)
+  // 1. Proteger rutas por rol
   if (path.startsWith('/admin')) {
     if (!user) {
       const url = request.nextUrl.clone()
@@ -55,7 +55,6 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    // Verificar si el usuario tiene rol de administrador en public.profiles
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -63,31 +62,77 @@ export async function updateSession(request: NextRequest) {
       .single()
 
     if (!profile || profile.role !== 'admin') {
-      // Si está autenticado pero no es administrador, cerramos sesión por seguridad y redirigimos
       const response = NextResponse.redirect(new URL('/login?error=unauthorized', request.url))
-      // Intentar limpiar cookies de sesión
       await supabase.auth.signOut()
       return response
     }
   }
 
-  // 2. Redirigir si ya está autenticado e intenta acceder a /login
-  if (path.startsWith('/login')) {
+  if (path.startsWith('/gestor')) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || (profile.role !== 'gestor' && profile.role !== 'admin')) {
+      const response = NextResponse.redirect(new URL('/login?error=unauthorized', request.url))
+      await supabase.auth.signOut()
+      return response
+    }
+  }
+
+  if (path.startsWith('/dashboard')) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || (profile.role !== 'cliente' && profile.role !== 'gestor' && profile.role !== 'admin')) {
+      const response = NextResponse.redirect(new URL('/login?error=unauthorized', request.url))
+      await supabase.auth.signOut()
+      return response
+    }
+  }
+
+  // 2. Redirigir si ya está autenticado e intenta acceder a /login o /registro
+  if (path.startsWith('/login') || path.startsWith('/registro')) {
     if (user) {
-      // Verificar si es administrador
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .single()
 
-      if (profile && profile.role === 'admin') {
+      if (profile) {
         const url = request.nextUrl.clone()
-        url.pathname = '/admin'
-        return NextResponse.redirect(url)
+        if (profile.role === 'admin') {
+          url.pathname = '/admin'
+          return NextResponse.redirect(url)
+        } else if (profile.role === 'gestor') {
+          url.pathname = '/gestor'
+          return NextResponse.redirect(url)
+        } else if (profile.role === 'cliente') {
+          url.pathname = '/dashboard'
+          return NextResponse.redirect(url)
+        }
       }
     }
   }
 
   return supabaseResponse
 }
+
