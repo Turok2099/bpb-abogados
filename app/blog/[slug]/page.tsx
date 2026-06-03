@@ -4,7 +4,7 @@ import { getPostBySlug } from '@/app/actions/blog'
 import { marked } from 'marked'
 
 export const dynamic = 'force-dynamic'
-import { Calendar, ArrowLeft, ChevronRight, MessageSquare, AlertCircle } from 'lucide-react'
+import { Calendar, ArrowLeft, MessageSquare, AlertCircle } from 'lucide-react'
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
@@ -163,21 +163,14 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
                   ¿Tiene una consulta sobre este u otro caso legal?
                 </h3>
                 <p className="font-body text-sm text-on-surface-variant leading-relaxed">
-                  Ofrecemos asesoramiento experto con estricto rigor y confidencialidad corporativa. Realice una evaluación inicial de viabilidad técnica o contáctenos hoy mismo.
+                  Ofrecemos asesoramiento experto con estricto rigor y confidencialidad corporativa. Contáctenos hoy mismo para analizar su situación.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 shrink-0 w-full sm:w-auto">
                 <Link
-                  href="/test-de-viabilidad"
-                  className="h-12 px-6 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white transition-all duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  Evaluar mi caso
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-                <Link
                   href="/contacto"
-                  className="h-12 px-6 border border-white/20 text-white font-bold text-xs uppercase tracking-widest hover:border-secondary hover:text-secondary transition-all duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer"
+                  className="h-12 px-6 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white transition-all duration-300 rounded-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Contacto directo
