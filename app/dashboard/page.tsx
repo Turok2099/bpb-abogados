@@ -15,9 +15,14 @@ export default async function ClientDashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nombre, telefono")
+    .select("nombre, telefono, role")
     .eq("id", user.id)
     .maybeSingle();
+
+  // Si el usuario es administrador o gestor, no debe ver el dashboard de clientes
+  if (profile && (profile.role === "admin" || profile.role === "gestor")) {
+    redirect("/gestor");
+  }
 
   const casosRes = await getMisCasos();
   if (casosRes.error) {

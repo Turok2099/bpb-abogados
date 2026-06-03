@@ -38,9 +38,9 @@ export function Footer() {
             <li>
               <Link
                 className="font-body text-xs md:text-sm uppercase tracking-wider md:tracking-widest text-white/70 hover:text-white hover:underline decoration-secondary underline-offset-4 transition-colors"
-                href="/login"
+                href="/dashboard"
               >
-                Acceso
+                Portal
               </Link>
             </li>
           </ul>
