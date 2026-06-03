@@ -1,4 +1,4 @@
-import { ArrowRight, FileText, CheckCircle, Clock, Shield } from "lucide-react";
+import { ArrowRight, FileText, CheckCircle, Shield } from "lucide-react";
 import Link from "next/link";
 import "../theme.css";
 import { CalendlyWidget } from "../../components/CalendlyWidget";
@@ -208,60 +208,86 @@ export default function Infraestructura() {
           </div>
         </section>
 
-        {/* Sección 5: Urgencia y Llamada a la Acción */}
-        <section className="py-20 md:py-32 px-8 bg-surface-bright border-t border-white/5">
-          <div className="max-w-screen-xl mx-auto text-center">
-            <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-6">
-              El momento de actuar
+        {/* Sección 5: Test de Viabilidad de su Portafolio */}
+        <section className="py-20 md:py-32 px-6 bg-surface-bright border-t border-white/5 text-center">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold">
+              Escrutinio Regulatorio
             </p>
-            <h2 className="font-headline text-4xl md:text-6xl text-white font-light mb-8 max-w-4xl mx-auto leading-snug">
-              Test de Viabilidad de su portafolio.
+            <h2 className="font-headline text-3xl sm:text-4xl md:text-6xl text-white font-light leading-tight">
+              Test de Viabilidad de su portafolio
             </h2>
-            <p className="font-body text-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed mb-16">
-              Transforme sus metros cuadrados inmovilizados y gastos hundidos en
-              liquidez. El escrutinio regulatorio actual sobre las
-              distribuidoras no tiene precedentes, volviéndolas altamente
-              vulnerables ante reclamos técnicos bien fundamentados. Es el
-              momento exacto para actuar.
+            <p className="font-body text-sm sm:text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+              Transforme sus metros cuadrados inmovilizados y gastos hundidos en liquidez. El contexto actual sobre las distribuidoras no tiene precedentes, volviéndolas vulnerables ante reclamos técnicos bien fundamentados.
             </p>
 
-            <div className="bg-surface-container border border-white/10 text-white p-8 md:p-16 max-w-4xl mx-auto rounded-2xl shadow-2xl text-center md:text-left relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-                <div className="md:w-2/3 flex flex-col items-center md:items-start">
-                  <h3 className="font-headline text-2xl sm:text-3xl mb-4 text-white">
-                    Agende una evaluación técnica confidencial.
+            <div className="bg-surface-container border border-white/10 text-white p-8 md:p-12 max-w-3xl mx-auto rounded-xl shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/5 to-transparent opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+              <div className="relative z-10 flex flex-col items-center gap-6">
+                <div className="text-center space-y-3">
+                  <h3 className="font-headline text-xl sm:text-2xl text-white font-light">
+                    ¿Quiere saber si su caso es viable?
                   </h3>
-                  <div className="flex items-center gap-3 text-white/80 mb-6 justify-center md:justify-start">
-                    <Clock className="w-5 h-5 text-secondary" />
-                    <p className="font-body text-sm font-bold tracking-wide">
-                      En 48 horas entregaremos un informe de viabilidad.
-                    </p>
-                  </div>
-                  <p className="font-body text-sm leading-relaxed text-on-surface-variant">
-                    Recibirá una estimación concreta del capital recuperable,
-                    sin ningún costo inicial ni compromiso vinculante.
+                  <p className="font-body text-xs sm:text-sm text-on-surface-variant max-w-lg mx-auto leading-relaxed">
+                    Complete nuestro cuestionario guiado en línea y analice la viabilidad de recuperar la inversión en obra eléctrica o cesión de espacio en su desarrollo.
                   </p>
                 </div>
-                <div className="md:w-1/3 w-full">
-                  <Link
-                    href="/test-de-viabilidad"
-                    className="block w-full text-center bg-secondary text-surface-container py-5 px-6 text-xs font-bold tracking-[0.2em] hover:bg-white transition-all duration-300 rounded-sm"
-                  >
-                    INICIAR TEST DE
-                    <br />
-                    VIABILIDAD
-                  </Link>
-                </div>
+                <Link
+                  href="/test-de-viabilidad"
+                  className="w-full sm:w-auto text-center bg-secondary text-primary py-4 px-8 text-xs font-bold tracking-[0.2em] uppercase hover:bg-white hover:text-primary transition-all duration-300 rounded-sm shadow-md cursor-pointer"
+                >
+                  Iniciar Test en Línea
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Sección: Agendar Reunión (Calendly) */}
+        <section
+          id="calendly"
+          className="py-20 md:py-32 px-6 bg-background border-t border-white/5 text-center"
+        >
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="space-y-4">
+              <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold">
+                Asesoramiento Directo
+              </p>
+              <h2 className="font-headline text-3xl sm:text-4xl md:text-5xl text-white font-light leading-tight">
+                Agende una Sesión de Consulta
+              </h2>
+              <p className="font-body text-sm sm:text-base text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                Seleccione el día y horario de su preferencia para coordinar una reunión técnica y legal confidencial con nuestros especialistas.
+              </p>
+            </div>
+
+            {/* Calendly Widget */}
+            <div className="max-w-5xl mx-auto relative group bg-surface-container border border-white/10 p-4 sm:p-6 rounded-xl shadow-2xl overflow-hidden">
+              <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/5 to-transparent opacity-100 blur-3xl pointer-events-none"></div>
+              <div className="relative z-10">
+                <CalendlyWidget url="https://calendly.com/bpb-abogados" />
+              </div>
+            </div>
+
+            {/* Alternativa de Contacto Directo */}
+            <div className="max-w-xl mx-auto pt-6 border-t border-white/10 space-y-4">
+              <p className="font-body text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                ¿Prefiere no agendar una reunión en este momento? Envíenos un mensaje y nos pondremos en contacto a la brevedad.
+              </p>
+              <Link
+                href="/contacto"
+                className="inline-flex h-12 px-8 border border-white/20 hover:border-secondary hover:text-secondary text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 rounded-sm items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+              >
+                Escribir Mensaje Directo
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Sección FAQ */}
-        <section className="py-20 md:py-32 px-8 bg-background border-t border-white/5">
-          <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row gap-16 items-start">
-            <div className="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left w-full">
+        <section className="py-20 md:py-32 px-6 bg-surface-bright border-t border-white/5">
+          <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+            <div className="lg:w-1/3 flex flex-col items-center lg:items-start text-center lg:text-left w-full">
               <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-4">
                 Claridad Absoluta
               </p>
@@ -270,24 +296,24 @@ export default function Infraestructura() {
               </h2>
             </div>
 
-            <div className="md:w-2/3 space-y-12">
-              <div className="border-b border-white/10 pb-8">
-                <h3 className="font-headline text-2xl text-white mb-4">
+            <div className="lg:w-2/3 space-y-8 sm:space-y-12">
+              <div className="border-b border-white/10 pb-6 sm:pb-8">
+                <h3 className="font-headline text-xl sm:text-2xl text-white mb-3 sm:mb-4">
                   ¿El reclamo demorará la conexión eléctrica de mi desarrollo?
                 </h3>
-                <p className="text-on-surface-variant font-body text-lg leading-relaxed">
+                <p className="text-on-surface-variant font-body text-sm sm:text-lg leading-relaxed">
                   Absolutamente no. La conexión eléctrica y el reclamo de
                   capital corren por vías diferentes. Nuestras acciones se
                   inician estratégicamente después de asegurar el suministro,
                   garantizando que pueda entregar sus unidades a tiempo.
                 </p>
               </div>
-              <div className="border-b border-white/10 pb-8">
-                <h3 className="font-headline text-2xl text-white mb-4">
+              <div className="border-b border-white/10 pb-6 sm:pb-8">
+                <h3 className="font-headline text-xl sm:text-2xl text-white mb-3 sm:mb-4">
                   ¿Es legal que la distribuidora me obligue a pagar la obra para
                   darme servicio?
                 </h3>
-                <p className="text-on-surface-variant font-body text-lg leading-relaxed">
+                <p className="text-on-surface-variant font-body text-sm sm:text-lg leading-relaxed">
                   Es una práctica habitual, pero contraria a la realidad legal.
                   La obligación de abastecer e invertir es exclusiva de la
                   distribuidora. Si el desarrollista asume la obra, la Ley
@@ -295,35 +321,16 @@ export default function Infraestructura() {
                 </p>
               </div>
               <div>
-                <h3 className="font-headline text-2xl text-white mb-4">
+                <h3 className="font-headline text-xl sm:text-2xl text-white mb-3 sm:mb-4">
                   ¿Por qué se reclama también por el espacio de la cámara?
                 </h3>
-                <p className="text-on-surface-variant font-body text-lg leading-relaxed">
+                <p className="text-on-surface-variant font-body text-sm sm:text-lg leading-relaxed">
                   Porque la afectación a perpetuidad de sus metros cuadrados
                   constituye una "Servidumbre Administrativa de Electroducto".
                   Esta limitación al uso y valor de su propiedad común debe ser
                   indemnizada económicamente.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Calendly Section */}
-        <section
-          id="calendly"
-          className="py-20 md:py-32 px-8 bg-surface-bright border-t border-white/5"
-        >
-          <div className="max-w-5xl mx-auto text-center">
-            <p className="font-label text-xs uppercase tracking-[0.3em] text-secondary font-semibold mb-6">
-              Agendar Sesión
-            </p>
-            <h2 className="font-headline text-4xl md:text-5xl text-white font-light mb-12">
-              Seleccione el horario de su preferencia.
-            </h2>
-            <div className="max-w-5xl mx-auto relative group">
-              <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/10 to-transparent opacity-100 blur-3xl pointer-events-none"></div>
-              <CalendlyWidget url="https://calendly.com/bpb-abogados" />
             </div>
           </div>
         </section>
