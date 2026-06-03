@@ -71,18 +71,15 @@ export function Navbar() {
 
           {/* REAL STATE Dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none cursor-pointer">
+            <Link
+              href="/infraestructura"
+              className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none cursor-pointer"
+            >
               REAL STATE
               <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-            </button>
+            </Link>
             <div className="absolute top-full left-0 pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300">
               <div className="bg-surface border border-outline-variant/10 shadow-xl rounded-sm py-2 w-64 flex flex-col">
-                <Link
-                  href="/infraestructura"
-                  className="px-6 py-3 text-base tracking-wider text-white/70 hover:text-secondary hover:bg-white/5 transition-colors"
-                >
-                  Infraestructura
-                </Link>
                 <Link
                   href="/test-de-viabilidad"
                   className="px-6 py-3 text-base tracking-wider text-white/70 hover:text-secondary hover:bg-white/5 transition-colors"
@@ -154,22 +151,23 @@ export function Navbar() {
 
           {/* Mobile REAL STATE Dropdown */}
           <div className="border-b border-white/10 pb-4">
-            <button
-              onClick={() => setIsRealStateOpen(!isRealStateOpen)}
-              className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left cursor-pointer"
-            >
-              <span>REAL STATE</span>
-              <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isRealStateOpen ? "rotate-180" : ""}`} />
-            </button>
+            <div className="flex justify-between items-center w-full">
+              <Link
+                href="/infraestructura"
+                onClick={toggleMobileMenu}
+                className="text-white text-sm font-bold tracking-widest uppercase transition-colors hover:text-secondary"
+              >
+                REAL STATE
+              </Link>
+              <button
+                onClick={() => setIsRealStateOpen(!isRealStateOpen)}
+                className="p-2 focus:outline-none cursor-pointer"
+              >
+                <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isRealStateOpen ? "rotate-180" : ""}`} />
+              </button>
+            </div>
             {isRealStateOpen && (
               <div className="flex flex-col pl-4 gap-3.5 mt-4 transition-all duration-300">
-                <Link
-                  href="/infraestructura"
-                  onClick={toggleMobileMenu}
-                  className="text-xs text-white/70 hover:text-secondary tracking-wider uppercase transition-colors"
-                >
-                  Infraestructura
-                </Link>
                 <Link
                   href="/test-de-viabilidad"
                   onClick={toggleMobileMenu}
