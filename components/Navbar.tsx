@@ -12,7 +12,7 @@ const servicesList = [
   { num: "05", title: "Derecho Administrativo" },
   { num: "06", title: "Derecho Penal" },
   { num: "07", title: "Defensa del Consumidor" },
-  { num: "08", title: "Familia y Sucesiones" }
+  { num: "08", title: "Familia y Sucesiones" },
 ];
 
 export function Navbar() {
@@ -32,12 +32,15 @@ export function Navbar() {
     <header className="fixed top-0 w-full z-40 bg-surface/90 backdrop-blur-lg border-b border-outline-variant/10 transition-all">
       <div className="flex justify-between items-center px-6 md:px-8 py-6 max-w-screen-2xl mx-auto">
         <Link href="/" className="flex items-center group">
-          <img src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" alt="BPB Abogados Logo" className="h-[72px] w-auto object-contain transition-transform group-hover:scale-105" />
+          <img
+            src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png"
+            alt="BPB Abogados Logo"
+            className="h-[72px] w-auto object-contain transition-transform group-hover:scale-105"
+          />
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-10">
-
           <div className="relative group">
             <button className="flex items-center gap-1 text-on-surface-variant hover:text-secondary text-base tracking-widest transition-all duration-300 uppercase focus:outline-none cursor-pointer">
               SERVICIOS
@@ -50,8 +53,14 @@ export function Navbar() {
                     key={srv.num}
                     href={`/#servicio-${srv.num}`}
                     onClick={() => {
-                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 100);
-                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 500);
+                      setTimeout(
+                        () => window.dispatchEvent(new Event("hashchange")),
+                        100,
+                      );
+                      setTimeout(
+                        () => window.dispatchEvent(new Event("hashchange")),
+                        500,
+                      );
                     }}
                     className="px-6 py-3 text-base tracking-wider text-white/70 hover:text-secondary hover:bg-white/5 transition-colors"
                   >
@@ -101,7 +110,7 @@ export function Navbar() {
             className="h-10 px-4 border border-secondary/35 text-secondary hover:bg-secondary/5 text-xs uppercase tracking-widest transition-all rounded-sm flex items-center justify-center font-semibold cursor-pointer"
             href="/dashboard"
           >
-            PORTAL CLIENTES
+            PORTAL
           </Link>
         </nav>
 
@@ -111,14 +120,17 @@ export function Navbar() {
           className="md:hidden text-white focus:outline-none"
           aria-label="Alternar menú"
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6 text-secondary" /> : <Menu className="w-6 h-6" />}
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6 text-secondary" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
         </button>
       </div>
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full max-h-[85vh] overflow-y-auto bg-surface border-b border-outline-variant/10 shadow-xl flex flex-col py-6 px-6 gap-6">
-
           {/* Mobile Servicios Dropdown */}
           <div className="border-b border-white/10 pb-4">
             <button
@@ -126,7 +138,9 @@ export function Navbar() {
               className="flex justify-between items-center w-full text-white text-sm font-bold tracking-widest uppercase focus:outline-none text-left cursor-pointer"
             >
               <span>SERVICIOS</span>
-              <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`} />
+              <ChevronDown
+                className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`}
+              />
             </button>
             {isServicesOpen && (
               <div className="flex flex-col pl-4 gap-3.5 mt-4 transition-all duration-300">
@@ -136,8 +150,14 @@ export function Navbar() {
                     href={`/#servicio-${srv.num}`}
                     onClick={() => {
                       toggleMobileMenu();
-                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 100);
-                      setTimeout(() => window.dispatchEvent(new Event('hashchange')), 500);
+                      setTimeout(
+                        () => window.dispatchEvent(new Event("hashchange")),
+                        100,
+                      );
+                      setTimeout(
+                        () => window.dispatchEvent(new Event("hashchange")),
+                        500,
+                      );
                     }}
                     className="text-xs text-white/70 hover:text-secondary tracking-wider uppercase transition-colors"
                   >
@@ -170,7 +190,9 @@ export function Navbar() {
                 onClick={() => setIsRealStateOpen(!isRealStateOpen)}
                 className="p-2 focus:outline-none cursor-pointer"
               >
-                <ChevronDown className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isRealStateOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`w-4 h-4 text-white/70 transition-transform duration-300 ${isRealStateOpen ? "rotate-180" : ""}`}
+                />
               </button>
             </div>
             {isRealStateOpen && (

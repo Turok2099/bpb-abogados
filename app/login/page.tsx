@@ -39,9 +39,9 @@ function LoginForm() {
             color: "var(--color-on-surface)",
           },
         });
-        if (res?.role === 'admin') {
+        if (res?.role === "admin") {
           router.push("/admin");
-        } else if (res?.role === 'gestor') {
+        } else if (res?.role === "gestor") {
           router.push("/gestor");
         } else {
           router.push("/dashboard");
@@ -66,9 +66,6 @@ function LoginForm() {
         <h1 className="font-headline text-3xl font-light text-white tracking-wide">
           Portal de Acceso
         </h1>
-        <p className="font-body text-[10px] uppercase tracking-widest text-secondary mt-2">
-          BPB Abogados - Clientes y Gestores
-        </p>
       </div>
 
       {errorParam === "unauthorized" && (
@@ -135,7 +132,10 @@ function LoginForm() {
 
         <div className="text-center pt-4 border-t border-outline-variant/30 mt-6 text-xs font-body text-white/50">
           ¿No tienes una cuenta de cliente?{" "}
-          <Link href="/registro" className="text-secondary hover:underline ml-1 font-semibold">
+          <Link
+            href="/registro"
+            className="text-secondary hover:underline ml-1 font-semibold"
+          >
             Regístrate aquí
           </Link>
         </div>
