@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { registrarDocumento } from "@/app/actions/cases";
+import { registrarDocumento, crearCasoCliente } from "@/app/actions/cases";
 import { logout } from "@/app/actions/auth";
 import { 
   FileText, UploadCloud, CheckCircle2, AlertTriangle, 
@@ -40,6 +40,29 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
   const [casos, setCasos] = useState<Caso[]>(initialCasos);
   const [uploadingCasoId, setUploadingCasoId] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isCreatingTest, setIsCreatingTest] = useState(false);
+
+  const handleIniciarTest = async () => {
+    setIsCreatingTest(true);
+    try {
+      const res = await crearCasoCliente();
+      if (res.error) {
+        toast.error(res.error, {
+          style: { background: "var(--color-surface)", borderColor: "var(--color-error)", color: "var(--color-on-surface)" }
+        });
+      } else {
+        toast.success("Test de Viabilidad iniciado correctamente.", {
+          style: { background: "var(--color-surface)", borderColor: "var(--color-secondary)", color: "var(--color-on-surface)" }
+        });
+        router.refresh();
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Ocurrió un error inesperado al iniciar el test.");
+    } finally {
+      setIsCreatingTest(false);
+    }
+  };
 
   const handleFileUpload = async (casoId: string, file: File) => {
     if (!file) return;
@@ -179,20 +202,48 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
         </div>
 
         {casos.length === 0 ? (
-          <div className="bg-surface-container border border-outline-variant/30 p-12 text-center rounded-sm space-y-6 max-w-xl mx-auto mt-8">
-            <Briefcase className="w-12 h-12 text-secondary/40 mx-auto" />
-            <h2 className="font-headline text-2xl text-white font-light">Tu caso se encuentra en preparación</h2>
-            <p className="text-sm text-white/60 font-body leading-relaxed">
-              Actualmente no tienes un expediente asignado o activo en el sistema. Los gestores están cargando tu información en este momento.
-            </p>
-            <div className="pt-2">
-              <Link 
-                href="/contacto" 
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white transition-all rounded-sm"
+          <div className="bg-surface-container border border-outline-variant/20 p-8 md:p-12 text-center rounded-sm space-y-8 max-w-2xl mx-auto mt-8 relative overflow-hidden">
+            {/* Glow decorativo */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-secondary/5 blur-3xl rounded-full"></div>
+            
+            <div className="space-y-4 relative z-10">
+              <div className="inline-flex p-4 rounded-full bg-secondary/10 border border-secondary/20 mb-2">
+                <Briefcase className="w-10 h-10 text-secondary" />
+              </div>
+              <h2 className="font-headline text-3xl text-white font-light">Iniciar Test de Viabilidad</h2>
+              <div className="editorial-line max-w-xs mx-auto opacity-30 my-4"></div>
+              <p className="text-sm text-on-surface-variant font-body leading-relaxed max-w-lg mx-auto">
+                Comience el análisis técnico-legal para evaluar la viabilidad de recupero de los costos de su infraestructura eléctrica. Para iniciar, debe habilitar su expediente digital de viabilidad.
+              </p>
+            </div>
+
+            <div className="bg-surface p-6 rounded-sm border border-outline-variant/15 text-left space-y-4 max-w-lg mx-auto relative z-10">
+              <h3 className="text-xs uppercase tracking-widest text-secondary font-semibold font-label">Insumos sugeridos para la carga posterior:</h3>
+              <ul className="text-xs text-white/70 font-body space-y-2 list-disc list-inside">
+                <li>Facturas de la obra eléctrica (distribuidora o contratista).</li>
+                <li>Contrato de Fideicomiso, Reglamento de Copropiedad o Acta de Personería.</li>
+                <li>Plano PH y planos de la instalación eléctrica.</li>
+              </ul>
+            </div>
+
+            <div className="pt-4 relative z-10">
+              <button
+                onClick={handleIniciarTest}
+                disabled={isCreatingTest}
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white transition-all duration-300 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg cursor-pointer font-label"
               >
-                Contactar Soporte
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
+                {isCreatingTest ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Habilitando Expediente...
+                  </>
+                ) : (
+                  <>
+                    Comenzar Análisis de Viabilidad
+                    <ArrowUpRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
             </div>
           </div>
         ) : (

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 // 1. OBTENER INFORMACIÓN DE CLIENTES (Gestores / Admins)
@@ -191,4 +191,52 @@ export async function validarDocumento(data: { docId: string; casoId: string; es
   revalidatePath(`/gestor`);
   revalidatePath(`/dashboard`);
   return { success: true, data: docActualizado };
+}
+
+// 9. CASOS: CREAR CASO DESDE EL CLIENTE (Test de Viabilidad)
+export async function crearCasoCliente() {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "No autenticado." };
+  }
+
+  // Verificar si ya tiene un caso de "Test de Viabilidad"
+  const { data: casosExistentes, error: errorBusqueda } = await supabase
+    .from("casos")
+    .select("id")
+    .eq("cliente_id", user.id)
+    .eq("titulo", "Test de Viabilidad");
+
+  if (errorBusqueda) {
+    return { error: errorBusqueda.message };
+  }
+
+  // Si ya tiene un test de viabilidad iniciado, no creamos otro
+  if (casosExistentes && casosExistentes.length > 0) {
+    return { error: "Ya has iniciado un Test de Viabilidad." };
+  }
+
+  const adminSupabase = await createAdminClient();
+
+  const { data: nuevoCaso, error } = await adminSupabase
+    .from("casos")
+    .insert({
+      cliente_id: user.id,
+      titulo: "Test de Viabilidad",
+      descripcion: "Análisis técnico y legal de infraestructura eléctrica e historial de facturación para evaluar viabilidad de recupero.",
+      estado: "en revision",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/gestor");
+  
+  return { success: true, data: nuevoCaso };
 }

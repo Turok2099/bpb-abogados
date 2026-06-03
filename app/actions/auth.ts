@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
@@ -59,7 +59,7 @@ export async function registerClient(data: { nombre: string; email: string; tele
   const protocol = host?.includes('localhost') ? 'http' : 'https'
   const siteUrl = `${protocol}://${host}`
 
-  const { error } = await supabase.auth.signUp({
+  const { data: signUpData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -74,6 +74,28 @@ export async function registerClient(data: { nombre: string; email: string; tele
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Inserción manual de resiliencia en la tabla profiles
+  if (signUpData.user) {
+    try {
+      const adminSupabase = await createAdminClient()
+      const { error: profileError } = await adminSupabase
+        .from('profiles')
+        .upsert({
+          id: signUpData.user.id,
+          nombre,
+          role: 'cliente',
+          telefono,
+          email
+        }, { onConflict: 'id' })
+
+      if (profileError) {
+        console.error("Error al upsertar perfil en el registro:", profileError)
+      }
+    } catch (err) {
+      console.error("Excepción al insertar perfil en registro:", err)
+    }
   }
 
   revalidatePath('/', 'layout')

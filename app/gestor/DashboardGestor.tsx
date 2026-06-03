@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 
 interface Documento {
   id: string;
@@ -225,65 +226,37 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
   );
 
   return (
-    <div className="min-h-screen bg-background text-white flex flex-col">
-      {/* Header */}
-      <header className="bg-surface border-b border-outline-variant/20 py-4 px-6 md:px-8">
-        <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center shrink-0">
-              <img 
-                src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" 
-                alt="BPB Abogados Logo" 
-                className="h-10 w-auto object-contain hover:opacity-80 transition-opacity"
-              />
-            </Link>
-            <div className="h-6 w-[1px] bg-outline-variant/35 hidden sm:block"></div>
-            <div className="hidden sm:block text-xs uppercase tracking-widest text-secondary font-semibold">
-              Panel de Control (Gestores)
-            </div>
-          </div>
+    <div className="min-h-screen bg-background text-white flex flex-col md:flex-row">
+      {/* Sidebar Izquierdo Unificado */}
+      <SidebarAdmin user={user} profile={profile} />
 
-          <div className="flex items-center gap-4">
-            <span className="hidden md:block text-xs text-white/60">
-              Sesión como: <strong className="text-white">{profile?.nombre || user.email}</strong>
-            </span>
-            <form action={logout}>
-              <button 
-                type="submit" 
-                className="h-9 px-4 border border-outline-variant/30 hover:border-error hover:text-error text-white/70 text-xs uppercase tracking-widest transition-all rounded-sm flex items-center gap-2 cursor-pointer font-label"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                Cerrar Sesión
-              </button>
-            </form>
+      {/* Contenedor Principal */}
+      <div className="flex-1 md:pl-64 flex flex-col min-w-0">
+        
+        {/* Tabs Layout */}
+        <div className="bg-surface/50 border-b border-outline-variant/20 sticky top-0 z-35">
+          <div className="px-6 md:px-8 flex">
+            <button
+              onClick={() => { setActiveTab("casos"); setSelectedCaso(null); }}
+              className={`py-4 px-6 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold border-b-2 transition-all cursor-pointer
+                ${activeTab === "casos" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
+            >
+              <Briefcase className="w-4 h-4" />
+              Expedientes y Casos ({casos.length})
+            </button>
+            <button
+              onClick={() => { setActiveTab("clientes"); setSelectedCaso(null); }}
+              className={`py-4 px-6 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold border-b-2 transition-all cursor-pointer
+                ${activeTab === "clientes" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
+            >
+              <Users className="w-4 h-4" />
+              Clientes Registrados ({clientes.length})
+            </button>
           </div>
         </div>
-      </header>
 
-      {/* Tabs Layout */}
-      <div className="bg-surface/50 border-b border-outline-variant/20">
-        <div className="max-w-screen-2xl mx-auto px-6 md:px-8 flex">
-          <button
-            onClick={() => { setActiveTab("casos"); setSelectedCaso(null); }}
-            className={`py-4 px-6 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold border-b-2 transition-all cursor-pointer
-              ${activeTab === "casos" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
-          >
-            <Briefcase className="w-4 h-4" />
-            Expedientes y Casos ({casos.length})
-          </button>
-          <button
-            onClick={() => { setActiveTab("clientes"); setSelectedCaso(null); }}
-            className={`py-4 px-6 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold border-b-2 transition-all cursor-pointer
-              ${activeTab === "clientes" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
-          >
-            <Users className="w-4 h-4" />
-            Clientes Registrados ({clientes.length})
-          </button>
-        </div>
-      </div>
-
-      {/* Main Container */}
-      <main className="flex-1 max-w-screen-2xl w-full mx-auto p-6 md:p-8">
+        {/* Main Container */}
+        <main className="flex-1 max-w-screen-2xl w-full mx-auto p-6 md:p-8">
         {activeTab === "casos" ? (
           <div className="grid md:grid-cols-3 gap-8 items-start">
             
@@ -557,6 +530,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
           </div>
         )}
       </main>
+      </div> {/* Cierre del Contenedor Principal */}
 
       {/* CREATE CASO MODAL */}
       {isCreateModalOpen && (
