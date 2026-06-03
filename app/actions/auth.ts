@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 export async function login(data: { email: string; password: string }) {
   const { email, password } = data
@@ -52,11 +53,17 @@ export async function registerClient(data: { nombre: string; email: string; tele
 
   const supabase = await createClient()
 
+  // Construir dinámicamente la URL del sitio desde los encabezados de la solicitud
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const protocol = host?.includes('localhost') ? 'http' : 'https'
+  const siteUrl = `${protocol}://${host}`
+
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+      emailRedirectTo: `${siteUrl}/auth/callback`,
       data: {
         nombre,
         role: 'cliente',
@@ -70,6 +77,33 @@ export async function registerClient(data: { nombre: string; email: string; tele
   }
 
   revalidatePath('/', 'layout')
+  return { success: true }
+}
+
+export async function resendConfirmation(email: string) {
+  if (!email) {
+    return { error: 'El correo electrónico es obligatorio.' }
+  }
+
+  const supabase = await createClient()
+
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const protocol = host?.includes('localhost') ? 'http' : 'https'
+  const siteUrl = `${protocol}://${host}`
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
+    options: {
+      emailRedirectTo: `${siteUrl}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
   return { success: true }
 }
 
