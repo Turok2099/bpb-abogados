@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { login } from "@/app/actions/auth";
 import { toast } from "sonner";
 import { Lock, Mail, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 function LoginForm() {
   const router = useRouter();
@@ -63,10 +64,10 @@ function LoginForm() {
           className="h-16 w-auto mx-auto mb-6 object-contain"
         />
         <h1 className="font-headline text-3xl font-light text-white tracking-wide">
-          Acceso Administrativo
+          Portal de Acceso
         </h1>
         <p className="font-body text-[10px] uppercase tracking-widest text-secondary mt-2">
-          BPB Abogados
+          BPB Abogados - Clientes y Gestores
         </p>
       </div>
 
@@ -131,6 +132,13 @@ function LoginForm() {
         >
           {isPending ? "AUTENTICANDO..." : "INICIAR SESIÓN"}
         </button>
+
+        <div className="text-center pt-4 border-t border-outline-variant/30 mt-6 text-xs font-body text-white/50">
+          ¿No tienes una cuenta de cliente?{" "}
+          <Link href="/registro" className="text-secondary hover:underline ml-1 font-semibold">
+            Regístrate aquí
+          </Link>
+        </div>
       </form>
     </div>
   );
