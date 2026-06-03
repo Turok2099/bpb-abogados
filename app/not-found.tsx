@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { AlertTriangle, ArrowLeft, Home } from 'lucide-react'
+import { AlertTriangle, Home } from 'lucide-react'
 
 export const metadata = {
-  title: 'Solicitud Incorrecta (400) | BPB Abogados',
-  description: 'La solicitud no pudo ser procesada por el servidor.',
+  title: 'Página no encontrada (404) | BPB Abogados',
+  description: 'La página que busca no existe o ha sido movida.',
 }
 
-export default function BadRequestPage() {
+export default function NotFoundPage() {
   return (
     <div className="min-h-[80vh] bg-background text-white flex items-center justify-center px-6 py-24 md:py-32">
       <div className="max-w-xl w-full text-center space-y-8 relative">
@@ -18,14 +18,14 @@ export default function BadRequestPage() {
             <AlertTriangle className="w-12 h-12 text-secondary" />
           </div>
           <span className="block font-label text-xs uppercase tracking-widest text-secondary font-bold">
-            Error 400
+            Error 404
           </span>
           <h1 className="font-headline text-4xl sm:text-5xl font-light leading-tight">
-            Petición Incorrecta
+            Página No Encontrada
           </h1>
           <div className="editorial-line max-w-xs mx-auto opacity-30 my-4"></div>
           <p className="font-body text-sm sm:text-base text-on-surface-variant leading-relaxed max-w-md mx-auto">
-            El servidor no pudo interpretar o procesar la solicitud debido a un formato no válido o a un error en la transferencia de datos.
+            Lo sentimos, la página que está buscando no existe, ha sido eliminada o cambió de dirección.
           </p>
         </div>
 
