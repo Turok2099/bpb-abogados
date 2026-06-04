@@ -13,34 +13,25 @@ function CallbackHandler() {
     // Leemos el hash antes de que Supabase pueda procesarlo y borrarlo
     const hash = typeof window !== 'undefined' ? window.location.hash : ''
     const hasHashAuth = hash.includes('access_token=') || hash.includes('error_code=')
-    // También verificamos searchParams por si viene el type ahí
+    // Verificamos si es flujo de restablecimiento/invitacion
     const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
-    const invitedEmail = searchParams.get('email')
 
-    // Si es un flujo de invitación o recuperación, y hay un email invitado,
-    // cerramos la sesión local actual de forma síncrona si pertenece a otro usuario.
-    if (isResetFlow && invitedEmail && typeof window !== 'undefined') {
+    // Si hay un token de acceso en el hash, cerramos la sesión local actual de forma síncrona
+    // para evitar que Supabase intente fusionar el token con un usuario distinto (conflictos de sesión).
+    if (hash.includes('access_token=') && typeof window !== 'undefined') {
       try {
-        let currentEmail = null
         let tokenKey = null
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i)
           if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
             tokenKey = key
-            const val = localStorage.getItem(key)
-            if (val) {
-              const data = JSON.parse(val)
-              currentEmail = data?.currentSession?.user?.email || data?.user?.email
-            }
             break
           }
         }
 
-        if (currentEmail && currentEmail !== invitedEmail) {
-          console.log(`Limpiando sesión local de ${currentEmail} en favor de ${invitedEmail}`)
-          if (tokenKey) {
-            localStorage.removeItem(tokenKey)
-          }
+        if (tokenKey) {
+          console.log(`Limpiando sesión local conflictiva`)
+          localStorage.removeItem(tokenKey)
           // Borrar cookies de supabase
           document.cookie.split(";").forEach((c) => {
             const eqPos = c.indexOf("=");
@@ -71,6 +62,14 @@ function CallbackHandler() {
 
       // 2. Escuchamos el cambio de estado de Supabase Auth
       let processed = false
+
+      if (hash.includes('error=')) {
+        const urlParams = new URLSearchParams(hash.substring(1))
+        const errorDesc = urlParams.get('error_description') || 'invalid_link'
+        console.error("Error en link de autenticación:", errorDesc)
+        router.push(`/login?error=${encodeURIComponent(errorDesc)}`)
+        return
+      }
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
         // Si hay un hash de autenticación, IGNORAMOS la sesión inicial, ya que puede ser

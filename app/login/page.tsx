@@ -111,9 +111,21 @@ function LoginForm() {
         </p>
       </div>
 
-      {errorParam === "unauthorized" && view === "login" && (
+      {errorParam && errorParam === "unauthorized" && view === "login" && (
         <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error text-sm rounded-sm text-center font-body uppercase tracking-wider">
           Acceso denegado. Se requieren permisos de administrador.
+        </div>
+      )}
+      {errorParam && errorParam !== "unauthorized" && view === "login" && (
+        <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error text-sm rounded-sm text-center font-body">
+          <p className="font-bold uppercase tracking-wider mb-1">Error de Autenticación</p>
+          {errorParam === "timeout" 
+            ? "El inicio de sesión ha tardado demasiado. Por favor, intenta nuevamente." 
+            : errorParam === "callback_error"
+            ? "Hubo un error al procesar el inicio de sesión."
+            : errorParam === "invalid_link" || errorParam === "Email link is invalid or has expired"
+            ? "El enlace es inválido, ya fue utilizado o ha expirado. Por favor, solicita uno nuevo."
+            : decodeURIComponent(errorParam)}
         </div>
       )}
 
