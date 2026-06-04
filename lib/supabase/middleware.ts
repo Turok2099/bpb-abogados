@@ -62,6 +62,12 @@ export async function updateSession(request: NextRequest) {
       .single()
 
     if (!profile || profile.role !== 'admin') {
+      if (profile?.role === 'gestor') {
+        return NextResponse.redirect(new URL('/gestor?error=unauthorized', request.url))
+      } else if (profile?.role === 'cliente') {
+        return NextResponse.redirect(new URL('/dashboard?error=unauthorized', request.url))
+      }
+      
       const response = NextResponse.redirect(new URL('/login?error=unauthorized', request.url))
       await supabase.auth.signOut()
       return response
@@ -82,6 +88,10 @@ export async function updateSession(request: NextRequest) {
       .single()
 
     if (!profile || (profile.role !== 'gestor' && profile.role !== 'admin')) {
+      if (profile?.role === 'cliente') {
+        return NextResponse.redirect(new URL('/dashboard?error=unauthorized', request.url))
+      }
+
       const response = NextResponse.redirect(new URL('/login?error=unauthorized', request.url))
       await supabase.auth.signOut()
       return response

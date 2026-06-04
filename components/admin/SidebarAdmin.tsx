@@ -25,12 +25,16 @@ export function SidebarAdmin({ user, profile }: SidebarAdminProps) {
       icon: Briefcase,
       active: pathname.startsWith("/gestor"),
     },
-    {
-      name: "Publicaciones Blog",
-      href: "/admin",
-      icon: LayoutDashboard,
-      active: pathname.startsWith("/admin"),
-    },
+    ...(profile?.role === "admin"
+      ? [
+          {
+            name: "Publicaciones Blog",
+            href: "/admin",
+            icon: LayoutDashboard,
+            active: pathname.startsWith("/admin"),
+          },
+        ]
+      : []),
     {
       name: "Ver Sitio Público",
       href: "/",
