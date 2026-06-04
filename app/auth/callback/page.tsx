@@ -81,7 +81,7 @@ function CallbackHandler() {
           event === 'PASSWORD_RECOVERY' || 
           event === 'TOKEN_REFRESHED' || 
           event === 'USER_UPDATED' || 
-          (event === 'INITIAL_SESSION' && session && !hasHashAuth)
+          (event === 'INITIAL_SESSION' && session)
         ) {
           processed = true
           subscription.unsubscribe()
