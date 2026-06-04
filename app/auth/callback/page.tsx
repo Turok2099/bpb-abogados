@@ -51,73 +51,94 @@ function CallbackHandler() {
     addLog('Supabase client instanciado.')
 
     const handleAuth = async () => {
-      if (code) {
-        addLog('Intercambiando código PKCE...')
-        const { error } = await supabase.auth.exchangeCodeForSession(code)
-        if (error) {
-          addLog(`Error PKCE: ${error.message}`)
-          router.push('/login?error=callback_error')
+      try {
+        if (hash.includes('error=')) {
+          const urlParams = new URLSearchParams(hash.substring(1))
+          const errorDesc = urlParams.get('error_description') || 'invalid_link'
+          addLog(`Hash contiene error explícito: ${errorDesc}`)
+          router.push(`/login?error=${encodeURIComponent(errorDesc)}`)
           return
         }
-        addLog('Intercambio PKCE exitoso.')
-      }
 
-      let processed = false
-
-      if (hash.includes('error=')) {
-        const urlParams = new URLSearchParams(hash.substring(1))
-        const errorDesc = urlParams.get('error_description') || 'invalid_link'
-        addLog(`Hash contiene error explícito: ${errorDesc}`)
-        router.push(`/login?error=${encodeURIComponent(errorDesc)}`)
-        return
-      }
-
-      addLog('Registrando onAuthStateChange...')
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-        addLog(`Evento recibido: ${event}, Sesión presente: ${!!session}`)
-        
-        if (
-          event === 'SIGNED_IN' || 
-          event === 'PASSWORD_RECOVERY' || 
-          event === 'TOKEN_REFRESHED' || 
-          event === 'USER_UPDATED' || 
-          (event === 'INITIAL_SESSION' && session)
-        ) {
-          processed = true
-          addLog('Procesado con éxito. Redirigiendo...')
-          subscription.unsubscribe()
+        // 1. Manejo del flujo PKCE (con código en query)
+        if (code) {
+          addLog('Intercambiando código PKCE...')
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+          if (error) {
+            addLog(`Error PKCE: ${error.message}`)
+            router.push('/login?error=callback_error')
+            return
+          }
           
+          addLog('Intercambio PKCE exitoso. Redirigiendo...')
           if (isResetFlow) {
             router.push('/restablecer-contrasena')
-          } else if (session) {
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('role')
-              .eq('id', session.user.id)
-              .single()
-
+          } else if (data.session) {
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.session.user.id).single()
             if (profile?.role === 'admin') router.push('/admin')
             else if (profile?.role === 'gestor') router.push('/gestor')
             else router.push('/dashboard')
           } else {
             router.push('/login')
           }
-        } else if (event === 'INITIAL_SESSION' && !session && !hasHashAuth && !hasCode) {
-          addLog('INITIAL_SESSION sin sesión y sin hash. Redirigiendo a login.')
-          processed = true
-          subscription.unsubscribe()
+          return
+        }
+
+        // 2. Manejo del flujo Implícito (con token en hash)
+        const cleanHash = hash.replace(/^#[/]?/, '')
+        const hashParams = new URLSearchParams(cleanHash)
+        const accessToken = hashParams.get('access_token')
+        const refreshToken = hashParams.get('refresh_token')
+
+        if (accessToken && refreshToken) {
+          addLog('Token de acceso detectado en hash. Ejecutando setSession manual...')
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          })
+
+          if (error) {
+            addLog(`Error setSession manual: ${error.message}`)
+            router.push(`/login?error=${encodeURIComponent('Token inválido o expirado')}`)
+            return
+          }
+
+          addLog('setSession manual exitoso. Redirigiendo...')
+          if (isResetFlow) {
+            router.push('/restablecer-contrasena')
+          } else if (data.session) {
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.session.user.id).single()
+            if (profile?.role === 'admin') router.push('/admin')
+            else if (profile?.role === 'gestor') router.push('/gestor')
+            else router.push('/dashboard')
+          } else {
+            router.push('/login')
+          }
+          return
+        }
+
+        // 3. Fallback: Si no hay código ni token, verificar sesión existente
+        addLog('No hay código ni token en URL. Verificando sesión existente...')
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session) {
+          addLog('Sesión existente encontrada. Redirigiendo...')
+          if (isResetFlow) {
+            router.push('/restablecer-contrasena')
+          } else {
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
+            if (profile?.role === 'admin') router.push('/admin')
+            else if (profile?.role === 'gestor') router.push('/gestor')
+            else router.push('/dashboard')
+          }
+        } else {
+          addLog('Ninguna sesión activa. Redirigiendo a login.')
           router.push('/login')
         }
-      })
-
-      if (hasHashAuth || hasCode) {
-        setTimeout(() => {
-          if (!processed) {
-            addLog('TIMEOUT ALCANZADO (5s sin evento de éxito).')
-            subscription.unsubscribe()
-            setHasTimedOut(true) // Mostramos el error en pantalla en vez de redirigir silenciosamente
-          }
-        }, 5000)
+        
+      } catch (err: any) {
+        addLog(`Excepción general en handleAuth: ${err.message}`)
+        setHasTimedOut(true) // Mostramos el panel de debug
       }
     }
 
