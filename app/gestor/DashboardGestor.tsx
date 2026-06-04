@@ -8,7 +8,7 @@ import {
   actualizarEstadoCaso, 
   validarDocumento 
 } from "@/app/actions/cases";
-import { logout, crearGestor } from "@/app/actions/auth";
+import { logout, crearGestor, reenviarInvitacion } from "@/app/actions/auth";
 import { 
   FileText, CheckCircle2, AlertTriangle, Clock, LogOut, 
   Loader2, Phone, Briefcase, Plus, Users, Search, 
@@ -90,6 +90,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   const [newGestorEmail, setNewGestorEmail] = useState("");
   const [newGestorTelefono, setNewGestorTelefono] = useState("");
   const [isCreatingGestor, setIsCreatingGestor] = useState(false);
+  const [resendingId, setResendingId] = useState<string | null>(null);
 
   // Validación de documentos
   const [validatingDocId, setValidatingDocId] = useState<string | null>(null);
@@ -152,6 +153,26 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       toast.error(err.message || "Error al crear el gestor.");
     } finally {
       setIsCreatingGestor(false);
+    }
+  };
+
+  const handleReenviarInvitacion = async (gestor: Cliente) => {
+    if (!gestor.email) return;
+    setResendingId(gestor.id);
+    try {
+      const res = await reenviarInvitacion({
+        email: gestor.email,
+        nombre: gestor.nombre,
+        telefono: gestor.telefono || ""
+      });
+
+      if (res.error) throw new Error(res.error);
+
+      toast.success("Invitación re-enviada correctamente por correo.");
+    } catch (err: any) {
+      toast.error(err.message || "Error al re-enviar la invitación.");
+    } finally {
+      setResendingId(null);
     }
   };
 
@@ -619,12 +640,13 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                     <th className="py-4 px-6">Email</th>
                     <th className="py-4 px-6">Teléfono</th>
                     <th className="py-4 px-6">Registro</th>
+                    <th className="py-4 px-6">Acción</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10 text-sm font-body">
                   {gestores.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="py-8 px-6 text-center text-white/40">
+                      <td colSpan={5} className="py-8 px-6 text-center text-white/40">
                         No hay gestores registrados en el sistema.
                       </td>
                     </tr>
@@ -635,6 +657,25 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                         <td className="py-4 px-6 text-white/70">{g.email || "No registrado"}</td>
                         <td className="py-4 px-6 text-white/70">{g.telefono || "No registrado"}</td>
                         <td className="py-4 px-6 text-white/50 text-xs">{new Date(g.created_at).toLocaleDateString()}</td>
+                        <td className="py-4 px-6">
+                          <button
+                            onClick={() => handleReenviarInvitacion(g)}
+                            disabled={resendingId === g.id}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-secondary/35 text-secondary hover:border-secondary hover:bg-secondary/5 text-[10px] uppercase tracking-widest font-semibold rounded-sm transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            {resendingId === g.id ? (
+                              <>
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                Enviando...
+                              </>
+                            ) : (
+                              <>
+                                <MessageSquare className="w-3 h-3" />
+                                Re-enviar
+                              </>
+                            )}
+                          </button>
+                        </td>
                       </tr>
                     ))
                   )}

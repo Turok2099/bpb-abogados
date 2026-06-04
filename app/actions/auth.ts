@@ -4,6 +4,7 @@ import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
+import { Resend } from "resend"
 
 export async function login(data: { email: string; password: string }) {
   const { email, password } = data
@@ -145,8 +146,43 @@ async function checkIsAdmin() {
     .select('role')
     .eq('id', user.id)
     .single()
-  return profile && profile.role === 'admin'
 }
+
+async function enviarEmailInvitacion(email: string, nombre: string, actionLink: string) {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const FROM_EMAIL = "Notificaciones BPB <sistema@bpbabogados.com.ar>"
+
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: "Invitación para acceder como Gestor - BPB Abogados",
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 8px; background-color: #ffffff;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" alt="BPB Abogados" style="height: 50px; width: auto;" />
+        </div>
+        <h2 style="color: #1a1a1a; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; font-weight: normal; text-align: center;">Invitación al Portal de Gestión</h2>
+        <p>Hola <strong>${nombre}</strong>,</p>
+        <p>Has sido invitado a formar parte del equipo de <strong>BPB Abogados</strong> como Gestor.</p>
+        <p>Para activar tu cuenta y configurar tu contraseña de acceso, por favor haz clic en el siguiente botón:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${actionLink}" style="background-color: #D4AF37; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+            Configurar mi Cuenta
+          </a>
+        </div>
+        <p style="font-size: 12px; color: #666; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
+          Si el botón no funciona, puedes copiar y pegar el siguiente enlace en tu navegador:<br />
+          <a href="${actionLink}" style="color: #D4AF37; word-break: break-all;">${actionLink}</a>
+        </p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;" />
+        <p style="font-size: 11px; color: #999; text-align: center;">
+          Este es un correo automático enviado por el sistema de BPB Abogados.
+        </p>
+      </div>
+    `
+  })
+}
+
 export async function crearGestor(data: { nombre: string; email: string; telefono: string }) {
   const isAdmin = await checkIsAdmin()
   if (!isAdmin) {
@@ -165,12 +201,16 @@ export async function crearGestor(data: { nombre: string; email: string; telefon
   const protocol = host?.includes('localhost') ? 'http' : 'https'
   const siteUrl = `${protocol}://${host}`
 
-  const { data: inviteData, error } = await adminSupabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${siteUrl}/auth/callback`,
-    data: {
-      nombre,
-      role: 'gestor',
-      telefono,
+  const { data: linkData, error } = await adminSupabase.auth.admin.generateLink({
+    type: 'invite',
+    email,
+    options: {
+      redirectTo: `${siteUrl}/auth/callback`,
+      data: {
+        nombre,
+        role: 'gestor',
+        telefono,
+      }
     }
   })
 
@@ -178,12 +218,21 @@ export async function crearGestor(data: { nombre: string; email: string; telefon
     return { error: error.message }
   }
 
-  if (inviteData.user) {
+  if (linkData.properties?.action_link) {
+    try {
+      await enviarEmailInvitacion(email, nombre, linkData.properties.action_link)
+    } catch (emailErr: any) {
+      console.error("Error al enviar correo por Resend:", emailErr)
+      return { error: "Se creó el usuario pero falló el envío del correo por Resend: " + emailErr.message }
+    }
+  }
+
+  if (linkData.user) {
     try {
       const { error: profileError } = await adminSupabase
         .from('profiles')
         .upsert({
-          id: inviteData.user.id,
+          id: linkData.user.id,
           nombre,
           role: 'gestor',
           telefono,
@@ -202,6 +251,66 @@ export async function crearGestor(data: { nombre: string; email: string; telefon
   return { success: true }
 }
 
+export async function reenviarInvitacion(data: { email: string; nombre: string; telefono: string }) {
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin) {
+    return { error: 'No autorizado.' }
+  }
+
+  const { email, nombre, telefono } = data
+  const adminSupabase = await createAdminClient()
+
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const protocol = host?.includes('localhost') ? 'http' : 'https'
+  const siteUrl = `${protocol}://${host}`
+
+  const { data: linkData, error } = await adminSupabase.auth.admin.generateLink({
+    type: 'invite',
+    email,
+    options: {
+      redirectTo: `${siteUrl}/auth/callback`,
+      data: {
+        nombre,
+        role: 'gestor',
+        telefono,
+      }
+    }
+  })
+
+  let actionLink = linkData?.properties?.action_link
+
+  if (error) {
+    if (error.message.includes("already registered") || error.message.includes("already exists") || error.message.includes("taken")) {
+      const { data: recoveryData, error: recoveryError } = await adminSupabase.auth.admin.generateLink({
+        type: 'recovery',
+        email,
+        options: {
+          redirectTo: `${siteUrl}/auth/callback`
+        }
+      })
+
+      if (recoveryError) {
+        return { error: recoveryError.message }
+      }
+
+      actionLink = recoveryData.properties?.action_link
+    } else {
+      return { error: error.message }
+    }
+  }
+
+  if (actionLink) {
+    try {
+      await enviarEmailInvitacion(email, nombre, actionLink)
+    } catch (emailErr: any) {
+      console.error("Error al enviar correo por Resend en reenvío:", emailErr)
+      return { error: "Fallo al enviar correo por Resend: " + emailErr.message }
+    }
+  }
+
+  return { success: true }
+}
 export async function getGestores() {
   const isAdmin = await checkIsAdmin()
   if (!isAdmin) {
