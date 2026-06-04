@@ -3,11 +3,25 @@
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
+// Helper para verificar si el usuario es gestor o admin
+async function checkIsGestorOrAdmin(supabase: any) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  return profile && (profile.role === "gestor" || profile.role === "admin");
+}
+
 // 1. OBTENER INFORMACIÓN DE CLIENTES (Gestores / Admins)
 export async function getClientes() {
   const supabase = await createClient();
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+  if (!isAuthorized) {
+    return { error: "No autorizado." };
+  }
 
-  const { data, error } = await supabase
+  const adminSupabase = await createAdminClient();
+
+  const { data, error } = await adminSupabase
     .from("profiles")
     .select("id, nombre, role, telefono, email, created_at")
     .eq("role", "cliente")
@@ -45,8 +59,14 @@ export async function getMisCasos() {
 // 3. CASOS: OBTENER TODOS LOS CASOS (Gestor / Admin)
 export async function getTodosCasos() {
   const supabase = await createClient();
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+  if (!isAuthorized) {
+    return { error: "No autorizado." };
+  }
 
-  const { data, error } = await supabase
+  const adminSupabase = await createAdminClient();
+
+  const { data, error } = await adminSupabase
     .from("casos")
     .select("*, cliente:profiles!casos_cliente_id_fkey(nombre, telefono, email), documentos_casos(*)")
     .order("created_at", { ascending: false });
@@ -62,7 +82,14 @@ export async function getTodosCasos() {
 export async function getCasoPorId(id: string) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "No autenticado." };
+  }
+
+  const adminSupabase = await createAdminClient();
+
+  const { data, error } = await adminSupabase
     .from("casos")
     .select("*, cliente:profiles!casos_cliente_id_fkey(nombre, telefono, email, id), documentos_casos(*)")
     .eq("id", id)
@@ -70,6 +97,13 @@ export async function getCasoPorId(id: string) {
 
   if (error) {
     return { error: error.message };
+  }
+
+  const isOwner = data.cliente_id === user.id;
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+
+  if (!isOwner && !isAuthorized) {
+    return { error: "No autorizado." };
   }
 
   return { data };
