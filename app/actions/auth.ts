@@ -136,3 +136,89 @@ export async function logout() {
   redirect('/login')
 }
 
+async function checkIsAdmin() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return false
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+  return profile && profile.role === 'admin'
+}
+export async function crearGestor(data: { nombre: string; email: string; telefono: string }) {
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin) {
+    return { error: 'No autorizado.' }
+  }
+
+  const { nombre, email, telefono } = data
+  if (!nombre || !email || !telefono) {
+    return { error: 'Todos los campos son obligatorios.' }
+  }
+
+  const adminSupabase = await createAdminClient()
+
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const protocol = host?.includes('localhost') ? 'http' : 'https'
+  const siteUrl = `${protocol}://${host}`
+
+  const { data: inviteData, error } = await adminSupabase.auth.admin.inviteUserByEmail(email, {
+    redirectTo: `${siteUrl}/auth/callback`,
+    data: {
+      nombre,
+      role: 'gestor',
+      telefono,
+    }
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  if (inviteData.user) {
+    try {
+      const { error: profileError } = await adminSupabase
+        .from('profiles')
+        .upsert({
+          id: inviteData.user.id,
+          nombre,
+          role: 'gestor',
+          telefono,
+          email
+        }, { onConflict: 'id' })
+
+      if (profileError) {
+        console.error("Error al upsertar perfil de gestor:", profileError)
+      }
+    } catch (err) {
+      console.error("Excepción al insertar perfil de gestor:", err)
+    }
+  }
+
+  revalidatePath('/gestor')
+  return { success: true }
+}
+
+export async function getGestores() {
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin) {
+    return { error: 'No autorizado.' }
+  }
+
+  const adminSupabase = await createAdminClient()
+  const { data, error } = await adminSupabase
+    .from('profiles')
+    .select('id, nombre, role, telefono, email, created_at')
+    .eq('role', 'gestor')
+    .order('nombre', { ascending: true })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { data }
+}
+

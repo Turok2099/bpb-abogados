@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { 
@@ -8,7 +8,7 @@ import {
   actualizarEstadoCaso, 
   validarDocumento 
 } from "@/app/actions/cases";
-import { logout } from "@/app/actions/auth";
+import { logout, crearGestor } from "@/app/actions/auth";
 import { 
   FileText, CheckCircle2, AlertTriangle, Clock, LogOut, 
   Loader2, Phone, Briefcase, Plus, Users, Search, 
@@ -53,16 +53,26 @@ interface Caso {
 
 interface DashboardGestorProps {
   user: { id: string; email: string };
-  profile: { nombre: string } | null;
+  profile: { nombre: string; role: string } | null;
   initialCasos: Caso[];
   clientes: Cliente[];
+  initialGestores?: Cliente[];
 }
 
-export function DashboardGestor({ user, profile, initialCasos, clientes }: DashboardGestorProps) {
+export function DashboardGestor({ user, profile, initialCasos, clientes, initialGestores = [] }: DashboardGestorProps) {
   const router = useRouter();
   const [casos, setCasos] = useState<Caso[]>(initialCasos);
-  const [activeTab, setActiveTab] = useState<"casos" | "clientes">("casos");
+  const [gestores, setGestores] = useState<Cliente[]>(initialGestores);
+  const [activeTab, setActiveTab] = useState<"casos" | "clientes" | "gestores">("casos");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setCasos(initialCasos);
+  }, [initialCasos]);
+
+  useEffect(() => {
+    setGestores(initialGestores);
+  }, [initialGestores]);
   
   // Detalle de caso seleccionado
   const [selectedCaso, setSelectedCaso] = useState<Caso | null>(null);
@@ -73,6 +83,13 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
   const [newCasoTitulo, setNewCasoTitulo] = useState("");
   const [newCasoDescripcion, setNewCasoDescripcion] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+
+  // Crear Gestor State
+  const [isGestorModalOpen, setIsGestorModalOpen] = useState(false);
+  const [newGestorNombre, setNewGestorNombre] = useState("");
+  const [newGestorEmail, setNewGestorEmail] = useState("");
+  const [newGestorTelefono, setNewGestorTelefono] = useState("");
+  const [isCreatingGestor, setIsCreatingGestor] = useState(false);
 
   // Validación de documentos
   const [validatingDocId, setValidatingDocId] = useState<string | null>(null);
@@ -93,6 +110,48 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
     } catch (err) {
       console.error(err);
       toast.error("No se pudo obtener el archivo de forma segura.");
+    }
+  };
+
+  const handleCreateGestor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGestorNombre || !newGestorEmail || !newGestorTelefono) {
+      toast.error("Por favor completa todos los campos obligatorios.");
+      return;
+    }
+
+    setIsCreatingGestor(true);
+    try {
+      const res = await crearGestor({
+        nombre: newGestorNombre,
+        email: newGestorEmail,
+        telefono: newGestorTelefono,
+      });
+
+      if (res.error) throw new Error(res.error);
+
+      toast.success("Invitación enviada al gestor correctamente.");
+      setIsGestorModalOpen(false);
+      setNewGestorNombre("");
+      setNewGestorEmail("");
+      setNewGestorTelefono("");
+      
+      // Actualizar lista local temporalmente
+      const nuevo: Cliente = {
+        id: Math.random().toString(), // Temporal
+        nombre: newGestorNombre,
+        role: "gestor",
+        telefono: newGestorTelefono,
+        email: newGestorEmail,
+        created_at: new Date().toISOString()
+      };
+      setGestores([nuevo, ...gestores]);
+      
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Error al crear el gestor.");
+    } finally {
+      setIsCreatingGestor(false);
     }
   };
 
@@ -252,6 +311,16 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
               <Users className="w-4 h-4" />
               Clientes Registrados ({clientes.length})
             </button>
+            {profile?.role === "admin" && (
+              <button
+                onClick={() => { setActiveTab("gestores"); setSelectedCaso(null); }}
+                className={`py-4 px-6 flex items-center gap-2 text-xs uppercase tracking-widest font-semibold border-b-2 transition-all cursor-pointer
+                  ${activeTab === "gestores" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
+              >
+                <UserPlus className="w-4 h-4" />
+                Gestores Registrados ({gestores.length})
+              </button>
+            )}
           </div>
         </div>
 
@@ -481,7 +550,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
             </div>
 
           </div>
-        ) : (
+        ) : activeTab === "clientes" ? (
           /* TABLA CLIENTES REGISTRADOS */
           <div className="space-y-6">
             <div className="text-xs text-white/50 uppercase tracking-widest font-label">Listado de Clientes en el Sistema</div>
@@ -521,6 +590,51 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
                             Asignar Expediente
                           </button>
                         </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          /* TABLA GESTORES REGISTRADOS (Solo para Admin) */
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="text-xs text-white/50 uppercase tracking-widest font-label">Listado de Gestores en el Sistema</div>
+              <button
+                onClick={() => setIsGestorModalOpen(true)}
+                className="w-full sm:w-auto h-10 px-5 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-primary transition-all rounded-sm flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Nuevo Gestor
+              </button>
+            </div>
+
+            <div className="bg-surface-container border border-outline-variant/20 rounded-sm overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="border-b border-outline-variant/20 bg-surface/30 font-label text-[10px] uppercase tracking-widest text-secondary">
+                    <th className="py-4 px-6">Nombre Completo</th>
+                    <th className="py-4 px-6">Email</th>
+                    <th className="py-4 px-6">Teléfono</th>
+                    <th className="py-4 px-6">Registro</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/10 text-sm font-body">
+                  {gestores.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-8 px-6 text-center text-white/40">
+                        No hay gestores registrados en el sistema.
+                      </td>
+                    </tr>
+                  ) : (
+                    gestores.map((g) => (
+                      <tr key={g.id} className="hover:bg-surface/10 transition-colors">
+                        <td className="py-4 px-6 font-medium text-white">{g.nombre}</td>
+                        <td className="py-4 px-6 text-white/70">{g.email || "No registrado"}</td>
+                        <td className="py-4 px-6 text-white/70">{g.telefono || "No registrado"}</td>
+                        <td className="py-4 px-6 text-white/50 text-xs">{new Date(g.created_at).toLocaleDateString()}</td>
                       </tr>
                     ))
                   )}
@@ -590,6 +704,68 @@ export function DashboardGestor({ user, profile, initialCasos, clientes }: Dashb
                 className="w-full h-11 bg-secondary text-primary font-bold text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-primary transition-all duration-300 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center pt-0.5 cursor-pointer"
               >
                 {isCreating ? "CREANDO EXPEDIENTE..." : "CREAR EXPEDIENTE"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE GESTOR MODAL */}
+      {isGestorModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-surface-container border border-outline-variant/30 p-6 md:p-8 rounded-sm shadow-2xl relative">
+            <button 
+              onClick={() => setIsGestorModalOpen(false)}
+              className="absolute right-4 top-4 p-1 text-white/50 hover:text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="font-headline text-2xl font-light text-white mb-6">Crear Nuevo Gestor</h3>
+
+            <form onSubmit={handleCreateGestor} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="font-label text-[10px] uppercase tracking-widest text-white/70 block">Nombre Completo *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej: Carlos Pérez"
+                  value={newGestorNombre}
+                  onChange={(e) => setNewGestorNombre(e.target.value)}
+                  className="w-full h-11 bg-surface border border-outline-variant/30 text-white text-sm focus:border-secondary focus:outline-none px-3 rounded-sm font-body"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="font-label text-[10px] uppercase tracking-widest text-white/70 block">Email *</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="carlos.perez@bpb.com"
+                  value={newGestorEmail}
+                  onChange={(e) => setNewGestorEmail(e.target.value)}
+                  className="w-full h-11 bg-surface border border-outline-variant/30 text-white text-sm focus:border-secondary focus:outline-none px-3 rounded-sm font-body"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="font-label text-[10px] uppercase tracking-widest text-white/70 block">Teléfono *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej: +5491122334455"
+                  value={newGestorTelefono}
+                  onChange={(e) => setNewGestorTelefono(e.target.value)}
+                  className="w-full h-11 bg-surface border border-outline-variant/30 text-white text-sm focus:border-secondary focus:outline-none px-3 rounded-sm font-body"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isCreatingGestor}
+                className="w-full h-11 bg-secondary text-primary font-bold text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-primary transition-all duration-300 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center pt-0.5 cursor-pointer"
+              >
+                {isCreatingGestor ? "CREANDO E INVITANDO..." : "CREAR E INVITAR GESTOR"}
               </button>
             </form>
           </div>

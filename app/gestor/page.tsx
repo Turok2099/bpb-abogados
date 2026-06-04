@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getClientes, getTodosCasos } from "@/app/actions/cases";
+import { getGestores } from "@/app/actions/auth";
 import { redirect } from "next/navigation";
 import { DashboardGestor } from "./DashboardGestor";
 
@@ -30,12 +31,19 @@ export default async function GestorDashboardPage() {
   const casosRes = await getTodosCasos();
   const casos = casosRes.data || [];
 
+  let gestores: any[] = [];
+  if (profile.role === "admin") {
+    const gestoresRes = await getGestores();
+    gestores = gestoresRes.data || [];
+  }
+
   return (
     <DashboardGestor
       user={{ id: user.id, email: user.email! }}
       profile={profile}
       initialCasos={casos as any}
       clientes={clientes as any}
+      initialGestores={gestores as any}
     />
   );
 }

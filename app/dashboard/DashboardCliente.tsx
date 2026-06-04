@@ -37,7 +37,7 @@ interface DashboardClienteProps {
 
 export function DashboardCliente({ user, profile, initialCasos }: DashboardClienteProps) {
   const router = useRouter();
-  const [casos, setCasos] = useState<Caso[]>(initialCasos);
+  const casos = initialCasos;
   const [uploadingCasoId, setUploadingCasoId] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isCreatingTest, setIsCreatingTest] = useState(false);
