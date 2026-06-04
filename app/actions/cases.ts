@@ -7,7 +7,8 @@ import { revalidatePath } from "next/cache";
 async function checkIsGestorOrAdmin(supabase: any) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  const adminSupabase = await createAdminClient();
+  const { data: profile } = await adminSupabase.from("profiles").select("role").eq("id", user.id).single();
   return profile && (profile.role === "gestor" || profile.role === "admin");
 }
 

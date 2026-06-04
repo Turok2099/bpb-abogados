@@ -141,11 +141,13 @@ async function checkIsAdmin() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return false
-  const { data: profile } = await supabase
+  const adminSupabase = await createAdminClient()
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select('role')
     .eq('id', user.id)
     .single()
+  return profile && profile.role === 'admin'
 }
 
 async function enviarEmailInvitacion(email: string, nombre: string, actionLink: string) {
