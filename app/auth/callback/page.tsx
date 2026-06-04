@@ -17,31 +17,25 @@ function CallbackHandler() {
     const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
 
     // Si hay un token de acceso en el hash, cerramos la sesión local actual de forma síncrona
-    // para evitar que Supabase intente fusionar el token con un usuario distinto (conflictos de sesión).
     if (hash.includes('access_token=') && typeof window !== 'undefined') {
       try {
-        let tokenKey = null
-        for (let i = 0; i < localStorage.length; i++) {
+        console.log(`Limpiando sesión local conflictiva`)
+        for (let i = localStorage.length - 1; i >= 0; i--) {
           const key = localStorage.key(i)
           if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
-            tokenKey = key
-            break
+            localStorage.removeItem(key)
           }
         }
-
-        if (tokenKey) {
-          console.log(`Limpiando sesión local conflictiva`)
-          localStorage.removeItem(tokenKey)
-          // Borrar cookies de supabase
-          document.cookie.split(";").forEach((c) => {
-            const eqPos = c.indexOf("=");
-            const name = eqPos > -1 ? c.substring(0, eqPos).trim() : c.trim();
-            if (name.startsWith("sb-")) {
-              document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-              document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-            }
-          });
-        }
+        
+        // Borrar cookies de supabase
+        document.cookie.split(";").forEach((c) => {
+          const eqPos = c.indexOf("=");
+          const name = eqPos > -1 ? c.substring(0, eqPos).trim() : c.trim();
+          if (name.startsWith("sb-")) {
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+          }
+        });
       } catch (err) {
         console.error("Error al limpiar sesión local conflictiva:", err)
       }
@@ -71,17 +65,17 @@ function CallbackHandler() {
         return
       }
 
+      const hashParams = new URLSearchParams(hash.substring(1))
+      const hashAccessToken = hashParams.get('access_token')
+
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-        // Si hay un hash de autenticación, IGNORAMOS la sesión inicial, ya que puede ser
-        // una sesión antigua de otro usuario que estaba logueado.
-        // Esperamos explícitamente el evento SIGNED_IN o PASSWORD_RECOVERY que Supabase emitirá tras procesar el hash.
-        
+        // Ignoramos INITIAL_SESSION si pertenece a la sesión antigua
         if (
           event === 'SIGNED_IN' || 
           event === 'PASSWORD_RECOVERY' || 
           event === 'TOKEN_REFRESHED' || 
           event === 'USER_UPDATED' || 
-          (event === 'INITIAL_SESSION' && session)
+          (event === 'INITIAL_SESSION' && session && (!hasHashAuth || session.access_token === hashAccessToken))
         ) {
           processed = true
           subscription.unsubscribe()

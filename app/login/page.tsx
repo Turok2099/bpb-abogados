@@ -2,9 +2,9 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { login, resendConfirmation } from "@/app/actions/auth";
+import { login, resendConfirmation, sendPasswordRecovery } from "@/app/actions/auth";
 import { toast } from "sonner";
-import { Lock, Mail, Eye, EyeOff, Send, ArrowLeft, Loader2 } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, Send, ArrowLeft, Loader2, KeyRound } from "lucide-react";
 import Link from "next/link";
 
 function LoginForm() {
@@ -12,13 +12,15 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const errorParam = searchParams.get("error");
 
-  const [view, setView] = useState<"login" | "resend">("login");
+  const [view, setView] = useState<"login" | "resend" | "recovery">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resendEmail, setResendEmail] = useState("");
+  const [recoveryEmail, setRecoveryEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [isResendPending, setIsResendPending] = useState(false);
+  const [isRecoveryPending, setIsRecoveryPending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +95,41 @@ function LoginForm() {
     }
   };
 
+  const handleRecovery = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!recoveryEmail) {
+      toast.error("Por favor introduce tu correo electrónico.");
+      return;
+    }
+    setIsRecoveryPending(true);
+
+    try {
+      const res = await sendPasswordRecovery(recoveryEmail);
+      if (res?.error) {
+        toast.error(res.error, {
+          style: {
+            background: "var(--color-surface)",
+            borderColor: "var(--color-error)",
+            color: "var(--color-on-surface)",
+          },
+        });
+      } else {
+        toast.success("Enlace de recuperación enviado. Revisa tu correo.", {
+          style: {
+            background: "var(--color-surface)",
+            borderColor: "var(--color-secondary)",
+            color: "var(--color-on-surface)",
+          },
+        });
+        setView("login");
+      }
+    } catch (err) {
+      toast.error("Ocurrió un error inesperado.");
+    } finally {
+      setIsRecoveryPending(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-md bg-surface-container border border-secondary/20 p-8 md:p-10 rounded-sm shadow-2xl relative z-10">
       <div className="text-center mb-8">
@@ -104,10 +141,10 @@ function LoginForm() {
           />
         </Link>
         <h1 className="font-headline text-3xl font-light text-white tracking-wide">
-          {view === "login" ? "Portal de Acceso" : "Reenviar Confirmación"}
+          {view === "login" ? "Portal de Acceso" : view === "resend" ? "Reenviar Confirmación" : "Recuperar Contraseña"}
         </h1>
         <p className="font-body text-[10px] uppercase tracking-widest text-secondary mt-2">
-          {view === "login" ? "BPB Abogados - Clientes y Gestores" : "Recupera tu enlace de verificación"}
+          {view === "login" ? "BPB Abogados - Clientes y Gestores" : view === "resend" ? "Recupera tu enlace de verificación" : "Te enviaremos un enlace de acceso"}
         </p>
       </div>
 
@@ -175,6 +212,13 @@ function LoginForm() {
                   <Eye className="w-5 h-5" />
                 )}
               </button>
+              <button
+                type="button"
+                onClick={() => setView("recovery")}
+                className="text-secondary/80 hover:text-secondary text-[10px] uppercase tracking-wider mt-2 float-right hover:underline focus:outline-none"
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
             </div>
           </div>
 
@@ -205,7 +249,7 @@ function LoginForm() {
             </div>
           </div>
         </form>
-      ) : (
+      ) : view === "resend" ? (
         <form onSubmit={handleResend} className="space-y-6">
           <p className="text-xs text-white/60 font-body leading-relaxed">
             Ingresa el correo electrónico con el que te registraste. Te enviaremos un nuevo enlace de confirmación para que puedas activar tu portal.
@@ -243,6 +287,59 @@ function LoginForm() {
               <>
                 <Send className="w-4 h-4" />
                 REENVIAR CORREO
+              </>
+            )}
+          </button>
+
+          <div className="pt-4 border-t border-outline-variant/30 mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => setView("login")}
+              className="text-white/65 hover:text-white inline-flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Volver al inicio de sesión
+            </button>
+          </div>
+        </form>
+      ) : (
+        <form onSubmit={handleRecovery} className="space-y-6">
+          <p className="text-xs text-white/60 font-body leading-relaxed">
+            Ingresa tu correo electrónico registrado. Te enviaremos un enlace seguro para que puedas restablecer tu contraseña.
+          </p>
+
+          <div className="space-y-2">
+            <label className="font-label text-xs uppercase tracking-widest text-white/70 block">
+              Correo Electrónico
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+              <input
+                type="email"
+                required
+                value={recoveryEmail}
+                onChange={(e) => setRecoveryEmail(e.target.value)}
+                disabled={isRecoveryPending}
+                placeholder="ejemplo@bpbabogados.com"
+                className="w-full h-12 bg-surface-container-high border border-outline-variant/30 focus:border-secondary focus:outline-none pl-12 pr-4 text-white text-base transition-colors rounded-sm"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isRecoveryPending}
+            className="w-full h-12 bg-secondary text-primary font-bold text-sm tracking-[0.2em] uppercase hover:bg-white hover:text-primary transition-all duration-300 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer gap-2"
+          >
+            {isRecoveryPending ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                ENVIANDO...
+              </>
+            ) : (
+              <>
+                <KeyRound className="w-4 h-4" />
+                ENVIAR ENLACE
               </>
             )}
           </button>
