@@ -17,19 +17,48 @@ function CallbackHandler() {
     const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
     const invitedEmail = searchParams.get('email')
 
+    // Si es un flujo de invitación o recuperación, y hay un email invitado,
+    // cerramos la sesión local actual de forma síncrona si pertenece a otro usuario.
+    if (isResetFlow && invitedEmail && typeof window !== 'undefined') {
+      try {
+        let currentEmail = null
+        let tokenKey = null
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i)
+          if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+            tokenKey = key
+            const val = localStorage.getItem(key)
+            if (val) {
+              const data = JSON.parse(val)
+              currentEmail = data?.currentSession?.user?.email || data?.user?.email
+            }
+            break
+          }
+        }
+
+        if (currentEmail && currentEmail !== invitedEmail) {
+          console.log(`Limpiando sesión local de ${currentEmail} en favor de ${invitedEmail}`)
+          if (tokenKey) {
+            localStorage.removeItem(tokenKey)
+          }
+          // Borrar cookies de supabase
+          document.cookie.split(";").forEach((c) => {
+            const eqPos = c.indexOf("=");
+            const name = eqPos > -1 ? c.substring(0, eqPos).trim() : c.trim();
+            if (name.startsWith("sb-")) {
+              document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+              document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error al limpiar sesión local conflictiva:", err)
+      }
+    }
+
     const supabase = createClient()
 
     const handleAuth = async () => {
-      // Si hay una sesión activa, y es un flujo de restablecimiento o invitación de otro correo,
-      // cerramos la sesión actual primero para evitar conflictos (ej. administrador logueado)
-      if (isResetFlow && invitedEmail) {
-        const { data: { session: existingSession } } = await supabase.auth.getSession()
-        if (existingSession && existingSession.user.email !== invitedEmail) {
-          console.log(`Cerrando sesión de ${existingSession.user.email} en favor del nuevo invitado ${invitedEmail}`)
-          await supabase.auth.signOut()
-        }
-      }
-
       // 1. Si es flujo PKCE, intercambiamos el código por sesión
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)
