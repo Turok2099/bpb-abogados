@@ -15,10 +15,21 @@ function CallbackHandler() {
     const hasHashAuth = hash.includes('access_token=') || hash.includes('error_code=')
     // También verificamos searchParams por si viene el type ahí
     const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
+    const invitedEmail = searchParams.get('email')
 
     const supabase = createClient()
 
     const handleAuth = async () => {
+      // Si hay una sesión activa, y es un flujo de restablecimiento o invitación de otro correo,
+      // cerramos la sesión actual primero para evitar conflictos (ej. administrador logueado)
+      if (isResetFlow && invitedEmail) {
+        const { data: { session: existingSession } } = await supabase.auth.getSession()
+        if (existingSession && existingSession.user.email !== invitedEmail) {
+          console.log(`Cerrando sesión de ${existingSession.user.email} en favor del nuevo invitado ${invitedEmail}`)
+          await supabase.auth.signOut()
+        }
+      }
+
       // 1. Si es flujo PKCE, intercambiamos el código por sesión
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)

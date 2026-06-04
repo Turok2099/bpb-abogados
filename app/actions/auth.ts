@@ -207,7 +207,7 @@ export async function crearGestor(data: { nombre: string; email: string; telefon
     type: 'invite',
     email,
     options: {
-      redirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback?type=invite&email=${encodeURIComponent(email)}`,
       data: {
         nombre,
         role: 'gestor',
@@ -217,6 +217,10 @@ export async function crearGestor(data: { nombre: string; email: string; telefon
   })
 
   if (error) {
+    const errMsg = error.message.toLowerCase()
+    if (errMsg.includes("register") || errMsg.includes("exist") || errMsg.includes("taken")) {
+      return { error: 'Este correo electrónico ya está registrado. Si necesitas enviarle un nuevo acceso, usa el botón "Reenviar Invitación" en la lista de gestores.' }
+    }
     return { error: error.message }
   }
 
@@ -271,7 +275,7 @@ export async function reenviarInvitacion(data: { email: string; nombre: string; 
     type: 'invite',
     email,
     options: {
-      redirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback?type=invite&email=${encodeURIComponent(email)}`,
       data: {
         nombre,
         role: 'gestor',
@@ -283,12 +287,13 @@ export async function reenviarInvitacion(data: { email: string; nombre: string; 
   let actionLink = linkData?.properties?.action_link
 
   if (error) {
-    if (error.message.includes("already registered") || error.message.includes("already exists") || error.message.includes("taken")) {
+    const errMsg = error.message.toLowerCase()
+    if (errMsg.includes("register") || errMsg.includes("exist") || errMsg.includes("taken")) {
       const { data: recoveryData, error: recoveryError } = await adminSupabase.auth.admin.generateLink({
         type: 'recovery',
         email,
         options: {
-          redirectTo: `${siteUrl}/auth/callback`
+          redirectTo: `${siteUrl}/auth/callback?type=recovery&email=${encodeURIComponent(email)}`
         }
       })
 
