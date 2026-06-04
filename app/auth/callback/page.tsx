@@ -65,17 +65,15 @@ function CallbackHandler() {
         return
       }
 
-      const hashParams = new URLSearchParams(hash.substring(1))
-      const hashAccessToken = hashParams.get('access_token')
+      const hasCode = !!code
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-        // Ignoramos INITIAL_SESSION si pertenece a la sesión antigua
         if (
           event === 'SIGNED_IN' || 
           event === 'PASSWORD_RECOVERY' || 
           event === 'TOKEN_REFRESHED' || 
           event === 'USER_UPDATED' || 
-          (event === 'INITIAL_SESSION' && session && (!hasHashAuth || session.access_token === hashAccessToken))
+          (event === 'INITIAL_SESSION' && session)
         ) {
           processed = true
           subscription.unsubscribe()
@@ -100,7 +98,7 @@ function CallbackHandler() {
           } else {
             router.push('/login')
           }
-        } else if (event === 'INITIAL_SESSION' && !session && !hasHashAuth) {
+        } else if (event === 'INITIAL_SESSION' && !session && !hasHashAuth && !hasCode) {
           processed = true
           subscription.unsubscribe()
           router.push('/login')
