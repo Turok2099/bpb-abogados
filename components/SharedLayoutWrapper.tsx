@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { WhatsAppWrapper } from './WhatsAppWrapper';
+import { CookieAlert } from './CookieAlert';
 
 interface SharedLayoutWrapperProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ export function SharedLayoutWrapper({ children }: SharedLayoutWrapperProps) {
         {children}
       </div>
       {isSharedLayout && <WhatsAppWrapper />}
+      {isSharedLayout && <CookieAlert />}
       {isSharedLayout && <Footer />}
     </>
   );
