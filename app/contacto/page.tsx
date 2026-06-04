@@ -127,7 +127,7 @@ export default function Contacto() {
           </div>
           <div className="max-w-5xl mx-auto relative group">
             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-secondary/10 to-transparent opacity-100 blur-3xl pointer-events-none"></div>
-            <CalendlyWidget url="https://calendly.com/bpb-abogados" />
+            <CalendlyWidget url="https://calendly.com/bpbabogados" />
           </div>
         </div>
       </div>
