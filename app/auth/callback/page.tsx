@@ -10,6 +10,12 @@ function CallbackHandler() {
   const code = searchParams.get('code')
 
   useEffect(() => {
+    // Leemos el hash antes de que Supabase pueda procesarlo y borrarlo
+    const hash = typeof window !== 'undefined' ? window.location.hash : ''
+    const hasHashAuth = hash.includes('access_token=') || hash.includes('error_code=')
+    // También verificamos searchParams por si viene el type ahí
+    const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
+
     const supabase = createClient()
 
     const handleAuth = async () => {
@@ -23,61 +29,59 @@ function CallbackHandler() {
         }
       }
 
-      // 2. Obtener sesión activa
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (session) {
-        const hash = window.location.hash
-        const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
+      // 2. Escuchamos el cambio de estado de Supabase Auth
+      let processed = false
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        // Si hay un hash de autenticación, IGNORAMOS la sesión inicial, ya que puede ser
+        // una sesión antigua de otro usuario que estaba logueado.
+        // Esperamos explícitamente el evento SIGNED_IN o PASSWORD_RECOVERY que Supabase emitirá tras procesar el hash.
         
-        if (isResetFlow) {
-          router.push('/restablecer-contrasena')
-        } else {
-          // Redirección por rol
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .single()
+        if (
+          event === 'SIGNED_IN' || 
+          event === 'PASSWORD_RECOVERY' || 
+          event === 'TOKEN_REFRESHED' || 
+          event === 'USER_UPDATED' || 
+          (event === 'INITIAL_SESSION' && session && !hasHashAuth)
+        ) {
+          processed = true
+          subscription.unsubscribe()
+          
+          if (isResetFlow) {
+            router.push('/restablecer-contrasena')
+          } else if (session) {
+            // Redirección por rol
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('role')
+              .eq('id', session.user.id)
+              .single()
 
-          if (profile?.role === 'admin') {
-            router.push('/admin')
-          } else if (profile?.role === 'gestor') {
-            router.push('/gestor')
-          } else {
-            router.push('/dashboard')
-          }
-        }
-      } else {
-        // 3. Si no hay sesión inmediata, escuchamos el cambio de estado de Supabase Auth
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-          if (session) {
-            subscription.unsubscribe()
-            const hash = window.location.hash
-            const isReset = hash.includes('type=recovery') || hash.includes('type=invite') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
-            
-            if (isReset) {
-              router.push('/restablecer-contrasena')
+            if (profile?.role === 'admin') {
+              router.push('/admin')
+            } else if (profile?.role === 'gestor') {
+              router.push('/gestor')
             } else {
-              const { data: profile } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('id', session.user.id)
-                .single()
-
-              if (profile?.role === 'admin') {
-                router.push('/admin')
-              } else if (profile?.role === 'gestor') {
-                router.push('/gestor')
-              } else {
-                router.push('/dashboard')
-              }
+              router.push('/dashboard')
             }
-          } else if (event === 'INITIAL_SESSION' && !session) {
-            subscription.unsubscribe()
+          } else {
             router.push('/login')
           }
-        })
+        } else if (event === 'INITIAL_SESSION' && !session && !hasHashAuth) {
+          processed = true
+          subscription.unsubscribe()
+          router.push('/login')
+        }
+      })
+
+      // 3. Fallback de seguridad por si Supabase falla silenciosamente al procesar el hash
+      if (hasHashAuth) {
+        setTimeout(() => {
+          if (!processed) {
+            subscription.unsubscribe()
+            router.push('/login?error=timeout')
+          }
+        }, 5000)
       }
     }
 
