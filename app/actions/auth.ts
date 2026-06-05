@@ -52,19 +52,21 @@ export async function registerClient(data: { nombre: string; email: string; tele
     return { error: 'Todos los campos son obligatorios.' }
   }
 
-  const supabase = await createClient()
-
   // Construir dinámicamente la URL del sitio desde los encabezados de la solicitud
   const headersList = await headers()
   const host = headersList.get('host')
   const protocol = host?.includes('localhost') ? 'http' : 'https'
   const siteUrl = `${protocol}://${host}`
 
-  const { data: signUpData, error } = await supabase.auth.signUp({
+  const adminSupabase = await createAdminClient()
+
+  // Generamos el link de registro usando admin client para evitar que Supabase envíe el correo automático
+  const { data: linkData, error } = await adminSupabase.auth.admin.generateLink({
+    type: 'signup',
     email,
     password,
     options: {
-      emailRedirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback`,
       data: {
         nombre,
         role: 'cliente',
@@ -78,13 +80,12 @@ export async function registerClient(data: { nombre: string; email: string; tele
   }
 
   // Inserción manual de resiliencia en la tabla profiles
-  if (signUpData.user) {
+  if (linkData.user) {
     try {
-      const adminSupabase = await createAdminClient()
       const { error: profileError } = await adminSupabase
         .from('profiles')
         .upsert({
-          id: signUpData.user.id,
+          id: linkData.user.id,
           nombre,
           role: 'cliente',
           telefono,
@@ -96,6 +97,48 @@ export async function registerClient(data: { nombre: string; email: string; tele
       }
     } catch (err) {
       console.error("Excepción al insertar perfil en registro:", err)
+    }
+  }
+
+  // Enviar el correo usando Resend con el link generado
+  if (linkData.properties?.action_link) {
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const FROM_EMAIL = "Notificaciones BPB <sistema@bpbabogados.com.ar>"
+
+    try {
+      await resend.emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: "Confirma tu Cuenta - BPB Abogados",
+        html: `
+          <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 8px; background-color: #ffffff;">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <img src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" alt="BPB Abogados" style="height: 50px; width: auto;" />
+            </div>
+            <h2 style="color: #1a1a1a; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; font-weight: normal; text-align: center;">Verificación de Cuenta</h2>
+            <p>Hola <strong>${nombre}</strong>,</p>
+            <p>Gracias por registrarte en el portal de <strong>BPB Abogados</strong> para iniciar tu Test de Viabilidad.</p>
+            <p>Para verificar tu cuenta y comenzar a subir tu documentación, por favor haz clic en el siguiente botón:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${linkData.properties.action_link}" style="background-color: #D4AF37; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+                Verificar Cuenta
+              </a>
+            </div>
+            <p style="font-size: 12px; color: #666; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
+              Si el botón no funciona, puedes copiar y pegar el siguiente enlace en tu navegador:<br />
+              <a href="${linkData.properties.action_link}" style="color: #D4AF37; word-break: break-all;">${linkData.properties.action_link}</a>
+            </p>
+            <p>Si no has solicitado el registro de esta cuenta, por favor ignora este correo.</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;" />
+            <p style="font-size: 11px; color: #999; text-align: center;">
+              Este es un correo automático enviado por el sistema de BPB Abogados.
+            </p>
+          </div>
+        `
+      })
+    } catch (emailErr: any) {
+      console.error("Error al enviar correo de verificación con Resend:", emailErr)
+      return { error: "Cuenta registrada pero falló el envío del correo: " + emailErr.message }
     }
   }
 
@@ -178,23 +221,81 @@ export async function resendConfirmation(email: string) {
     return { error: 'El correo electrónico es obligatorio.' }
   }
 
-  const supabase = await createClient()
+  const adminSupabase = await createAdminClient()
 
   const headersList = await headers()
   const host = headersList.get('host')
   const protocol = host?.includes('localhost') ? 'http' : 'https'
   const siteUrl = `${protocol}://${host}`
 
-  const { error } = await supabase.auth.resend({
-    type: 'signup',
+  // Obtener el perfil para personalizar el correo
+  let nombre = 'Cliente'
+  try {
+    const { data: profile } = await adminSupabase
+      .from('profiles')
+      .select('nombre')
+      .eq('email', email)
+      .maybeSingle()
+    if (profile?.nombre) {
+      nombre = profile.nombre
+    }
+  } catch (err) {
+    console.error("Error al obtener nombre de cliente para reenvío:", err)
+  }
+
+  // Generamos el link de confirmación usando generateLink con type: 'magiclink'
+  const { data: linkData, error } = await adminSupabase.auth.admin.generateLink({
+    type: 'magiclink',
     email,
     options: {
-      emailRedirectTo: `${siteUrl}/auth/callback`,
-    },
+      redirectTo: `${siteUrl}/auth/callback`,
+    }
   })
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Enviar el correo usando Resend
+  if (linkData.properties?.action_link) {
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const FROM_EMAIL = "Notificaciones BPB <sistema@bpbabogados.com.ar>"
+
+    try {
+      await resend.emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: "Confirma tu Cuenta - BPB Abogados",
+        html: `
+          <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 8px; background-color: #ffffff;">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <img src="https://res.cloudinary.com/dxbtafe9u/image/upload/v1779560163/BPB_Logo_Web_kqsqhh.png" alt="BPB Abogados" style="height: 50px; width: auto;" />
+            </div>
+            <h2 style="color: #1a1a1a; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; font-weight: normal; text-align: center;">Reenvío de Verificación de Cuenta</h2>
+            <p>Hola <strong>${nombre}</strong>,</p>
+            <p>Hemos recibido una solicitud para reenviar el enlace de verificación de tu cuenta de <strong>BPB Abogados</strong>.</p>
+            <p>Para verificar tu cuenta y comenzar a subir tu documentación, por favor haz clic en el siguiente botón:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${linkData.properties.action_link}" style="background-color: #D4AF37; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+                Verificar Cuenta
+              </a>
+            </div>
+            <p style="font-size: 12px; color: #666; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
+              Si el botón no funciona, puedes copiar y pegar el siguiente enlace en tu navegador:<br />
+              <a href="${linkData.properties.action_link}" style="color: #D4AF37; word-break: break-all;">${linkData.properties.action_link}</a>
+            </p>
+            <p>Si no has solicitado este reenvío, por favor ignora este correo.</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;" />
+            <p style="font-size: 11px; color: #999; text-align: center;">
+              Este es un correo automático enviado por el sistema de BPB Abogados.
+            </p>
+          </div>
+        `
+      })
+    } catch (emailErr: any) {
+      console.error("Error al reenviar correo de verificación con Resend:", emailErr)
+      return { error: "Fallo al enviar correo: " + emailErr.message }
+    }
   }
 
   return { success: true }

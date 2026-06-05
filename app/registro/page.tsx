@@ -67,10 +67,10 @@ export default function RegistroPage() {
           },
         });
         setIsRegistered(true);
-        // Esperamos 4 segundos antes de enviar al login
+        // Esperamos 8 segundos antes de enviar al login para dar tiempo a leer el mensaje
         setTimeout(() => {
           router.push("/login");
-        }, 4000);
+        }, 8000);
       }
     } catch (err) {
       toast.error("Ocurrió un error inesperado.");

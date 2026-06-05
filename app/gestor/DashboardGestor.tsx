@@ -11,7 +11,7 @@ import {
   archivarCaso,
   registrarDocumentoGestor
 } from "@/app/actions/cases";
-import { logout, crearGestor, reenviarInvitacion } from "@/app/actions/auth";
+import { logout, crearGestor, reenviarInvitacion, resendConfirmation } from "@/app/actions/auth";
 import { 
   FileText, CheckCircle2, AlertTriangle, Clock, LogOut, 
   Loader2, Phone, Briefcase, Plus, Users, Search, 
@@ -96,6 +96,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   const [newGestorTelefono, setNewGestorTelefono] = useState("");
   const [isCreatingGestor, setIsCreatingGestor] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
+  const [resendingConfirmationEmail, setResendingConfirmationEmail] = useState<string | null>(null);
 
   // Validación de documentos
   const [validatingDocId, setValidatingDocId] = useState<string | null>(null);
@@ -318,6 +319,19 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       toast.error(err.message || "Error al reenviar la invitación.");
     } finally {
       setResendingId(null);
+    }
+  };
+
+  const handleReenviarConfirmacionCliente = async (email: string, nombre: string) => {
+    setResendingConfirmationEmail(email);
+    try {
+      const res = await resendConfirmation(email);
+      if (res.error) throw new Error(res.error);
+      toast.success(`Enlace de verificación enviado a ${nombre} correctamente.`);
+    } catch (err: any) {
+      toast.error(err.message || "Error al reenviar la verificación.");
+    } finally {
+      setResendingConfirmationEmail(null);
     }
   };
 
@@ -715,6 +729,26 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                               <div className="text-white/40 mt-1">{archivedCasos.length} Archivados</div>
                             )}
                           </div>
+
+                          {cliente.email && (
+                            <button
+                              onClick={() => handleReenviarConfirmacionCliente(cliente.email!, cliente.nombre)}
+                              disabled={resendingConfirmationEmail === cliente.email}
+                              className="mt-4 w-full h-9 px-3 bg-surface border border-outline-variant/30 hover:border-secondary hover:text-secondary rounded-sm text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 transition-all text-white/70 disabled:opacity-50 cursor-pointer"
+                            >
+                              {resendingConfirmationEmail === cliente.email ? (
+                                <>
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  Reenviando...
+                                </>
+                              ) : (
+                                <>
+                                  <Mail className="w-3.5 h-3.5" />
+                                  Reenviar Verificación
+                                </>
+                              )}
+                            </button>
+                          )}
                         </div>
                       </div>
                     )
