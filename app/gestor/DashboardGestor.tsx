@@ -778,7 +778,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
             ) : activeTab === "clientes" ? (
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {clientes.map(cliente => {
+                  {clientes
+                    .filter(cliente => profile?.role === "admin" || casos.some(c => c.cliente_id === cliente.id && c.gestor_id === user.id))
+                    .map(cliente => {
                     const clientCasos = casos.filter(c => c.cliente_id === cliente.id);
                     const archivedCasos = clientCasos.filter(c => c.estado === "archivado");
                     return (
