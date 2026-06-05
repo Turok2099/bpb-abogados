@@ -20,7 +20,8 @@ function CallbackHandler() {
     addLog(`Hash detectado: ${hash ? hash.substring(0, 30) + '...' : 'vacío'}`)
     
     const hasHashAuth = hash.includes('access_token=') || hash.includes('error_code=') || hash.includes('error=')
-    const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || hash.includes('type=signup') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
+    const isSignupFlow = hash.includes('type=signup') || searchParams.get('type') === 'signup'
+    const isResetFlow = hash.includes('type=recovery') || hash.includes('type=invite') || searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite'
     const hasCode = !!code
     
     addLog(`Condiciones: hasHashAuth=${hasHashAuth}, isResetFlow=${isResetFlow}, hasCode=${hasCode}`)
@@ -73,6 +74,9 @@ function CallbackHandler() {
           addLog('Intercambio PKCE exitoso. Redirigiendo...')
           if (isResetFlow) {
             router.push('/restablecer-contrasena')
+          } else if (isSignupFlow) {
+            await supabase.auth.signOut()
+            router.push('/login?verified=true')
           } else if (data.session) {
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.session.user.id).single()
             if (profile?.role === 'admin') router.push('/admin')
@@ -106,6 +110,9 @@ function CallbackHandler() {
           addLog('setSession manual exitoso. Redirigiendo...')
           if (isResetFlow) {
             router.push('/restablecer-contrasena')
+          } else if (isSignupFlow) {
+            await supabase.auth.signOut()
+            router.push('/login?verified=true')
           } else if (data.session) {
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.session.user.id).single()
             if (profile?.role === 'admin') router.push('/admin')
@@ -125,6 +132,9 @@ function CallbackHandler() {
           addLog('Sesión existente encontrada. Redirigiendo...')
           if (isResetFlow) {
             router.push('/restablecer-contrasena')
+          } else if (isSignupFlow) {
+            await supabase.auth.signOut()
+            router.push('/login?verified=true')
           } else {
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
             if (profile?.role === 'admin') router.push('/admin')

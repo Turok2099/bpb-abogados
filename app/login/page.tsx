@@ -11,6 +11,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const errorParam = searchParams.get("error");
+  const verifiedParam = searchParams.get("verified");
 
   const [view, setView] = useState<"login" | "resend" | "recovery">("login");
   const [email, setEmail] = useState("");
@@ -147,6 +148,13 @@ function LoginForm() {
           {view === "login" ? "BPB Abogados - Clientes y Gestores" : view === "resend" ? "Recupera tu enlace de verificación" : "Te enviaremos un enlace de acceso"}
         </p>
       </div>
+
+      {verifiedParam && verifiedParam === "true" && view === "login" && (
+        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm rounded-sm text-center font-body">
+          <p className="font-bold uppercase tracking-wider mb-1">¡Cuenta Confirmada!</p>
+          Tu dirección de correo ha sido verificada con éxito. Ya puedes iniciar sesión.
+        </div>
+      )}
 
       {errorParam && errorParam === "unauthorized" && view === "login" && (
         <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error text-sm rounded-sm text-center font-body uppercase tracking-wider">
