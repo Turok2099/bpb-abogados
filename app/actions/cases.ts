@@ -334,3 +334,53 @@ export async function archivarCaso(casoId: string) {
   revalidatePath("/gestor");
   return { success: true, data };
 }
+
+// 12. DOCUMENTOS: REGISTRAR DOCUMENTO SUBIDO POR GESTOR (Gestor / Admin)
+export async function registrarDocumentoGestor(data: { 
+  casoId: string; 
+  clienteId: string; 
+  nombreArchivo: string; 
+  urlArchivo: string; 
+}) {
+  const supabase = await createClient();
+
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+  if (!isAuthorized) {
+    return { error: "No autorizado." };
+  }
+
+  const { casoId, clienteId, nombreArchivo, urlArchivo } = data;
+
+  if (!casoId || !clienteId || !nombreArchivo || !urlArchivo) {
+    return { error: "Información del archivo incompleta." };
+  }
+
+  const adminSupabase = await createAdminClient();
+
+  // Insertar documento para el cliente
+  const { data: nuevoDoc, error } = await adminSupabase
+    .from("documentos_casos")
+    .insert({
+      caso_id: casoId,
+      cliente_id: clienteId,
+      nombre_archivo: nombreArchivo,
+      url_archivo: urlArchivo,
+      estado: "validado", // Como lo sube el gestor, se marca como validado automáticamente
+    })
+    .select()
+    .single();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Al subir un documento el gestor, actualizamos la fecha de modificación del caso
+  await adminSupabase
+    .from("casos")
+    .update({ updated_at: new Date().toISOString() })
+    .eq("id", casoId);
+
+  revalidatePath(`/dashboard`);
+  revalidatePath(`/gestor`);
+  return { success: true, data: nuevoDoc };
+}

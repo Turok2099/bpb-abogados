@@ -276,6 +276,55 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
     }
   };
 
+  const handleCreateGestor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGestorNombre || !newGestorEmail || !newGestorTelefono) {
+      toast.error("Por favor completa todos los campos.");
+      return;
+    }
+
+    setIsCreatingGestor(true);
+    try {
+      const res = await crearGestor({
+        nombre: newGestorNombre,
+        email: newGestorEmail,
+        telefono: newGestorTelefono
+      });
+
+      if (res.error) throw new Error(res.error);
+
+      toast.success("Gestor invitado correctamente.");
+      setIsGestorModalOpen(false);
+      setNewGestorNombre("");
+      setNewGestorEmail("");
+      setNewGestorTelefono("");
+      window.location.reload(); 
+    } catch (err: any) {
+      toast.error(err.message || "Error al invitar al gestor.");
+    } finally {
+      setIsCreatingGestor(false);
+    }
+  };
+
+  const handleReenviarInvitacion = async (gestor: Cliente) => {
+    setResendingId(gestor.id);
+    try {
+      const res = await reenviarInvitacion({
+        email: gestor.email || "",
+        nombre: gestor.nombre,
+        telefono: gestor.telefono || ""
+      });
+
+      if (res.error) throw new Error(res.error);
+
+      toast.success("Invitación reenviada correctamente.");
+    } catch (err: any) {
+      toast.error(err.message || "Error al reenviar la invitación.");
+    } finally {
+      setResendingId(null);
+    }
+  };
+
   const getEstadoCasoStyles = (estado: Caso["estado"]) => {
     switch (estado) {
       case "en revision": return { text: "En Revisión", color: "text-amber-400 border-amber-500/20 bg-amber-500/5", icon: Clock };
@@ -494,9 +543,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
   return (
     <div className="min-h-screen bg-background text-white flex">
-      {profile?.role === "admin" && <SidebarAdmin currentPath="/gestor" />}
+      <SidebarAdmin user={user} profile={profile} />
       
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 md:pl-64 flex flex-col">
         <header className="bg-surface border-b border-outline-variant/20 py-4 px-6 md:px-8">
           <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-4">
