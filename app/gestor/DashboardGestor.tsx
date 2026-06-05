@@ -112,7 +112,6 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   const [newClienteNombre, setNewClienteNombre] = useState("");
   const [newClienteEmail, setNewClienteEmail] = useState("");
   const [newClienteTelefono, setNewClienteTelefono] = useState("");
-  const [newClientePassword, setNewClientePassword] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [deletingClienteId, setDeletingClienteId] = useState<string | null>(null);
 
@@ -276,13 +275,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
   const handleCreateCaso = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newClienteNombre || !newClienteEmail || !newClienteTelefono || !newClientePassword) {
+    if (!newClienteNombre || !newClienteEmail || !newClienteTelefono) {
       toast.error("Por favor completa todos los campos del cliente.");
-      return;
-    }
-
-    if (newClientePassword.length < 6) {
-      toast.error("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
 
@@ -291,8 +285,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       const res = await crearClienteYExpediente({
         nombre: newClienteNombre,
         email: newClienteEmail,
-        telefono: newClienteTelefono,
-        password: newClientePassword
+        telefono: newClienteTelefono
       });
 
       if (res.error) throw new Error(res.error);
@@ -307,7 +300,6 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       setNewClienteNombre("");
       setNewClienteEmail("");
       setNewClienteTelefono("");
-      setNewClientePassword("");
       
       if (typeof window !== "undefined") {
         sessionStorage.setItem("gestor_active_tab", "casos_activos");
@@ -1004,18 +996,6 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                     value={newClienteTelefono}
                     onChange={(e) => setNewClienteTelefono(e.target.value)}
                     placeholder="+54 9 11 1234-5678"
-                    className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase tracking-widest text-white/70 font-semibold block">Contraseña de Acceso</label>
-                  <input
-                    type="password"
-                    required
-                    value={newClientePassword}
-                    onChange={(e) => setNewClientePassword(e.target.value)}
-                    placeholder="Mínimo 6 caracteres"
                     className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
                   />
                 </div>

@@ -417,7 +417,6 @@ export async function crearClienteYExpediente(data: {
   nombre: string;
   email: string;
   telefono: string;
-  password: string;
 }) {
   const supabase = await createClient();
 
@@ -431,13 +430,9 @@ export async function crearClienteYExpediente(data: {
     return { error: "No autorizado." };
   }
 
-  const { nombre, email, telefono, password } = data;
-  if (!nombre || !email || !telefono || !password) {
+  const { nombre, email, telefono } = data;
+  if (!nombre || !email || !telefono) {
     return { error: "Todos los campos son obligatorios." };
-  }
-
-  if (password.length < 6) {
-    return { error: "La contraseña debe tener al menos 6 caracteres." };
   }
 
   const headersList = await headers();
@@ -449,11 +444,10 @@ export async function crearClienteYExpediente(data: {
 
   // Generamos el link de registro usando admin client para evitar que Supabase envíe el correo automático
   const { data: linkData, error: signupError } = await adminSupabase.auth.admin.generateLink({
-    type: "signup",
+    type: "invite",
     email,
-    password,
     options: {
-      redirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback?type=invite&email=${encodeURIComponent(email)}`,
       data: {
         nombre,
         role: "cliente",
