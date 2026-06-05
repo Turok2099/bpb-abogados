@@ -509,3 +509,58 @@ export async function getGestores() {
   return { data }
 }
 
+export async function eliminarGestorCompleto(gestorId: string) {
+  const isAdmin = await checkIsAdmin()
+  if (!isAdmin) {
+    return { error: 'No autorizado.' }
+  }
+
+  const adminSupabase = await createAdminClient()
+
+  // 1. Desasignar casos asignados a este gestor
+  try {
+    const { error: casosError } = await adminSupabase
+      .from("casos")
+      .update({ gestor_id: null })
+      .eq("gestor_id", gestorId)
+    if (casosError) {
+      console.error("Error al desasignar casos del gestor:", casosError)
+    }
+  } catch (err) {
+    console.error("Excepción al desasignar casos:", err)
+  }
+
+  // 2. Desasignar leads asignados a este gestor
+  try {
+    const { error: leadsError } = await adminSupabase
+      .from("leads")
+      .update({ gestor_asignado_id: null })
+      .eq("gestor_asignado_id", gestorId)
+    if (leadsError) {
+      console.error("Error al desasignar leads del gestor:", leadsError)
+    }
+  } catch (err) {
+    console.error("Excepción al desasignar leads:", err)
+  }
+
+  // 3. Eliminar el perfil de profiles
+  const { error: profileError } = await adminSupabase
+    .from("profiles")
+    .delete()
+    .eq("id", gestorId)
+
+  if (profileError) {
+    console.error("Error al eliminar perfil de gestor de la base de datos:", profileError)
+  }
+
+  // 4. Eliminar el usuario de Supabase Auth
+  const { error: deleteAuthError } = await adminSupabase.auth.admin.deleteUser(gestorId)
+  if (deleteAuthError) {
+    console.error("Error al eliminar gestor de auth.users:", deleteAuthError)
+    return { error: "Error al eliminar gestor del sistema: " + deleteAuthError.message }
+  }
+
+  revalidatePath('/gestor')
+  return { success: true }
+}
+

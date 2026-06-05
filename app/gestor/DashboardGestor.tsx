@@ -13,7 +13,7 @@ import {
   crearClienteYExpediente,
   eliminarClienteCompleto
 } from "@/app/actions/cases";
-import { logout, crearGestor, reenviarInvitacion, resendConfirmation } from "@/app/actions/auth";
+import { logout, crearGestor, reenviarInvitacion, resendConfirmation, eliminarGestorCompleto } from "@/app/actions/auth";
 import { 
   FileText, CheckCircle2, AlertTriangle, Clock, LogOut, 
   Loader2, Phone, Briefcase, Plus, Users, Search, 
@@ -124,6 +124,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   const [isCreatingGestor, setIsCreatingGestor] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
   const [resendingConfirmationEmail, setResendingConfirmationEmail] = useState<string | null>(null);
+  const [deletingGestorId, setDeletingGestorId] = useState<string | null>(null);
 
   // Validación de documentos
   const [validatingDocId, setValidatingDocId] = useState<string | null>(null);
@@ -389,6 +390,29 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       toast.error(err.message || "Error al reenviar la invitación.");
     } finally {
       setResendingId(null);
+    }
+  };
+
+  const handleEliminarGestor = async (gestorId: string, nombre: string) => {
+    if (!confirm(`¿Estás seguro de que deseas eliminar permanentemente al gestor "${nombre}"?\n\nEsta acción eliminará de forma irreversible:\n1. Su cuenta de acceso\n2. Su perfil y datos de contacto.\n\nLos expedientes y prospectos (leads) asignados a él no se borrarán, sino que se desasignarán (quedarán libres para otros gestores).`)) {
+      return;
+    }
+
+    setDeletingGestorId(gestorId);
+    try {
+      const res = await eliminarGestorCompleto(gestorId);
+      if (res.error) throw new Error(res.error);
+
+      toast.success(`Gestor "${nombre}" ha sido eliminado con éxito.`);
+      
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("gestor_active_tab", "gestores");
+      }
+      window.location.reload();
+    } catch (err: any) {
+      toast.error(err.message || "Error al eliminar el gestor.");
+    } finally {
+      setDeletingGestorId(null);
     }
   };
 
@@ -895,13 +919,34 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                       <div className="space-y-2 text-xs text-white/60">
                         {g.email && <div>Email: {g.email}</div>}
                         {g.telefono && <div>Tel: {g.telefono}</div>}
-                        <button 
-                           onClick={() => handleReenviarInvitacion(g)}
-                           disabled={resendingId === g.id}
-                           className="mt-3 px-3 py-1.5 bg-surface border border-outline-variant/30 hover:border-secondary hover:text-secondary rounded-sm text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5 transition-all text-white/70"
-                        >
-                          <Mail className="w-3 h-3" /> Re-enviar Invitación
-                        </button>
+                        
+                        <div className="flex gap-2 mt-4">
+                          <button 
+                             onClick={() => handleReenviarInvitacion(g)}
+                             disabled={resendingId === g.id || deletingGestorId === g.id}
+                             className="flex-1 h-9 px-2 bg-surface border border-outline-variant/30 hover:border-secondary hover:text-secondary rounded-sm text-[9px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 transition-all text-white/70 disabled:opacity-50 cursor-pointer"
+                          >
+                            <Mail className="w-3 h-3" /> Reenviar
+                          </button>
+                          
+                          <button 
+                             onClick={() => handleEliminarGestor(g.id, g.nombre)}
+                             disabled={deletingGestorId === g.id || resendingId === g.id}
+                             className="flex-1 h-9 px-2 bg-surface border border-outline-variant/30 hover:border-error hover:text-error rounded-sm text-[9px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 transition-all text-white/70 disabled:opacity-50 cursor-pointer"
+                          >
+                            {deletingGestorId === g.id ? (
+                              <>
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                ...
+                              </>
+                            ) : (
+                              <>
+                                <Trash className="w-3 h-3" />
+                                Eliminar
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
