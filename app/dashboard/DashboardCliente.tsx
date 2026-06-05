@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { registrarDocumento, crearCasoCliente } from "@/app/actions/cases";
+import { registrarDocumento, crearCasoCliente, guardarNotaCliente } from "@/app/actions/cases";
 import { logout } from "@/app/actions/auth";
 import { 
   FileText, UploadCloud, CheckCircle2, AlertTriangle, 
@@ -31,7 +31,7 @@ interface Caso {
 
 interface DashboardClienteProps {
   user: { id: string; email: string };
-  profile: { nombre: string; telefono: string } | null;
+  profile: { nombre: string; telefono: string; role?: string; nota_cliente?: string | null } | null;
   initialCasos: Caso[];
 }
 
@@ -41,6 +41,8 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
   const [uploadingCasoId, setUploadingCasoId] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isCreatingTest, setIsCreatingTest] = useState(false);
+  const [nota, setNota] = useState(profile?.nota_cliente || "");
+  const [isSavingNota, setIsSavingNota] = useState(false);
 
   const handleIniciarTest = async () => {
     setIsCreatingTest(true);
@@ -61,6 +63,22 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
       toast.error("Ocurrió un error inesperado al iniciar el test.");
     } finally {
       setIsCreatingTest(false);
+    }
+  };
+
+  const handleSaveNota = async () => {
+    setIsSavingNota(true);
+    try {
+      const res = await guardarNotaCliente(nota);
+      if (res.error) throw new Error(res.error);
+      toast.success("Nota de tu caso guardada correctamente.", {
+        style: { background: "var(--color-surface)", borderColor: "var(--color-secondary)", color: "var(--color-on-surface)" }
+      });
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Error al guardar la nota.");
+    } finally {
+      setIsSavingNota(false);
     }
   };
 
@@ -349,6 +367,42 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
                           })}
                         </div>
                       )}
+                    </div>
+                  </div>
+
+                  {/* Sección Nota del Cliente */}
+                  <div className="p-6 md:p-8 border-t border-outline-variant/20 bg-surface-container-low/30 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <FileCheck className="w-5 h-5 text-secondary" />
+                      <h3 className="font-label text-xs uppercase tracking-widest text-secondary font-semibold">Nota o Comentario sobre tu Caso</h3>
+                    </div>
+                    <p className="text-xs text-white/50 font-body leading-relaxed">
+                      Escribe aquí cualquier aclaración, comentario o nota importante relacionada con tu caso. Esta información será visible directamente para tu gestor asignado y el administrador.
+                    </p>
+                    <div className="space-y-3">
+                      <textarea
+                        value={nota}
+                        onChange={(e) => setNota(e.target.value)}
+                        placeholder="Escribe tu nota aquí..."
+                        className="w-full bg-surface border border-outline-variant/30 p-3.5 text-sm text-white rounded-sm focus:border-secondary focus:outline-none min-h-[100px] font-body"
+                        maxLength={1000}
+                      />
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleSaveNota}
+                          disabled={isSavingNota}
+                          className="h-10 px-6 bg-secondary text-primary font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-primary transition-colors rounded-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                          {isSavingNota ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Guardando...
+                            </>
+                          ) : (
+                            'Guardar Nota'
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

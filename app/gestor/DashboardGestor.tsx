@@ -9,14 +9,16 @@ import {
   validarDocumento,
   asignarGestorCaso,
   archivarCaso,
-  registrarDocumentoGestor
+  registrarDocumentoGestor,
+  crearClienteYExpediente,
+  eliminarClienteCompleto
 } from "@/app/actions/cases";
 import { logout, crearGestor, reenviarInvitacion, resendConfirmation } from "@/app/actions/auth";
 import { 
   FileText, CheckCircle2, AlertTriangle, Clock, LogOut, 
   Loader2, Phone, Briefcase, Plus, Users, Search, 
   X, ExternalLink, MessageSquare, ChevronRight, UserPlus,
-  FileUp, Mail, Archive, UserCheck, Check, UploadCloud
+  FileUp, Mail, Archive, UserCheck, Check, UploadCloud, Trash
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -38,6 +40,7 @@ interface Cliente {
   telefono: string | null;
   created_at: string;
   email?: string;
+  nota_cliente?: string | null;
 }
 
 interface Caso {
@@ -86,8 +89,12 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   
   // Crear Caso Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newCasoClienteId, setNewCasoClienteId] = useState("");
+  const [newClienteNombre, setNewClienteNombre] = useState("");
+  const [newClienteEmail, setNewClienteEmail] = useState("");
+  const [newClienteTelefono, setNewClienteTelefono] = useState("");
+  const [newClientePassword, setNewClientePassword] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+  const [deletingClienteId, setDeletingClienteId] = useState<string | null>(null);
 
   // Crear Gestor State
   const [isGestorModalOpen, setIsGestorModalOpen] = useState(false);
@@ -247,31 +254,67 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
   const handleCreateCaso = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newCasoClienteId) {
-      toast.error("Por favor selecciona un cliente.");
+    if (!newClienteNombre || !newClienteEmail || !newClienteTelefono || !newClientePassword) {
+      toast.error("Por favor completa todos los campos del cliente.");
+      return;
+    }
+
+    if (newClientePassword.length < 6) {
+      toast.error("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
 
     setIsCreating(true);
     try {
-      const res = await crearCaso({
-        clienteId: newCasoClienteId,
-        titulo: "Test de Viabilidad",
-        descripcion: "Análisis técnico y legal de infraestructura eléctrica e historial de facturación para evaluar viabilidad de recupero."
+      const res = await crearClienteYExpediente({
+        nombre: newClienteNombre,
+        email: newClienteEmail,
+        telefono: newClienteTelefono,
+        password: newClientePassword
       });
 
       if (res.error) throw new Error(res.error);
 
-      toast.success("Caso de Test de Viabilidad creado y asignado correctamente.");
+      if (res.warning) {
+        toast.warning(res.warning);
+      } else {
+        toast.success("Cliente creado y expediente de Test de Viabilidad asignado correctamente.");
+      }
+
       setIsCreateModalOpen(false);
-      setNewCasoClienteId("");
+      setNewClienteNombre("");
+      setNewClienteEmail("");
+      setNewClienteTelefono("");
+      setNewClientePassword("");
+      
       window.location.reload(); 
     } catch (err: any) {
-      toast.error(err.message || "Error al crear el caso.");
+      toast.error(err.message || "Error al crear el cliente y el expediente.");
     } finally {
       setIsCreating(false);
     }
   };
+
+  const handleEliminarCliente = async (clienteId: string, nombre: string) => {
+    if (!confirm(`¿Estás seguro de que deseas eliminar permanentemente a "${nombre}"?\n\nEsta acción eliminará de forma irreversible:\n1. Su cuenta de acceso\n2. Su perfil y notas\n3. Todos sus expedientes/casos y el historial de documentos registrados\n4. Todos sus archivos almacenados en el servidor.`)) {
+      return;
+    }
+
+    setDeletingClienteId(clienteId);
+    try {
+      const res = await eliminarClienteCompleto(clienteId);
+      if (res.error) throw new Error(res.error);
+
+      toast.success(`Cliente "${nombre}" y toda su información asociada han sido eliminados.`);
+      
+      window.location.reload();
+    } catch (err: any) {
+      toast.error(err.message || "Error al eliminar el cliente.");
+    } finally {
+      setDeletingClienteId(null);
+    }
+  };
+
 
   const handleCreateGestor = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -730,6 +773,13 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                             )}
                           </div>
 
+                          {cliente.nota_cliente && (
+                            <div className="mt-4 p-3 bg-surface border-l-2 border-secondary/35 rounded-sm text-xs font-body text-white/85">
+                              <strong className="text-secondary block mb-1 text-[9px] uppercase tracking-wider font-label">Nota del Cliente:</strong>
+                              <p className="whitespace-pre-line italic">"{cliente.nota_cliente}"</p>
+                            </div>
+                          )}
+
                           {cliente.email && (
                             <button
                               onClick={() => handleReenviarConfirmacionCliente(cliente.email!, cliente.nombre)}
@@ -749,6 +799,24 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                               )}
                             </button>
                           )}
+
+                          <button
+                            onClick={() => handleEliminarCliente(cliente.id, cliente.nombre)}
+                            disabled={deletingClienteId === cliente.id}
+                            className="mt-2 w-full h-9 px-3 bg-surface border border-outline-variant/30 hover:border-error hover:text-error rounded-sm text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 transition-all text-white/70 disabled:opacity-50 cursor-pointer"
+                          >
+                            {deletingClienteId === cliente.id ? (
+                              <>
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                Eliminando...
+                              </>
+                            ) : (
+                              <>
+                                <Trash className="w-3.5 h-3.5" />
+                                Eliminar Cliente
+                              </>
+                            )}
+                          </button>
                         </div>
                       </div>
                     )
@@ -803,19 +871,54 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
             <h2 className="font-headline text-2xl text-white mb-6">Crear Nuevo Expediente</h2>
             
             <form onSubmit={handleCreateCaso} className="space-y-5">
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-semibold text-white/70">Seleccionar Cliente</label>
-                <select
-                  value={newCasoClienteId}
-                  onChange={(e) => setNewCasoClienteId(e.target.value)}
-                  className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
-                  required
-                >
-                  <option value="">Seleccione un cliente...</option>
-                  {clientes.map(c => (
-                    <option key={c.id} value={c.id}>{c.nombre} {c.email ? `(${c.email})` : ''}</option>
-                  ))}
-                </select>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-white/70 font-semibold block">Nombre Completo del Cliente</label>
+                  <input
+                    type="text"
+                    required
+                    value={newClienteNombre}
+                    onChange={(e) => setNewClienteNombre(e.target.value)}
+                    placeholder="Nombre Completo"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-white/70 font-semibold block">Correo Electrónico</label>
+                  <input
+                    type="email"
+                    required
+                    value={newClienteEmail}
+                    onChange={(e) => setNewClienteEmail(e.target.value)}
+                    placeholder="correo@ejemplo.com"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-white/70 font-semibold block">Teléfono de Contacto</label>
+                  <input
+                    type="tel"
+                    required
+                    value={newClienteTelefono}
+                    onChange={(e) => setNewClienteTelefono(e.target.value)}
+                    placeholder="+54 9 11 1234-5678"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-white/70 font-semibold block">Contraseña de Acceso</label>
+                  <input
+                    type="password"
+                    required
+                    value={newClientePassword}
+                    onChange={(e) => setNewClientePassword(e.target.value)}
+                    placeholder="Mínimo 6 caracteres"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div className="bg-surface-container-low/60 p-4 border border-outline-variant/15 rounded-sm space-y-3">

@@ -15,7 +15,7 @@ export default async function ClientDashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nombre, telefono, role")
+    .select("nombre, telefono, role, nota_cliente")
     .eq("id", user.id)
     .maybeSingle();
 
