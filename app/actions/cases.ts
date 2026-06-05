@@ -69,7 +69,7 @@ export async function getTodosCasos() {
 
   const { data, error } = await adminSupabase
     .from("casos")
-    .select("*, cliente:profiles!casos_cliente_id_fkey(nombre, telefono, email), documentos_casos(*)")
+    .select("*, cliente:profiles!casos_cliente_id_fkey(nombre, telefono, email), gestor:profiles!casos_gestor_id_fkey(nombre, email), documentos_casos(*)")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -113,6 +113,11 @@ export async function getCasoPorId(id: string) {
 // 5. CASOS: CREAR CASO (Gestor / Admin)
 export async function crearCaso(data: { clienteId: string; titulo: string; descripcion: string }) {
   const supabase = await createClient();
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "No autenticado." };
+  }
 
   const { clienteId, titulo, descripcion } = data;
 
@@ -127,6 +132,7 @@ export async function crearCaso(data: { clienteId: string; titulo: string; descr
       titulo,
       descripcion,
       estado: "en revision",
+      gestor_id: user.id, // Auto-asignamos al gestor que lo crea
     })
     .select()
     .single();
@@ -274,4 +280,57 @@ export async function crearCasoCliente() {
   revalidatePath("/gestor");
   
   return { success: true, data: nuevoCaso };
+}
+
+// 10. CASOS: ASIGNAR GESTOR A UN CASO (Gestor)
+export async function asignarGestorCaso(casoId: string) {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "No autenticado." };
+  }
+
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+  if (!isAuthorized) {
+    return { error: "No autorizado." };
+  }
+
+  const { data, error } = await supabase
+    .from("casos")
+    .update({ gestor_id: user.id, updated_at: new Date().toISOString() })
+    .eq("id", casoId)
+    .select()
+    .single();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/gestor");
+  return { success: true, data };
+}
+
+// 11. CASOS: ARCHIVAR UN CASO (Gestor / Admin)
+export async function archivarCaso(casoId: string) {
+  const supabase = await createClient();
+
+  const isAuthorized = await checkIsGestorOrAdmin(supabase);
+  if (!isAuthorized) {
+    return { error: "No autorizado." };
+  }
+
+  const { data, error } = await supabase
+    .from("casos")
+    .update({ estado: "archivado", updated_at: new Date().toISOString() })
+    .eq("id", casoId)
+    .select()
+    .single();
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/gestor");
+  return { success: true, data };
 }
