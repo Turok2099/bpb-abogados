@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { login, resendConfirmation, sendPasswordRecovery } from "@/app/actions/auth";
 import { toast } from "sonner";
@@ -22,6 +22,44 @@ function LoginForm() {
   const [isPending, setIsPending] = useState(false);
   const [isResendPending, setIsResendPending] = useState(false);
   const [isRecoveryPending, setIsRecoveryPending] = useState(false);
+
+  useEffect(() => {
+    if (view !== "login") return;
+
+    if (verifiedParam === "true") {
+      toast.success("¡Cuenta Confirmada! Tu dirección de correo ha sido verificada con éxito. Ya puedes iniciar sesión.", {
+        style: {
+          background: "var(--color-surface)",
+          borderColor: "var(--color-secondary)",
+          color: "var(--color-on-surface)",
+        },
+      });
+      router.replace("/login");
+    }
+
+    if (errorParam) {
+      let errorMsg = "Error de Autenticación";
+      if (errorParam === "unauthorized") {
+        errorMsg = "Acceso denegado. Se requieren permisos de administrador.";
+      } else if (errorParam === "timeout") {
+        errorMsg = "El inicio de sesión ha tardado demasiado. Por favor, intenta nuevamente.";
+      } else if (errorParam === "callback_error") {
+        errorMsg = "Hubo un error al procesar el inicio de sesión.";
+      } else if (errorParam === "invalid_link" || errorParam === "Email link is invalid or has expired") {
+        errorMsg = "El enlace es inválido, ya fue utilizado o ha expirado. Por favor, solicita uno nuevo.";
+      } else {
+        errorMsg = decodeURIComponent(errorParam);
+      }
+      toast.error(errorMsg, {
+        style: {
+          background: "var(--color-surface)",
+          borderColor: "var(--color-error)",
+          color: "var(--color-on-surface)",
+        },
+      });
+      router.replace("/login");
+    }
+  }, [verifiedParam, errorParam, view, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,31 +186,6 @@ function LoginForm() {
           {view === "login" ? "BPB Abogados - Clientes y Gestores" : view === "resend" ? "Recupera tu enlace de verificación" : "Te enviaremos un enlace de acceso"}
         </p>
       </div>
-
-      {verifiedParam && verifiedParam === "true" && view === "login" && (
-        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm rounded-sm text-center font-body">
-          <p className="font-bold uppercase tracking-wider mb-1">¡Cuenta Confirmada!</p>
-          Tu dirección de correo ha sido verificada con éxito. Ya puedes iniciar sesión.
-        </div>
-      )}
-
-      {errorParam && errorParam === "unauthorized" && view === "login" && (
-        <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error text-sm rounded-sm text-center font-body uppercase tracking-wider">
-          Acceso denegado. Se requieren permisos de administrador.
-        </div>
-      )}
-      {errorParam && errorParam !== "unauthorized" && view === "login" && (
-        <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error text-sm rounded-sm text-center font-body">
-          <p className="font-bold uppercase tracking-wider mb-1">Error de Autenticación</p>
-          {errorParam === "timeout" 
-            ? "El inicio de sesión ha tardado demasiado. Por favor, intenta nuevamente." 
-            : errorParam === "callback_error"
-            ? "Hubo un error al procesar el inicio de sesión."
-            : errorParam === "invalid_link" || errorParam === "Email link is invalid or has expired"
-            ? "El enlace es inválido, ya fue utilizado o ha expirado. Por favor, solicita uno nuevo."
-            : decodeURIComponent(errorParam)}
-        </div>
-      )}
 
       {view === "login" ? (
         <form onSubmit={handleSubmit} className="space-y-6">

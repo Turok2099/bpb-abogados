@@ -223,7 +223,6 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
       toast.success("Documento subido correctamente.");
       router.refresh();
-      window.location.reload(); 
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Error al subir el documento.");
@@ -311,7 +310,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       if (typeof window !== "undefined") {
         sessionStorage.setItem("gestor_active_tab", "casos_activos");
       }
-      window.location.reload(); 
+      setActiveTab("casos_activos");
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message || "Error al crear el cliente y el expediente.");
     } finally {
@@ -334,7 +334,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       if (typeof window !== "undefined") {
         sessionStorage.setItem("gestor_active_tab", "clientes");
       }
-      window.location.reload();
+      setActiveTab("clientes");
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message || "Error al eliminar el cliente.");
     } finally {
@@ -365,7 +366,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       setNewGestorNombre("");
       setNewGestorEmail("");
       setNewGestorTelefono("");
-      window.location.reload(); 
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message || "Error al invitar al gestor.");
     } finally {
@@ -407,7 +408,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       if (typeof window !== "undefined") {
         sessionStorage.setItem("gestor_active_tab", "gestores");
       }
-      window.location.reload();
+      setActiveTab("gestores");
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message || "Error al eliminar el gestor.");
     } finally {

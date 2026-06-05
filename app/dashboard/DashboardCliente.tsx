@@ -113,8 +113,11 @@ export function DashboardCliente({ user, profile, initialCasos }: DashboardClien
       }
 
       // 5. Alerta y redirección al home
-      alert("En breve, un gestor se comunicará con usted.");
-      window.location.href = "/";
+      toast.success("En breve, un gestor se comunicará con usted.", {
+        style: { background: "var(--color-surface)", borderColor: "var(--color-secondary)", color: "var(--color-on-surface)" }
+      });
+      router.push("/");
+      router.refresh();
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Ocurrió un error al procesar la solicitud.");
