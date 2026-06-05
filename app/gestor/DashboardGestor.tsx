@@ -679,6 +679,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                   ${activeTab === "casos_activos" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
                 Mis Casos Activos
+                {casosActivos.length > 0 && (
+                  <span className="ml-2 bg-secondary/20 text-secondary px-1.5 py-0.5 rounded-sm text-[10px]">{casosActivos.length}</span>
+                )}
               </button>
               <button 
                 onClick={() => { changeTab("clientes"); setSelectedCaso(null); }}
@@ -686,6 +689,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                   ${activeTab === "clientes" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
                 Clientes
+                {clientes.length > 0 && (
+                  <span className="ml-2 bg-secondary/20 text-secondary px-1.5 py-0.5 rounded-sm text-[10px]">{clientes.length}</span>
+                )}
               </button>
               {profile?.role === "admin" && (
                 <button 
@@ -778,9 +784,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
             ) : activeTab === "clientes" ? (
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {clientes
-                    .filter(cliente => profile?.role === "admin" || casos.some(c => c.cliente_id === cliente.id && c.gestor_id === user.id))
-                    .map(cliente => {
+                  {clientes.map(cliente => {
                     const clientCasos = casos.filter(c => c.cliente_id === cliente.id);
                     const archivedCasos = clientCasos.filter(c => c.estado === "archivado");
                     return (
