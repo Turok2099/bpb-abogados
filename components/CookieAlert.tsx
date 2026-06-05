@@ -9,8 +9,28 @@ export function CookieAlert() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Check if consent has already been given or rejected
-    const consent = localStorage.getItem("bpb-cookie-consent");
+    
+    // Check if consent has already been given or rejected (using localStorage + cookie fallback)
+    let consent = null;
+    try {
+      consent = localStorage.getItem("bpb-cookie-consent");
+      if (!consent) {
+        // Try reading from cookies
+        const nameEQ = "bpb-cookie-consent=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) {
+            consent = c.substring(nameEQ.length, c.length);
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Error reading cookie consent:", e);
+    }
+
     if (!consent) {
       // Small delay to make the entrance look more natural
       const timer = setTimeout(() => {
@@ -20,14 +40,30 @@ export function CookieAlert() {
     }
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem("bpb-cookie-consent", "accepted");
+  const saveConsent = (value: "accepted" | "rejected") => {
+    try {
+      localStorage.setItem("bpb-cookie-consent", value);
+    } catch (e) {
+      console.warn("Error writing to localStorage:", e);
+    }
+
+    try {
+      const date = new Date();
+      date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000)); // 1 year expiration
+      document.cookie = `bpb-cookie-consent=${value}; expires=${date.toUTCString()}; path=/; SameSite=Lax; Secure`;
+    } catch (e) {
+      console.warn("Error writing cookie:", e);
+    }
+    
     setIsVisible(false);
   };
 
+  const handleAccept = () => {
+    saveConsent("accepted");
+  };
+
   const handleReject = () => {
-    localStorage.setItem("bpb-cookie-consent", "rejected");
-    setIsVisible(false);
+    saveConsent("rejected");
   };
 
   if (!isMounted || !isVisible) {
@@ -35,7 +71,7 @@ export function CookieAlert() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:right-auto md:left-8 md:bottom-8 z-45 max-w-md w-auto bg-surface-container-high/95 border border-secondary/20 rounded-sm shadow-2xl p-6 backdrop-blur-md transition-all duration-500 transform translate-y-0 animate-fade-in-up">
+    <div className="fixed bottom-4 left-4 right-4 md:right-auto md:left-8 md:bottom-8 z-50 max-w-md w-auto bg-surface-container-high/95 border border-secondary/20 rounded-sm shadow-2xl p-6 backdrop-blur-md transition-all duration-500 transform translate-y-0 animate-fade-in-up">
       <div className="flex flex-col gap-4">
         {/* Header with Title and Icon */}
         <div className="flex items-center gap-3">
@@ -49,7 +85,7 @@ export function CookieAlert() {
           </div>
           <button
             onClick={handleReject}
-            className="text-white/40 hover:text-white transition-colors p-1"
+            className="text-white/40 hover:text-white transition-colors p-1 cursor-pointer"
             aria-label="Cerrar aviso de cookies"
           >
             <X className="w-4 h-4" />

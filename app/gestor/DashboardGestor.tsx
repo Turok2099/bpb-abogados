@@ -87,8 +87,6 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   // Crear Caso Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newCasoClienteId, setNewCasoClienteId] = useState("");
-  const [newCasoTitulo, setNewCasoTitulo] = useState("");
-  const [newCasoDescripcion, setNewCasoDescripcion] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
   // Crear Gestor State
@@ -248,8 +246,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
   const handleCreateCaso = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newCasoClienteId || !newCasoTitulo) {
-      toast.error("Por favor completa los campos obligatorios.");
+    if (!newCasoClienteId) {
+      toast.error("Por favor selecciona un cliente.");
       return;
     }
 
@@ -257,17 +255,15 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
     try {
       const res = await crearCaso({
         clienteId: newCasoClienteId,
-        titulo: newCasoTitulo,
-        descripcion: newCasoDescripcion
+        titulo: "Test de Viabilidad",
+        descripcion: "Análisis técnico y legal de infraestructura eléctrica e historial de facturación para evaluar viabilidad de recupero."
       });
 
       if (res.error) throw new Error(res.error);
 
-      toast.success("Caso creado y asignado a ti correctamente.");
+      toast.success("Caso de Test de Viabilidad creado y asignado correctamente.");
       setIsCreateModalOpen(false);
       setNewCasoClienteId("");
-      setNewCasoTitulo("");
-      setNewCasoDescripcion("");
       window.location.reload(); 
     } catch (err: any) {
       toast.error(err.message || "Error al crear el caso.");
@@ -788,26 +784,17 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-semibold text-white/70">Título del Caso</label>
-                <input
-                  type="text"
-                  value={newCasoTitulo}
-                  onChange={(e) => setNewCasoTitulo(e.target.value)}
-                  placeholder="Ej. Sucesión Familia Pérez"
-                  className="w-full h-11 bg-surface border border-outline-variant/30 px-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-semibold text-white/70">Descripción Inicial (Opcional)</label>
-                <textarea
-                  value={newCasoDescripcion}
-                  onChange={(e) => setNewCasoDescripcion(e.target.value)}
-                  placeholder="Detalles del caso..."
-                  className="w-full bg-surface border border-outline-variant/30 p-3 text-sm text-white rounded-sm focus:border-secondary focus:outline-none min-h-[100px]"
-                />
+              <div className="bg-surface-container-low/60 p-4 border border-outline-variant/15 rounded-sm space-y-3">
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-widest text-secondary font-semibold font-label">Tipo de Expediente</span>
+                  <div className="text-sm text-white font-medium">Test de Viabilidad</div>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase tracking-widest text-secondary font-semibold font-label">Descripción</span>
+                  <div className="text-xs text-white/60 leading-relaxed font-body">
+                    Análisis técnico y legal de infraestructura eléctrica e historial de facturación para evaluar viabilidad de recupero.
+                  </div>
+                </div>
               </div>
 
               <div className="pt-4 flex gap-3">
