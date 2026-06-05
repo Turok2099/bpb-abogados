@@ -133,7 +133,14 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   // Filtros derivados
   const casosNuevos = casos.filter(c => !c.gestor_id && c.estado !== "archivado");
   const casosActivos = casos.filter(c => c.gestor_id === user.id && c.estado !== "archivado");
-  const clientesFiltrados = clientes.filter(cliente => profile?.role === "admin" || casos.some(c => c.cliente_id === cliente.id && c.gestor_id === user.id));
+  const clientesFiltrados = clientes.filter(cliente => {
+    if (profile?.role === "admin") return true;
+    const casosDelCliente = casos.filter(c => c.cliente_id === cliente.id);
+    if (casosDelCliente.length === 0) return true; // Mostrar si no tiene casos aún
+    const tieneCasosPropios = casosDelCliente.some(c => c.gestor_id === user.id);
+    const tieneCasosSinAsignar = casosDelCliente.some(c => !c.gestor_id);
+    return tieneCasosPropios || tieneCasosSinAsignar;
+  });
   
   // Handlers Documentos
   const handleOpenDocument = async (urlPath: string) => {
