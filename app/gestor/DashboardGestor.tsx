@@ -133,6 +133,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   // Filtros derivados
   const casosNuevos = casos.filter(c => !c.gestor_id && c.estado !== "archivado");
   const casosActivos = casos.filter(c => c.gestor_id === user.id && c.estado !== "archivado");
+  const clientesFiltrados = clientes.filter(cliente => profile?.role === "admin" || casos.some(c => c.cliente_id === cliente.id && c.gestor_id === user.id));
   
   // Handlers Documentos
   const handleOpenDocument = async (urlPath: string) => {
@@ -689,8 +690,8 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                   ${activeTab === "clientes" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
                 Clientes
-                {clientes.length > 0 && (
-                  <span className="ml-2 bg-secondary/20 text-secondary px-1.5 py-0.5 rounded-sm text-[10px]">{clientes.length}</span>
+                {clientesFiltrados.length > 0 && (
+                  <span className="ml-2 bg-secondary/20 text-secondary px-1.5 py-0.5 rounded-sm text-[10px]">{clientesFiltrados.length}</span>
                 )}
               </button>
               {profile?.role === "admin" && (
@@ -784,7 +785,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
             ) : activeTab === "clientes" ? (
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {clientes.map(cliente => {
+                  {clientesFiltrados.map(cliente => {
                     const clientCasos = casos.filter(c => c.cliente_id === cliente.id);
                     const archivedCasos = clientCasos.filter(c => c.estado === "archivado");
                     return (

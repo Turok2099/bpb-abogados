@@ -27,7 +27,7 @@ export async function getClientes() {
 
   const { data, error } = await adminSupabase
     .from("profiles")
-    .select("id, nombre, role, telefono, email, nota_cliente, created_at")
+    .select("id, nombre, role, telefono, email, created_at, nota_cliente")
     .eq("role", "cliente")
     .order("nombre", { ascending: true });
 
