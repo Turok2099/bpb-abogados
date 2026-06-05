@@ -55,6 +55,10 @@ interface Caso {
     telefono: string | null;
     email?: string;
   } | null;
+  gestor: {
+    nombre: string;
+    email: string;
+  } | null;
   documentos_casos: Documento[];
   created_at: string;
 }
@@ -73,6 +77,22 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
   const [gestores, setGestores] = useState<Cliente[]>(initialGestores);
   const [activeTab, setActiveTab] = useState<"casos_nuevos" | "casos_activos" | "clientes" | "gestores">("casos_nuevos");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const changeTab = (tab: "casos_nuevos" | "casos_activos" | "clientes" | "gestores") => {
+    setActiveTab(tab);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("gestor_active_tab", tab);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedTab = sessionStorage.getItem("gestor_active_tab");
+      if (savedTab && ["casos_nuevos", "casos_activos", "clientes", "gestores"].includes(savedTab)) {
+        setActiveTab(savedTab as any);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setCasos(initialCasos);
@@ -214,7 +234,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       const updatedCasos = casos.map(c => c.id === casoId ? { ...c, gestor_id: user.id } : c);
       setCasos(updatedCasos);
       setSelectedCaso(null); // Clear detail view
-      setActiveTab("casos_activos"); // Switch to active tab
+      changeTab("casos_activos"); // Switch to active tab
     } catch (err: any) {
       toast.error(err.message || "No se pudo asignar el caso.");
     }
@@ -287,6 +307,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
       setNewClienteTelefono("");
       setNewClientePassword("");
       
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("gestor_active_tab", "casos_activos");
+      }
       window.location.reload(); 
     } catch (err: any) {
       toast.error(err.message || "Error al crear el cliente y el expediente.");
@@ -307,6 +330,9 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
 
       toast.success(`Cliente "${nombre}" y toda su información asociada han sido eliminados.`);
       
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("gestor_active_tab", "clientes");
+      }
       window.location.reload();
     } catch (err: any) {
       toast.error(err.message || "Error al eliminar el cliente.");
@@ -638,7 +664,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
             {/* Nav Tabs */}
             <div className="border-b border-outline-variant/20 flex gap-6 overflow-x-auto no-scrollbar">
               <button 
-                onClick={() => { setActiveTab("casos_nuevos"); setSelectedCaso(null); }}
+                onClick={() => { changeTab("casos_nuevos"); setSelectedCaso(null); }}
                 className={`pb-3 text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-colors border-b-2 
                   ${activeTab === "casos_nuevos" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
@@ -648,14 +674,14 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                 )}
               </button>
               <button 
-                onClick={() => { setActiveTab("casos_activos"); setSelectedCaso(null); }}
+                onClick={() => { changeTab("casos_activos"); setSelectedCaso(null); }}
                 className={`pb-3 text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-colors border-b-2 
                   ${activeTab === "casos_activos" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
                 Mis Casos Activos
               </button>
               <button 
-                onClick={() => { setActiveTab("clientes"); setSelectedCaso(null); }}
+                onClick={() => { changeTab("clientes"); setSelectedCaso(null); }}
                 className={`pb-3 text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-colors border-b-2 
                   ${activeTab === "clientes" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
               >
@@ -663,7 +689,7 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
               </button>
               {profile?.role === "admin" && (
                 <button 
-                  onClick={() => { setActiveTab("gestores"); setSelectedCaso(null); }}
+                  onClick={() => { changeTab("gestores"); setSelectedCaso(null); }}
                   className={`pb-3 text-xs uppercase tracking-widest font-bold whitespace-nowrap transition-colors border-b-2 
                     ${activeTab === "gestores" ? "border-secondary text-secondary" : "border-transparent text-white/50 hover:text-white"}`}
                 >
@@ -766,10 +792,32 @@ export function DashboardGestor({ user, profile, initialCasos, clientes, initial
                           {cliente.telefono && <div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> {cliente.telefono}</div>}
                           <div className="flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> Registro: {new Date(cliente.created_at).toLocaleDateString()}</div>
                           
-                          <div className="pt-3 mt-3 border-t border-outline-variant/20">
+                          <div className="pt-3 mt-3 border-t border-outline-variant/20 font-body">
                             <span className="font-bold text-white/80">{clientCasos.length}</span> Expedientes Totales
                             {archivedCasos.length > 0 && (
                               <div className="text-white/40 mt-1">{archivedCasos.length} Archivados</div>
+                            )}
+
+                            {clientCasos.length > 0 && (
+                              <div className="mt-3 space-y-2">
+                                <span className="text-[10px] uppercase tracking-widest text-secondary font-semibold font-label">Detalle de Expedientes:</span>
+                                <div className="space-y-1.5 mt-1">
+                                  {clientCasos.map(c => {
+                                    const est = getEstadoCasoStyles(c.estado);
+                                    return (
+                                      <div key={c.id} className="bg-surface/50 border border-outline-variant/10 p-2.5 rounded-sm flex justify-between items-center gap-2">
+                                        <div className="min-w-0">
+                                          <div className="font-medium text-white text-xs truncate">{c.titulo}</div>
+                                          <div className="text-[9px] text-white/40 mt-0.5">Gestor: {c.gestor?.nombre || "Nadie"}</div>
+                                        </div>
+                                        <span className={`text-[8px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-sm shrink-0 ${est.color}`}>
+                                          {est.text}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
                             )}
                           </div>
 
