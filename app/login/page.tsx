@@ -6,6 +6,7 @@ import { login, resendConfirmation, sendPasswordRecovery } from "@/app/actions/a
 import { toast } from "sonner";
 import { Lock, Mail, Eye, EyeOff, Send, ArrowLeft, Loader2, KeyRound } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const router = useRouter();
@@ -22,6 +23,32 @@ function LoginForm() {
   const [isPending, setIsPending] = useState(false);
   const [isResendPending, setIsResendPending] = useState(false);
   const [isRecoveryPending, setIsRecoveryPending] = useState(false);
+
+  // Redirección client-side si el usuario ya está autenticado
+  useEffect(() => {
+    const checkSession = async () => {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profile) {
+          if (profile.role === "admin") {
+            router.replace("/admin");
+          } else if (profile.role === "gestor") {
+            router.replace("/gestor");
+          } else {
+            router.replace("/dashboard");
+          }
+        }
+      }
+    };
+    checkSession();
+  }, [router]);
 
   useEffect(() => {
     if (view !== "login") return;
@@ -84,11 +111,11 @@ function LoginForm() {
           },
         });
         if (res?.role === "admin") {
-          router.push("/admin");
+          router.replace("/admin");
         } else if (res?.role === "gestor") {
-          router.push("/gestor");
+          router.replace("/gestor");
         } else {
-          router.push("/dashboard");
+          router.replace("/dashboard");
         }
         router.refresh();
       }

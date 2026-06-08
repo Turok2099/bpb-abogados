@@ -26,28 +26,6 @@ function CallbackHandler() {
     
     addLog(`Condiciones: hasHashAuth=${hasHashAuth}, isResetFlow=${isResetFlow}, hasCode=${hasCode}`)
 
-    if (hash.includes('access_token=') && typeof window !== 'undefined') {
-      try {
-        addLog('Limpiando localStorage y cookies...')
-        for (let i = localStorage.length - 1; i >= 0; i--) {
-          const key = localStorage.key(i)
-          if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
-            localStorage.removeItem(key)
-          }
-        }
-        document.cookie.split(";").forEach((c) => {
-          const eqPos = c.indexOf("=");
-          const name = eqPos > -1 ? c.substring(0, eqPos).trim() : c.trim();
-          if (name.startsWith("sb-")) {
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-          }
-        });
-      } catch (err: any) {
-        addLog(`Error limpiando sesión: ${err.message}`)
-      }
-    }
-
     const supabase = createClient()
     addLog('Supabase client instanciado.')
 
@@ -59,6 +37,44 @@ function CallbackHandler() {
           addLog(`Hash contiene error explícito: ${errorDesc}`)
           router.push(`/login?error=${encodeURIComponent(errorDesc)}`)
           return
+        }
+
+        // Si se detecta un enlace de autenticación entrante (código PKCE o token en el hash) y existe
+        // una sesión previa activa, cerramos la sesión actual para evitar colisiones en la BD.
+        if (code || hash.includes('access_token=')) {
+          addLog('Verificando si existe sesión activa previa...')
+          const { data: { session: currentSession } } = await supabase.auth.getSession()
+          if (currentSession) {
+            addLog(`Sesión previa activa encontrada (Usuario: ${currentSession.user.email}). Cerrando sesión...`)
+            
+            // Cerrar sesión oficialmente mediante el SDK de Supabase
+            await supabase.auth.signOut()
+            
+            // Adicionalmente, limpiar manualmente localStorage y cookies de Supabase por seguridad
+            if (typeof window !== 'undefined') {
+              try {
+                for (let i = localStorage.length - 1; i >= 0; i--) {
+                  const key = localStorage.key(i)
+                  if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+                    localStorage.removeItem(key)
+                  }
+                }
+                document.cookie.split(";").forEach((c) => {
+                  const eqPos = c.indexOf("=");
+                  const name = eqPos > -1 ? c.substring(0, eqPos).trim() : c.trim();
+                  if (name.startsWith("sb-")) {
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                  }
+                });
+                addLog('Limpieza manual de cookies y almacenamiento completada.')
+              } catch (err: any) {
+                addLog(`Advertencia en limpieza manual: ${err.message}`)
+              }
+            }
+          } else {
+            addLog('No se detectó sesión previa activa.')
+          }
         }
 
         // 1. Manejo del flujo PKCE (con código en query)
